@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus · 工具提升</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f5f6f8;
+    color: #1a1a1a;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  .section { background: #fff; border-radius: 12px; padding: 28px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #eaecf0; }
+  .section-num { display: inline-block; background: #1d2939; color: #fff; width: 28px; height: 28px; border-radius: 6px; text-align: center; line-height: 28px; font-size: 14px; font-weight: 600; margin-right: 12px; vertical-align: middle; }
+  .section h2 { font-size: 22px; color: #101828; margin-bottom: 6px; font-weight: 600; display: flex; align-items: center; }
+  .section .subtitle { color: #667085; font-size: 13px; margin-bottom: 24px; margin-left: 40px; }
+  .section h3 { font-size: 17px; color: #1d2939; margin: 24px 0 14px; font-weight: 600; border-left: 3px solid #1d2939; padding-left: 12px; }
+  .section h4 { font-size: 15px; color: #344054; margin: 18px 0 10px; font-weight: 600; }
+  .section p { margin-bottom: 12px; color: #344054; }
+
+  /* 三 Tab */
+  .ability-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0 20px; }
+  .ability-tab { background: #f9fafb; border: 2px solid #eaecf0; border-radius: 10px; padding: 18px 20px; cursor: pointer; transition: all 0.15s ease; user-select: none; }
+  .ability-tab:hover { border-color: #98a2b3; background: #fff; }
+  .ability-tab.active { border-color: #1d2939; background: #1d2939; color: #fff; }
+  .ability-tab .ab-tag { display: inline-block; background: rgba(29,41,57,0.08); color: #1d2939; font-size: 11px; padding: 2px 8px; border-radius: 3px; margin-bottom: 8px; letter-spacing: 0.3px; }
+  .ability-tab.active .ab-tag { background: rgba(255,255,255,0.2); color: #fff; }
+  .ability-tab h5 { font-size: 16px; margin-bottom: 6px; font-weight: 600; }
+  .ability-tab p { font-size: 12px; color: #667085; margin: 0; }
+  .ability-tab.active p { color: rgba(255,255,255,0.75); }
+
+  .ability-demo { background: #f9fafb; border: 1px solid #eaecf0; border-radius: 12px; padding: 24px 28px; margin-top: 8px; }
+  .demo-pane { display: none; }
+  .demo-pane.active { display: block; }
+  .demo-title { font-size: 18px; color: #1d2939; font-weight: 600; margin-bottom: 6px; }
+  .demo-sub { color: #667085; font-size: 13px; margin-bottom: 18px; }
+  .demo-footnote { margin-top: 14px; padding: 12px 16px; background: #fff; border-left: 3px solid #fcd34d; border-radius: 0 6px 6px 0; font-size: 13px; color: #475467; }
+  .demo-footnote strong { color: #92400e; }
+
+  /* 表格 */
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 14px; }
+  th, td { border: 1px solid #eaecf0; padding: 10px 14px; text-align: left; vertical-align: top; }
+  th { background: #f9fafb; font-weight: 600; color: #344054; }
+  td.strong { font-weight: 600; color: #1d2939; }
+
+  /* 多路径卡 */
+  .path-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0 14px; }
+  .path-card { background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%); border: 1px solid #e9d5ff; border-radius: 8px; padding: 14px 12px; text-align: center; cursor: pointer; transition: all 0.15s; }
+  .path-card:hover { transform: translateY(-2px); border-color: #a78bfa; box-shadow: 0 4px 12px rgba(167,139,250,0.15); }
+  .path-card .pc-icon { width: 32px; height: 32px; background: #fff; border-radius: 8px; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #7c3aed; border: 1px solid #e9d5ff; }
+  .path-card .pc-name { font-size: 13px; font-weight: 600; color: #6b21a8; }
+  .path-card .pc-sub { font-size: 11px; color: #a78bfa; margin-top: 2px; }
+
+  /* 编辑器 */
+  .with-sidebar { display: grid; grid-template-columns: 1fr 280px; gap: 16px; margin: 14px 0; }
+  .topic-create { background: #fff; border: 1px solid #eaecf0; border-radius: 10px; padding: 24px 28px; margin: 14px 0; }
+  .field-label { font-size: 14px; font-weight: 600; color: #1d2939; margin: 14px 0 8px; display: flex; align-items: center; gap: 6px; }
+  .field-label .req { color: #e11d48; font-size: 14px; }
+  .field-label .hint { font-size: 12px; font-weight: 400; color: #98a2b3; margin-left: 4px; }
+  .field-input { width: 100%; border: 1px solid #d0d5dd; border-radius: 6px; padding: 10px 14px; font-size: 13px; color: #98a2b3; background: #fff; }
+  .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .tag-pill { background: #f3f4f7; border: 1px solid #eaecf0; color: #475467; font-size: 12px; padding: 4px 12px; border-radius: 14px; cursor: pointer; }
+  .tag-pill:hover { background: #eaecf0; }
+  .upload-zone { border: 2px dashed #a78bfa; background: #f5f3ff; border-radius: 10px; padding: 28px 24px; text-align: center; margin: 6px 0 8px; }
+  .upload-zone .uz-icon { font-size: 22px; color: #8b5cf6; margin-bottom: 6px; }
+  .upload-zone .uz-title { color: #6d28d9; font-weight: 600; font-size: 15px; margin-bottom: 8px; }
+  .upload-zone .uz-meta { font-size: 12px; color: #94a3b8; line-height: 1.7; }
+  .editor-bar { background: #fafafa; border: 1px solid #eaecf0; border-bottom: none; border-radius: 6px 6px 0 0; padding: 8px 12px; font-size: 13px; color: #98a2b3; }
+  .editor-area { border: 1px solid #eaecf0; border-radius: 0 0 6px 6px; padding: 16px; color: #98a2b3; font-size: 13px; min-height: 80px; background: #fff; }
+
+  /* 智能建议 */
+  .sidebar-suggest { background: #fff; border: 1px solid #eaecf0; border-radius: 10px; padding: 16px 18px; height: fit-content; }
+  .sidebar-suggest .ss-title { font-size: 13px; font-weight: 600; color: #1d2939; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+  .sidebar-suggest .ss-title .ss-spark { background: linear-gradient(135deg,#a78bfa,#7c3aed); color: #fff; width: 20px; height: 20px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; }
+  .sidebar-suggest .ss-sub { font-size: 11px; color: #98a2b3; margin-bottom: 12px; }
+  .ss-card { background: #faf5ff; border: 1px solid #ede9fe; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 12px; color: #475467; line-height: 1.6; }
+  .ss-card .ss-tag { display: inline-block; background: #ede9fe; color: #6d28d9; font-size: 10px; padding: 1px 6px; border-radius: 3px; margin-bottom: 4px; }
+  .ss-card.todo .ss-tag { background: #fef3c7; color: #92400e; }
+  .ss-card.guide .ss-tag { background: #dbeafe; color: #1e40af; }
+  .ss-card .ss-quote { color: #1d2939; font-weight: 500; margin: 4px 0; }
+  .ss-card .ss-action { display: inline-block; margin-top: 6px; color: #7c3aed; font-weight: 600; cursor: pointer; font-size: 11px; }
+
+  /* B 子页签 */
+  .b-subtabs { display: flex; gap: 8px; margin: 14px 0; padding: 6px; background: #f3f4f7; border-radius: 10px; border: 1px solid #eaecf0; }
+  .b-subtab { flex: 1; padding: 10px 16px; background: transparent; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; color: #667085; font-weight: 500; text-align: center; transition: all 0.15s; }
+  .b-subtab:hover { color: #1d2939; }
+  .b-subtab.active { background: #fff; color: #1d2939; box-shadow: 0 1px 3px rgba(0,0,0,0.08); font-weight: 600; }
+  .b-subpane { display: none; }
+  .b-subpane.active { display: block; }
+
+  /* 驾驶舱 */
+  .cockpit-header { background: #1d2939; color: #fff; border-radius: 10px; padding: 14px 18px; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
+  .cockpit-header .ch-badge { background: rgba(255,255,255,0.15); color: #fff; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
+  .cockpit-header .ch-name { font-size: 15px; font-weight: 700; }
+  .cockpit-header .ch-meta { font-size: 12px; color: rgba(255,255,255,0.6); margin-left: auto; }
+
+  .cockpit-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .cockpit-card { background: #fff; border: 1px solid #eaecf0; border-radius: 10px; padding: 18px 20px; min-height: 320px; display: flex; flex-direction: column; }
+  .cockpit-card .cc-head { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #f3f4f7; }
+  .cockpit-card .cc-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; background: #f3f4f7; color: #475467; }
+  .cockpit-card .cc-title { font-size: 14px; font-weight: 600; color: #1d2939; }
+  .cockpit-card .cc-sub { font-size: 11px; color: #98a2b3; margin-top: 1px; }
+
+  .kw-cloud { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .kw-pill { background: #f3f4f7; color: #475467; border-radius: 14px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
+  .kw-pill.hot { background: #1d2939; color: #fff; font-weight: 600; }
+  .kw-pill.warn { background: #fef3c7; color: #92400e; }
+
+  .my-attention { background: #f9fafb; border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #475467; line-height: 1.7; margin-top: auto; }
+  .my-attention strong { color: #1d2939; }
+  .my-attention .at-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; }
+  .my-attention .at-row .at-num { background: #1d2939; color: #fff; padding: 1px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+
+  .team-mini { display: flex; flex-direction: column; gap: 10px; }
+  .team-mini .tm-row { font-size: 12px; }
+  .team-mini .tm-head { display: flex; justify-content: space-between; color: #344054; margin-bottom: 4px; }
+  .team-mini .tm-name { font-weight: 500; }
+  .team-mini .tm-count { color: #98a2b3; }
+  .team-mini .tm-bar-wrap { height: 8px; background: #f3f4f7; border-radius: 3px; overflow: hidden; }
+  .team-mini .tm-fill { height: 100%; background: #475467; border-radius: 3px; }
+  .team-mini .tm-fill.hot { background: #1d2939; }
+  .team-mini .tm-fill.warn { background: #d97706; }
+  .team-mini .tm-summary { margin-top: auto; padding: 10px 12px; background: #fffbeb; border-left: 2px solid #fcd34d; border-radius: 0 4px 4px 0; font-size: 11.5px; color: #92400e; line-height: 1.6; }
+
+  .recommend-list { display: flex; flex-direction: column; gap: 10px; }
+  .recommend-item { padding: 10px 12px; border: 1px solid #eaecf0; border-radius: 8px; cursor: pointer; transition: all 0.15s; background: #fff; }
+  .recommend-item:hover { border-color: #98a2b3; background: #f9fafb; }
+  .recommend-item .ri-tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 3px; font-weight: 600; margin-right: 6px; vertical-align: middle; }
+  .recommend-item .ri-tag.score { background: #f3f4f7; color: #475467; }
+  .recommend-item .ri-tag.hot { background: #fef3c7; color: #92400e; }
+  .recommend-item .ri-title { display: inline; font-size: 12.5px; font-weight: 600; color: #1d2939; }
+  .recommend-item .ri-meta { font-size: 11px; color: #98a2b3; margin-top: 4px; }
+
+  .chatbot-mini { background: #fff; border: 1px solid #eaecf0; border-radius: 10px; padding: 16px 18px; margin-top: 4px; }
+  .chatbot-mini .cm-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .chatbot-mini .cm-icon { width: 26px; height: 26px; border-radius: 6px; background: #1d2939; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .chatbot-mini .cm-title { font-size: 13px; font-weight: 600; color: #1d2939; }
+  .chatbot-mini .cm-sub { font-size: 11px; color: #98a2b3; margin-left: auto; }
+  .chatbot-mini .cm-suggestions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  .chatbot-mini .cm-chip { background: #f9fafb; border: 1px solid #eaecf0; color: #344054; font-size: 12px; padding: 8px 12px; border-radius: 6px; cursor: pointer; text-align: center; line-height: 1.4; }
+  .chatbot-mini .cm-chip:hover { border-color: #1d2939; background: #fff; }
+  .chatbot-mini .cm-input-bar { display: flex; gap: 8px; background: #f9fafb; border: 1px solid #eaecf0; border-radius: 8px; padding: 6px; }
+  .chatbot-mini .cm-input { flex: 1; border: none; padding: 6px 10px; background: transparent; font-size: 12.5px; color: #98a2b3; }
+  .chatbot-mini .cm-send { background: #1d2939; color: #fff; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+  /* 员工视角 */
+  .staff-section { background: #fff; border: 1px solid #eaecf0; border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; }
+  .staff-section .ss-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #f3f4f7; }
+  .staff-section .ss-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; background: #f3f4f7; color: #475467; }
+  .staff-section .ss-title { font-size: 14px; font-weight: 600; color: #1d2939; }
+  .staff-section .ss-sub { font-size: 11px; color: #98a2b3; margin-top: 1px; }
+
+  .value-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+  .value-main-card { background: #f9fafb; border: 1px solid #eaecf0; border-radius: 8px; padding: 12px 14px; cursor: pointer; }
+  .value-main-card:hover { background: #fff; }
+  .value-main-card .vmc-tag { display: inline-block; background: #1d2939; color: #fff; font-size: 10px; padding: 2px 8px; border-radius: 3px; margin-bottom: 8px; }
+  .value-main-card h6 { font-size: 14px; color: #1d2939; margin-bottom: 6px; }
+  .value-main-card .vmc-summary { font-size: 12px; color: #475467; line-height: 1.6; }
+  .value-aux-list { display: flex; flex-direction: column; gap: 8px; }
+  .value-aux-card { background: #f9fafb; border: 1px solid #eaecf0; border-radius: 6px; padding: 10px 12px; cursor: pointer; font-size: 12px; color: #344054; line-height: 1.5; }
+  .value-aux-card:hover { background: #fff; }
+  .value-aux-card .va-meta { color: #98a2b3; font-size: 11px; margin-top: 3px; }
+
+  .trend-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .trend-block { background: #f9fafb; border-radius: 8px; padding: 12px 14px; }
+  .trend-block h6 { font-size: 12px; color: #98a2b3; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase; }
+  .trend-block .tb-line { font-size: 12.5px; color: #344054; margin: 4px 0; line-height: 1.6; }
+  .trend-block .tb-line strong { color: #1d2939; }
+  .trend-block .tb-line .tb-count { color: #98a2b3; font-size: 11px; margin-left: 6px; }
+
+  .like-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .like-card { background: #f9fafb; border: 1px solid #eaecf0; border-radius: 8px; padding: 14px; cursor: pointer; transition: all 0.15s; }
+  .like-card:hover { border-color: #1d2939; background: #fff; transform: translateY(-1px); }
+  .like-card .lc-reason { display: inline-block; font-size: 10px; background: #ede9fe; color: #6d28d9; padding: 2px 6px; border-radius: 3px; margin-bottom: 8px; }
+  .like-card h6 { font-size: 13px; color: #1d2939; margin-bottom: 6px; line-height: 1.4; }
+  .like-card .lc-summary { font-size: 11.5px; color: #475467; line-height: 1.6; margin-bottom: 8px; }
+  .like-card .lc-meta { font-size: 11px; color: #98a2b3; display: flex; justify-content: space-between; border-top: 1px solid #eaecf0; padding-top: 6px; }
+
+  /* C 横向 Section */
+  .c-section { background: #fff; border: 1px solid #eaecf0; border-radius: 12px; padding: 22px 26px; margin: 14px 0; }
+  .c-section .cs-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .c-section .cs-num { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg,#a78bfa,#7c3aed); color: #fff; text-align: center; line-height: 32px; font-weight: 700; font-size: 15px; flex-shrink: 0; }
+  .c-section.amber .cs-num { background: linear-gradient(135deg,#fbbf24,#f59e0b); }
+  .c-section .cs-title { font-size: 17px; font-weight: 600; color: #1d2939; }
+  .c-section .cs-sub { font-size: 12.5px; color: #98a2b3; }
+  .c-section .cs-body { margin-top: 14px; }
+
+  .extlink-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0; }
+  .extlink-card { background: #fff; border: 1px solid #eaecf0; border-radius: 8px; padding: 10px 12px; margin: 8px 0; display: flex; gap: 10px; align-items: flex-start; }
+  .extlink-row .extlink-card { margin: 0; }
+  .extlink-card .el-favicon { width: 32px; height: 32px; border-radius: 6px; background: linear-gradient(135deg,#a78bfa,#7c3aed); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .extlink-card .el-favicon.wechat { background: linear-gradient(135deg,#34d399,#059669); }
+  .extlink-card .el-favicon.xhs { background: linear-gradient(135deg,#fb7185,#e11d48); }
+  .extlink-card .el-favicon.zhihu { background: linear-gradient(135deg,#60a5fa,#2563eb); }
+  .extlink-card .el-body { flex: 1; min-width: 0; }
+  .extlink-card .el-title { font-size: 12.5px; font-weight: 600; color: #1d2939; line-height: 1.4; margin-bottom: 3px; }
+  .extlink-card .el-source { font-size: 11px; color: #98a2b3; margin-bottom: 4px; }
+  .extlink-card .el-summary { font-size: 11.5px; color: #475467; line-height: 1.6; background: #f9fafb; padding: 6px 8px; border-radius: 4px; border-left: 2px solid #a78bfa; }
+  .extlink-card .el-summary strong { color: #6d28d9; }
+
+  .paste-bar { display: flex; gap: 10px; align-items: center; background: #faf5ff; border: 1px solid #ede9fe; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; }
+  .paste-bar .paste-input { flex: 1; border: 1px solid #ddd6fe; border-radius: 6px; padding: 8px 12px; font-size: 12.5px; color: #98a2b3; background: #fff; }
+  .paste-bar .paste-btn { background: linear-gradient(135deg,#a78bfa,#7c3aed); color: #fff; padding: 8px 16px; border-radius: 6px; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+
+  .pk-horizontal { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+  .pk-side { background: #fff; border: 2px solid #eaecf0; border-radius: 10px; padding: 14px 16px; }
+  .pk-side.a { border-color: #a78bfa; background: #faf5ff; }
+  .pk-side.b { border-color: #fbbf24; background: #fffbeb; }
+  .pk-side .ps-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .pk-side .ps-label { width: 26px; height: 26px; border-radius: 50%; text-align: center; line-height: 26px; font-weight: 700; color: #fff; font-size: 13px; }
+  .pk-side.a .ps-label { background: #7c3aed; }
+  .pk-side.b .ps-label { background: #f59e0b; }
+  .pk-side .ps-stance { font-weight: 600; font-size: 14px; color: #1d2939; }
+  .pk-side .ps-vote { margin-left: auto; font-size: 12px; color: #667085; }
+  .pk-side .ps-bar { height: 6px; background: #f3f4f7; border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
+  .pk-side .ps-fill { height: 100%; }
+  .pk-side.a .ps-fill { background: #7c3aed; }
+  .pk-side.b .ps-fill { background: #f59e0b; }
+  .pk-side .ps-vote-btn { display: inline-block; margin-bottom: 10px; background: #fff; border: 1px solid currentColor; padding: 4px 12px; border-radius: 14px; font-size: 11px; cursor: pointer; font-weight: 600; }
+  .pk-side.a .ps-vote-btn { color: #7c3aed; }
+  .pk-side.b .ps-vote-btn { color: #f59e0b; }
+  .pk-side .ps-opinion { background: #fff; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; font-size: 12.5px; color: #344054; line-height: 1.6; }
+  .pk-side .ps-opinion .po-author { font-size: 11px; color: #98a2b3; margin-bottom: 4px; }
+  .pk-side .ps-opinion .po-actions { display: flex; gap: 10px; margin-top: 6px; font-size: 11px; color: #98a2b3; }
+
+  .interaction-note { background: #fffbeb; border-left: 3px solid #fcd34d; border-radius: 0 6px 6px 0; padding: 10px 14px; margin: 10px 0; font-size: 12.5px; color: #92400e; }
+  .interaction-note strong { color: #78350f; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="section">
+    <h2><span class="section-num">4</span>工具提升</h2>
+    <div class="subtitle">让 Nexus 写得更快、读得更深、用得更爽</div>
+
+    <p>围绕"工具问题"三子项，我们落地三项 AI 能力 ——「<strong>辅助输入更便捷 / 更好阅读 / 更好的讨论氛围</strong>」。<strong>点击下方任一卡片</strong>，下方会展开完整演示。</p>
+
+    <div class="ability-tabs">
+      <div class="ability-tab active" onclick="switchDemo('demo-a', this)">
+        <span class="ab-tag">A · 怎么发</span>
+        <h5>辅助输入更便捷</h5>
+        <p>AI 辅助输入 · 支持各类 HTML / 腾讯会议一键导入</p>
+      </div>
+      <div class="ability-tab" onclick="switchDemo('demo-b', this)">
+        <span class="ab-tag">B · 怎么读</span>
+        <h5>更好阅读</h5>
+        <p>管理驾驶舱 + 员工强引导：AI 总结 · AI 分析 · 你感兴趣</p>
+      </div>
+      <div class="ability-tab" onclick="switchDemo('demo-c', this)">
+        <span class="ab-tag">C · 怎么讨论</span>
+        <h5>更好的讨论氛围</h5>
+        <p>AI 识别话题信息 · 多种讨论样式 + AI 辅助回复</p>
+      </div>
+    </div>
+
+    <div class="ability-demo">
+
+      <!-- Demo A -->
+      <div class="demo-pane active" id="demo-a">
+        <div class="demo-title">A · 辅助输入更便捷</div>
+        <div class="demo-sub">强调 AI 辅助输入 —— 支持各类 HTML、腾讯会议、PPT 等<strong>一键导入</strong>，把"已有内容"零成本流入 Nexus</div>
+
+        <h4>① 多路径生成内容 · 让用户一进来就有强感知</h4>
+        <p style="font-size:12px;color:#667085;">不只是"上传文件"——给用户多条路径，每条都能 30 秒内生成一份初稿。</p>
+        <div class="path-row">
+          <div class="path-card"><div class="pc-icon">📎</div><div class="pc-name">上传 PPT/Word</div><div class="pc-sub">AI 解析结构 → 生成 Event</div></div>
+          <div class="path-card"><div class="pc-icon">🎙</div><div class="pc-name">腾讯会议导入</div><div class="pc-sub">逐字稿 → 自动汇报模板</div></div>
+          <div class="path-card"><div class="pc-icon">📄</div><div class="pc-name">腾讯文档/HTML</div><div class="pc-sub">链接粘贴 → 一键转 Topic</div></div>
+          <div class="path-card"><div class="pc-icon">💬</div><div class="pc-name">企微对话整理</div><div class="pc-sub">长聊天 → 关键决策提取</div></div>
+        </div>
+
+        <h4>② 编辑页 · 沿用线网样式 + 右侧智能建议</h4>
+        <p style="font-size:12px;color:#667085;">编辑器对齐线上现有创建 Topic 页，最小改动；右侧 280px 智能建议条与编辑随写随建议。</p>
+
+        <div class="with-sidebar">
+          <div class="topic-create">
+            <div class="field-label">Topic 名称 <span class="req">*</span></div>
+            <div class="field-input">输入 Topic 名称…</div>
+
+            <div class="field-label">标签 <span class="hint">可多选，不选默认无标签</span></div>
+            <div class="tag-row">
+              <span class="tag-pill">月会</span><span class="tag-pill">战略</span><span class="tag-pill">合规</span><span class="tag-pill">经营</span>
+              <span class="tag-pill">技术</span><span class="tag-pill">全员行动</span><span class="tag-pill">项目</span><span class="tag-pill">其他</span>
+            </div>
+
+            <div class="field-label">上传文件</div>
+            <div class="upload-zone">
+              <div class="uz-icon">🔗</div>
+              <div class="uz-title">上传文件 ～ 即可 AI 总结</div>
+              <div class="uz-meta">文档：PDF、Word、Excel、PowerPoint、TXT、Markdown、CSV<br>图片：JPG、JPEG、PNG、GIF、WEBP<br>最多上传 5 个文件，单文件须小于 10MB<br>你可将腾讯文档、腾讯会议逐字稿等下载本地后上传，也可直接拖拽至此</div>
+            </div>
+
+            <div class="field-label">输入正文 <span class="hint">支持 Markdown</span></div>
+            <div class="editor-bar">B　I　S　H　"　≡　≡　≡　&lt;/&gt;　[]　🔗　⊞</div>
+            <div class="editor-area">直接输入正文…（支持 Markdown）</div>
+
+            <div class="field-label">可见范围 <span class="req">*</span></div>
+            <div class="field-input">请选择可见范围（搜索仅匹配员工）</div>
+          </div>
+
+          <div class="sidebar-suggest">
+            <div class="ss-title"><span class="ss-spark">✨</span>AI 智能建议</div>
+            <div class="ss-sub">随写随建议 · 不打断思路</div>
+
+            <div class="ss-card">
+              <span class="ss-tag">表述优化</span>
+              <div>原文："我们这块可能要再调整一下"</div>
+              <div class="ss-quote">→ 建议改为：「研发节奏需调整 1-2 周，等待资源到位」</div>
+              <span class="ss-action">采纳建议 →</span>
+            </div>
+
+            <div class="ss-card todo">
+              <span class="ss-tag">待办建议</span>
+              <div>检测到一项行动："下周对接产品组确认"</div>
+              <div class="ss-quote">→ 是否 @ <strong>张三</strong>（产品组负责人）并设定时间？</div>
+              <span class="ss-action">一键 @ 并设时间 →</span>
+            </div>
+
+            <div class="ss-card guide">
+              <span class="ss-tag">引导补全</span>
+              <div>正文偏短，缺少决策依据</div>
+              <div class="ss-quote">→ 建议补充：「这次决策的 2 个关键证据是…」</div>
+              <span class="ss-action">让 AI 帮我写一版 →</span>
+            </div>
+
+            <div class="ss-card">
+              <span class="ss-tag">同类参考</span>
+              <div>站内 <strong>#守护家乡话</strong> 是相近主题</div>
+              <div class="ss-quote">→ 可参考其结构（钩子 + 3 证据 + CTA）</div>
+              <span class="ss-action">查看模板 →</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-footnote">
+          <strong>核心价值：</strong>把附件 / 会议 / HTML 这些"已经存在的内容"零成本流入 Nexus，把发布门槛从"写一篇文章"降到"贴一个链接 + 微调"。
+        </div>
+      </div>
+
+      <!-- Demo B -->
+      <div class="demo-pane" id="demo-b">
+        <div class="demo-title">B · 更好阅读</div>
+        <div class="demo-sub">管理层有「驾驶舱」可看全局 + 员工有「强引导」找到自己感兴趣的内容 —— AI 总结 / AI 分析 / "你感兴趣" 三件套</div>
+
+        <div class="b-subtabs">
+          <div class="b-subtab active" onclick="switchBSub('b-pane-1', this)">📊 管理驾驶舱</div>
+          <div class="b-subtab" onclick="switchBSub('b-pane-2', this)">🎯 员工视角 · 你感兴趣</div>
+        </div>
+
+        <div class="b-subpane active" id="b-pane-1">
+          <div class="cockpit-header">
+            <span class="ch-badge">管理驾驶舱</span>
+            <span class="ch-name"># AI 提效进展</span>
+            <span class="ch-meta">本月 28 条 · 42 人参与 · 187 评论 · 平均 AI 评分 4.2</span>
+          </div>
+
+          <div class="cockpit-row">
+            <div class="cockpit-card">
+              <div class="cc-head">
+                <div class="cc-icon">🔑</div>
+                <div><div class="cc-title">核心关键词</div><div class="cc-sub">大家在关注什么 · 我需要关注什么</div></div>
+              </div>
+              <div style="font-size:11px;color:#98a2b3;margin-bottom:6px;letter-spacing:0.3px;">大家在关注</div>
+              <div class="kw-cloud">
+                <span class="kw-pill hot">Cursor 实践</span><span class="kw-pill hot">Figma AI</span><span class="kw-pill">代码 Agent</span>
+                <span class="kw-pill">提效 KPI 化</span><span class="kw-pill">工具链统一</span><span class="kw-pill">培训瓶颈</span><span class="kw-pill warn">隐私合规</span>
+              </div>
+              <div class="my-attention">
+                <div style="font-size:11px;color:#98a2b3;margin-bottom:6px;letter-spacing:0.3px;text-transform:uppercase;">我需要关注</div>
+                <div class="at-row"><span><strong>@ 我的回复</strong></span><span class="at-num">5</span></div>
+                <div class="at-row"><span><strong>待我决策</strong></span><span class="at-num">2</span></div>
+                <div class="at-row"><span><strong>张力较大的话题</strong></span><span class="at-num">1</span></div>
+              </div>
+            </div>
+
+            <div class="cockpit-card">
+              <div class="cc-head">
+                <div class="cc-icon">👥</div>
+                <div><div class="cc-title">团队参与度</div><div class="cc-sub">各实验室目前的发布情况</div></div>
+              </div>
+              <div class="team-mini">
+                <div class="tm-row"><div class="tm-head"><span class="tm-name">产品实验室</span><span class="tm-count">12 条 · 43%</span></div><div class="tm-bar-wrap"><div class="tm-fill hot" style="width:78%"></div></div></div>
+                <div class="tm-row"><div class="tm-head"><span class="tm-name">设计实验室</span><span class="tm-count">8 条 · 29%</span></div><div class="tm-bar-wrap"><div class="tm-fill" style="width:55%"></div></div></div>
+                <div class="tm-row"><div class="tm-head"><span class="tm-name">研发实验室</span><span class="tm-count">5 条 · 18%</span></div><div class="tm-bar-wrap"><div class="tm-fill" style="width:35%"></div></div></div>
+                <div class="tm-row"><div class="tm-head"><span class="tm-name">公益实验室</span><span class="tm-count">3 条 · 10%</span></div><div class="tm-bar-wrap"><div class="tm-fill warn" style="width:18%"></div></div></div>
+                <div class="tm-summary"><strong>洞察：</strong>公益实验室参与度偏低，建议月会上 @ 邀请分享</div>
+              </div>
+            </div>
+
+            <div class="cockpit-card">
+              <div class="cc-head">
+                <div class="cc-icon">⭐</div>
+                <div><div class="cc-title">优质内容推荐</div><div class="cc-sub">高分 · 高互动 二合一精选</div></div>
+              </div>
+              <div class="recommend-list">
+                <div class="recommend-item"><span class="ri-tag score">AI 4.8</span><span class="ri-tag hot">21 评论</span><div class="ri-title">Topic#23 · 产品团队的 Cursor 实践</div><div class="ri-meta">证据三段齐全 · 嵌套讨论率 73%</div></div>
+                <div class="recommend-item"><span class="ri-tag score">AI 4.7</span><span class="ri-tag hot">已 @ 你 3 次</span><div class="ri-title">Topic#33 · Figma AI 工作流</div><div class="ri-meta">设计组热议 · 期待你回复</div></div>
+                <div class="recommend-item"><span class="ri-tag score">AI 4.5</span><span class="ri-tag hot">3 待决</span><div class="ri-title">Topic#27 · 代码 Agent 试点</div><div class="ri-meta">研发组拉锯 · 需方向性回复</div></div>
+                <div class="recommend-item"><span class="ri-tag hot">张力较大</span><div class="ri-title">Topic#19 · AI 提效是否 KPI 化</div><div class="ri-meta">9 评论 · 正反方各持立场</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chatbot-mini">
+            <div class="cm-head">
+              <div class="cm-icon">✨</div>
+              <div><div class="cm-title">直接问 AI · 1 分钟拿答案</div></div>
+              <div class="cm-sub">基于本项目所有 Topic + 评论回答，给出引用溯源</div>
+            </div>
+            <div class="cm-suggestions">
+              <div class="cm-chip">现在核心关注的内容是什么？</div>
+              <div class="cm-chip">大家可能有什么纠结点？</div>
+              <div class="cm-chip">现在的研发内容是什么样子的？</div>
+            </div>
+            <div class="cm-input-bar">
+              <div class="cm-input">问 AI 任何关于本项目的问题…</div>
+              <div class="cm-send">发送</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="b-subpane" id="b-pane-2">
+          <div class="cockpit-header" style="background:#475467;">
+            <span class="ch-badge">员工视角</span>
+            <span class="ch-name">Hello, 张三 · 产品实验室</span>
+            <span class="ch-meta">这周 SSV 上有 28 条新内容 · 6 条与你强相关</span>
+          </div>
+
+          <div class="staff-section">
+            <div class="ss-head">
+              <div class="ss-icon">🎯</div>
+              <div><div class="ss-title">对你有价值的内容</div><div class="ss-sub">基于你的项目（AI 转型）+ 同岗同事行为，强相关推荐</div></div>
+            </div>
+            <div class="value-grid">
+              <div class="value-main-card">
+                <span class="vmc-tag">最值得读</span>
+                <h6>Topic#23 · 产品团队的 Cursor 实践</h6>
+                <div class="vmc-summary">你所在的产品组踩过的 3 个坑 + 12 人全员上手过程，<strong>对你下周开始 Cursor 培训直接可用</strong>。AI 速读：5 分钟看完，关键里程碑：7/15 启动 · 8/15 中期 · 9/15 收尾。</div>
+              </div>
+              <div class="value-aux-list">
+                <div class="value-aux-card"><strong>Topic#40 · AB 实验基建</strong><div class="va-meta">同部门 brantli 强烈推荐 · 3 分钟速读</div></div>
+                <div class="value-aux-card"><strong>Topic#19 · AI 是否 KPI 化</strong><div class="va-meta">关于你的 KPI 制定 · 关注度高</div></div>
+                <div class="value-aux-card"><strong>Topic#45 · 公益机构数字化</strong><div class="va-meta">跨域参考 · 与你项目方法论相关</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="staff-section">
+            <div class="ss-head">
+              <div class="ss-icon">🌐</div>
+              <div><div class="ss-title">全局概览</div><div class="ss-sub">大家现在都在讨论什么、发布什么</div></div>
+            </div>
+            <div class="trend-row">
+              <div class="trend-block">
+                <h6>本周热议话题</h6>
+                <div class="tb-line"><strong># AI 提效进展</strong><span class="tb-count">本周 12 条</span></div>
+                <div class="tb-line"><strong># 野朋友数字孪生</strong><span class="tb-count">本周 6 条</span></div>
+                <div class="tb-line"><strong># 守护家乡话第二阶段</strong><span class="tb-count">本周 4 条</span></div>
+                <div class="tb-line"><strong># SSV 文化探讨</strong><span class="tb-count">本周 3 条</span></div>
+              </div>
+              <div class="trend-block">
+                <h6>本周高互动 Topic</h6>
+                <div class="tb-line"><strong>Topic#33 · Figma AI 工作流</strong><span class="tb-count">21 评论</span></div>
+                <div class="tb-line"><strong>Topic#23 · Cursor 实践</strong><span class="tb-count">15 评论</span></div>
+                <div class="tb-line"><strong>Topic#19 · AI KPI 化</strong><span class="tb-count">9 评论</span></div>
+                <div class="tb-line"><strong>Topic#40 · AB 实验基建</strong><span class="tb-count">7 评论</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="staff-section">
+            <div class="ss-head">
+              <div class="ss-icon">💡</div>
+              <div><div class="ss-title">猜你喜欢</div><div class="ss-sub">个性化推荐 · 点击进入完整阅读</div></div>
+            </div>
+            <div class="like-grid">
+              <div class="like-card"><span class="lc-reason">同部门同事看过</span><h6>Topic#27 · 代码 Agent 试点 · 谁来主导</h6><div class="lc-summary">研发实验室关于 Agent 推进路径的拉锯讨论，对你的工作方法论有启发。</div><div class="lc-meta"><span>3 分钟</span><span>15 评论</span></div></div>
+              <div class="like-card"><span class="lc-reason">同岗位关注</span><h6>Topic#22 · SSV 二次创业理念探讨</h6><div class="lc-summary">SSV 同岗 PM 关注度 92%，读完能更好理解组织战略。</div><div class="lc-meta"><span>6 分钟</span><span>11 评论</span></div></div>
+              <div class="like-card"><span class="lc-reason">你的标签命中</span><h6>Topic#32 · 野朋友心愿单</h6><div class="lc-summary">附件含 3 个产品意象（S 级物种推送 / 心愿墙 / 数字孪生），与你产品方向高度相关。</div><div class="lc-meta"><span>4 分钟</span><span>6 评论</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-footnote">
+          <strong>核心价值：</strong>管理者用<strong>「驾驶舱」</strong>30 秒拿到全局总览 + 直接问 AI 拿答案；员工用<strong>「你感兴趣」</strong>看到对自己有价值的内容 + 个性化推荐 —— <strong>读 + 决策 + 行动</strong>一体化。
+        </div>
+      </div>
+
+      <!-- Demo C -->
+      <div class="demo-pane" id="demo-c">
+        <div class="demo-title">C · 更好的讨论氛围</div>
+        <div class="demo-sub">AI 识别话题里的讨论信息，营造更好的氛围 —— <strong>多种讨论样式 + AI 辅助回复</strong>，让讨论不止于点赞</div>
+
+        <div class="c-section">
+          <div class="cs-header">
+            <div class="cs-num">1</div>
+            <div><div class="cs-title">信息分享与脑暴</div><div class="cs-sub">粘贴外链 → AI 自动总结成结构化卡片，分享门槛极低</div></div>
+          </div>
+          <div class="cs-body">
+            <div class="paste-bar"><span style="font-size:14px;">📎</span><div class="paste-input">粘贴公众号 / 小红书 / 知乎 / B 站等链接，AI 帮你总结…</div><div class="paste-btn">粘贴 + 总结</div></div>
+            <div style="font-size:12px;color:#475467;margin-bottom:6px;"><strong>示例话题：</strong>「SSV 的文化是什么？」 — 大家从外部世界搬来的相关信息</div>
+
+            <div class="extlink-row">
+              <div class="extlink-card"><div class="el-favicon wechat">公</div><div class="el-body"><div class="el-title">老人需要什么样的公益？</div><div class="el-source">公众号「公益慈善论坛」 · @ritaqwang 分享</div><div class="el-summary"><strong>AI 总结：</strong>老年公益不是"给"而是"让被需要"，参与感比物质支持更关键。</div></div></div>
+              <div class="extlink-card"><div class="el-favicon xhs">小</div><div class="el-body"><div class="el-title">如何做更有温度的公益内容</div><div class="el-source">小红书 · @brantli 分享</div><div class="el-summary"><strong>AI 总结：</strong>3 个真实故事 &gt; 10 张数据图，温度来自具体的人。</div></div></div>
+              <div class="extlink-card"><div class="el-favicon zhihu">知</div><div class="el-body"><div class="el-title">志愿者机制如何可持续</div><div class="el-source">知乎 · @chrischen 分享</div><div class="el-summary"><strong>AI 总结：</strong>留存关键是"可见的成就感"，而非培训和补贴。</div></div></div>
+            </div>
+            <div class="interaction-note"><strong>👉 我能怎么参与：</strong>看到一个好帖子 → 复制链接 → 粘贴到这里 → AI 自动出卡片，<strong>不必自己写大段文字</strong></div>
+          </div>
+        </div>
+
+        <div class="c-section amber">
+          <div class="cs-header">
+            <div class="cs-num">2</div>
+            <div><div class="cs-title">观点打擂台</div><div class="cs-sub">A/B 选项 + 投票 + 同学按立场分组分享真实经历，让讨论有结构</div></div>
+          </div>
+          <div class="cs-body">
+            <div style="background:rgba(255,255,255,0.6);border:1px solid #fde68a;border-radius:8px;padding:14px;margin-bottom:14px;text-align:center;">
+              <div style="font-size:11px;color:#92400e;font-weight:600;margin-bottom:4px;letter-spacing:0.5px;">本话题的核心命题</div>
+              <div style="font-size:16px;font-weight:600;color:#78350f;">公益落地中，<span style="color:#7c3aed;">机构能力</span> vs <span style="color:#f59e0b;">受益人感知</span>，哪个更应该被优先？</div>
+            </div>
+
+            <div class="pk-horizontal">
+              <div class="pk-side a">
+                <div class="ps-head"><div class="ps-label">A</div><div class="ps-stance">机构能力优先</div><div class="ps-vote">12 票 · 40%</div></div>
+                <div class="ps-bar"><div class="ps-fill" style="width:40%"></div></div>
+                <div class="ps-vote-btn">👍 我站 A</div>
+                <div class="ps-opinion"><div class="po-author">@Will · 野朋友项目</div>我们前期把所有精力放在数据系统建设，后来发现没有数据能力，受益人的反馈根本无法被结构化跟踪。<div class="po-actions"><span>👍 8</span><span>👎 1</span><span>💬 3 回复</span></div></div>
+              </div>
+              <div class="pk-side b">
+                <div class="ps-head"><div class="ps-label">B</div><div class="ps-stance">受益人感知优先</div><div class="ps-vote">18 票 · 60%</div></div>
+                <div class="ps-bar"><div class="ps-fill" style="width:60%"></div></div>
+                <div class="ps-vote-btn">👍 我站 B</div>
+                <div class="ps-opinion"><div class="po-author">@kiity · 公益机构对话</div>我们走了 3 个机构发现，数据再好看，受益人没感受到尊重就不愿意持续参与。<div class="po-actions"><span>👍 14</span><span>👎 0</span><span>💬 5 回复</span></div></div>
+                <div class="ps-opinion"><div class="po-author">@Suri · 数字文化月会</div>先把感知做对，再用机构能力放大——顺序反过来就废。<div class="po-actions"><span>👍 11</span><span>👎 2</span><span>💬 2 回复</span></div></div>
+              </div>
+            </div>
+            <div class="interaction-note"><strong>👉 我能怎么参与：</strong>① 选 A 或 B 投一票 → ② 用真实项目经历支持自己立场 → ③ 给别人观点点赞 / 点踩 / 回复</div>
+          </div>
+        </div>
+
+        <div class="demo-footnote">
+          <strong>核心价值：</strong>Topic 不止于"发布 + 评论"。AI 把碎片化的外部信息和内部观点，自动转成<strong>有结构、可对比、可读性强</strong>的内容。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function switchDemo(targetId, btn) {
+    document.querySelectorAll('.ability-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.demo-pane').forEach(p => p.classList.remove('active'));
+    document.getElementById(targetId).classList.add('active');
+  }
+  function switchBSub(targetId, btn) {
+    document.querySelectorAll('.b-subtab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.b-subpane').forEach(p => p.classList.remove('active'));
+    document.getElementById(targetId).classList.add('active');
+  }
+</script>
+</body>
+</html>
