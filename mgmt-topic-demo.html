@@ -15,10 +15,10 @@
 
   /* 4 步 stepper */
   .scenario-stepper { display: flex; gap: 0; margin: 16px 0; background: #f9fafb; border-radius: 10px; padding: 6px; border: 1px solid #eaecf0; flex-wrap: wrap; }
-  .scenario-step { flex: 1; min-width: 140px; padding: 10px 14px; background: transparent; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: #667085; transition: all 0.15s; text-align: center; font-weight: 500; }
+  .scenario-step { flex: 1; min-width: 140px; padding: 10px 14px; background: transparent; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: #667085; transition: all 0.15s; text-align: center; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; gap: 6px; line-height: 1.4; }
   .scenario-step:hover { background: #fff; color: #1d2939; }
   .scenario-step.active { background: #1d2939; color: #fff; box-shadow: 0 2px 6px rgba(29,41,57,0.2); }
-  .scenario-step .step-num { display: inline-block; width: 18px; height: 18px; border-radius: 50%; background: rgba(29,41,57,0.1); color: #1d2939; line-height: 18px; font-size: 11px; font-weight: 600; margin-right: 6px; }
+  .scenario-step .step-num { display: inline-block; width: 18px; height: 18px; border-radius: 50%; background: rgba(29,41,57,0.1); color: #1d2939; line-height: 18px; font-size: 11px; font-weight: 600; margin-right: 0; flex-shrink: 0; }
   .scenario-step.active .step-num { background: rgba(255,255,255,0.25); color: #fff; }
 
   .scenario-pane { display: none; }
@@ -95,18 +95,18 @@
 
   <div class="section">
     <h3>2026 Q3 季度目标 Topic</h3>
-    <p class="desc">点击下方任一步骤，下方展开对应的页面演示。一个 # 话题贯穿 4 步：创建话题 → 发起 Topic → 员工发布 Topic / 讲进展和思考 → 月底过会。</p>
+    <p class="desc">点击下方任一步骤，下方展开对应的页面演示。一个 # 话题贯穿 4 步：管理层创建话题 → 管理层同步目标 Topic → 员工发布进展 Topic → 进展汇总。</p>
 
     <div class="scenario-stepper">
-      <div class="scenario-step active" onclick="switchScenario('sc-1', this)"><span class="step-num">1</span>创建话题</div>
-      <div class="scenario-step" onclick="switchScenario('sc-2', this)"><span class="step-num">2</span>发起 Topic</div>
-      <div class="scenario-step" onclick="switchScenario('sc-3', this)"><span class="step-num">3</span>员工发布 Topic / 讲进展和思考</div>
-      <div class="scenario-step" onclick="switchScenario('sc-4', this)"><span class="step-num">4</span>月底过会</div>
+      <div class="scenario-step active" onclick="switchScenario('sc-1', this)"><span class="step-num">1</span>管理层<br>创建话题</div>
+      <div class="scenario-step" onclick="switchScenario('sc-2', this)"><span class="step-num">2</span>管理层同步<br>目标 Topic</div>
+      <div class="scenario-step" onclick="switchScenario('sc-3', this)"><span class="step-num">3</span>员工发布<br>进展 Topic</div>
+      <div class="scenario-step" onclick="switchScenario('sc-4', this)"><span class="step-num">4</span>进展<br>汇总</div>
     </div>
 
     <!-- Step 1：创建话题 -->
     <div class="scenario-pane active" id="sc-1">
-      <div class="step-narrative"><strong>第 1 步 · 创建话题</strong>：在 Nexus 上建一个带 # 的话题作为容器，明确这个季度大方向，并召集相关实验室进入。</div>
+      <div class="step-narrative"><strong>第 1 步 · 管理层创建话题</strong>：在 Nexus 上建一个带 # 的话题作为容器，明确这个季度大方向，并召集相关实验室进入。</div>
       <div class="scenario-frame">
         <div class="sf-bar">创建话题</div>
 
@@ -131,7 +131,7 @@
 
     <!-- Step 2：发起 Topic -->
     <div class="scenario-pane" id="sc-2">
-      <div class="step-narrative"><strong>第 2 步 · 发起 Topic</strong>：点击话题进入汇总界面，看到各团队负责人在话题下发布的 Q3 目标与重点事项汇总。</div>
+      <div class="step-narrative"><strong>第 2 步 · 管理层同步目标 Topic</strong>：点击话题进入汇总界面，看到各团队负责人在话题下发布的 Q3 目标与重点事项汇总。</div>
 
       <div class="topic-hero">
         <div class="hero-icon">#</div>
@@ -204,7 +204,7 @@
 
     <!-- Step 3：员工发布 Topic · 讲进展和一些思考 -->
     <div class="scenario-pane" id="sc-3">
-      <div class="step-narrative"><strong>第 3 步 · 员工发布 Topic · 讲进展和一些思考</strong>：随着 Q3 推进，员工在每件重点事项的 Topic 下持续发布——<strong>讲讲进展</strong>，<strong>留下思考</strong>。月底就直接基于这些内容讨论。</div>
+      <div class="step-narrative"><strong>第 3 步 · 员工发布进展 Topic</strong>：随着 Q3 推进，员工在每件重点事项的 Topic 下持续发布——<strong>讲讲进展</strong>，<strong>留下思考</strong>。月底就直接基于这些内容讨论。</div>
 
       <!-- 示例 1：Harness Schema -->
       <div class="scenario-frame" style="padding: 0;">
@@ -344,7 +344,7 @@
 
     <!-- Step 4：月底过会 -->
     <div class="scenario-pane" id="sc-4">
-      <div class="step-narrative"><strong>第 4 步 · 月底过会</strong>：到月底/季末，不再让大家单独发 PPT 汇报——直接拿话题下沉淀的所有 Topic 过会，一切都已结构化。</div>
+      <div class="step-narrative"><strong>第 4 步 · 进展汇总</strong>：到月底/季末，不再让大家单独发 PPT 汇报——直接拿话题下沉淀的所有 Topic 过会，一切都已结构化。</div>
       <div class="scenario-frame">
         <div class="sf-bar"># 2026 Q3 季度目标 · 季末驾驶舱</div>
 
