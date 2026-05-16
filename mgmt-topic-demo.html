@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus · 管理层话题全链路 Demo</title>
+<title>2026 Q3 季度目标 Topic</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f5f6f8; color: #1a1a1a; line-height: 1.7; font-size: 15px; }
@@ -13,9 +13,9 @@
   .section h3 { font-size: 22px; color: #101828; margin-bottom: 6px; font-weight: 600; }
   .section .desc { color: #475467; margin-bottom: 12px; font-size: 13.5px; }
 
-  /* 5 步 stepper */
+  /* 4 步 stepper */
   .scenario-stepper { display: flex; gap: 0; margin: 16px 0; background: #f9fafb; border-radius: 10px; padding: 6px; border: 1px solid #eaecf0; flex-wrap: wrap; }
-  .scenario-step { flex: 1; min-width: 120px; padding: 10px 14px; background: transparent; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: #667085; transition: all 0.15s; text-align: center; font-weight: 500; }
+  .scenario-step { flex: 1; min-width: 140px; padding: 10px 14px; background: transparent; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: #667085; transition: all 0.15s; text-align: center; font-weight: 500; }
   .scenario-step:hover { background: #fff; color: #1d2939; }
   .scenario-step.active { background: #1d2939; color: #fff; box-shadow: 0 2px 6px rgba(29,41,57,0.2); }
   .scenario-step .step-num { display: inline-block; width: 18px; height: 18px; border-radius: 50%; background: rgba(29,41,57,0.1); color: #1d2939; line-height: 18px; font-size: 11px; font-weight: 600; margin-right: 6px; }
@@ -26,24 +26,22 @@
 
   .scenario-frame { background: #fff; border: 1px solid #eaecf0; border-radius: 10px; padding: 20px 24px; margin: 12px 0; }
   .scenario-frame .sf-bar { background: #f3f4f7; margin: -20px -24px 16px; padding: 10px 18px; border-bottom: 1px solid #eaecf0; border-radius: 10px 10px 0 0; font-size: 12px; color: #475467; display: flex; align-items: center; gap: 8px; }
-  .scenario-frame .sf-bar .sf-role { background: #1d2939; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; }
-  .scenario-frame .sf-bar .sf-role.boss { background: #7c3aed; }
-  .scenario-frame .sf-bar .sf-role.team { background: #059669; }
-  .scenario-frame .sf-bar .sf-role.staff { background: #f59e0b; }
-  .scenario-frame .sf-bar .sf-role.review { background: #dc2626; }
 
-  .topic-card { background: #f9fafb; border: 1px solid #eaecf0; border-left: 4px solid #7c3aed; border-radius: 6px; padding: 14px 16px; margin: 10px 0; }
+  .topic-card { background: #f9fafb; border: 1px solid #eaecf0; border-left: 4px solid #1d2939; border-radius: 6px; padding: 14px 16px; margin: 10px 0; }
   .topic-card.team { border-left-color: #059669; }
-  .topic-card.staff { border-left-color: #f59e0b; }
-  .topic-card .tc-tag { display: inline-block; background: #ede9fe; color: #6d28d9; font-size: 11px; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
+  .topic-card.progress { border-left-color: #2563eb; }
+  .topic-card.report { border-left-color: #f59e0b; }
+
+  .topic-card .tc-tag { display: inline-block; background: #f3f4f7; color: #1d2939; font-size: 11px; padding: 2px 8px; border-radius: 3px; margin-right: 8px; }
   .topic-card.team .tc-tag { background: #d1fae5; color: #065f46; }
-  .topic-card.staff .tc-tag { background: #fef3c7; color: #92400e; }
+  .topic-card.progress .tc-tag { background: #dbeafe; color: #1e40af; }
+  .topic-card.report .tc-tag { background: #fef3c7; color: #92400e; }
   .topic-card h6 { font-size: 14px; color: #1d2939; margin: 4px 0; font-weight: 600; }
   .topic-card .tc-meta { color: #98a2b3; font-size: 11px; }
   .topic-card .tc-content { font-size: 13px; color: #475467; margin-top: 6px; line-height: 1.7; }
 
-  .step-narrative { background: linear-gradient(90deg, #faf5ff 0%, #f5f3ff 100%); border-left: 3px solid #7c3aed; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 12px 0; font-size: 13px; color: #5b21b6; }
-  .step-narrative strong { color: #4c1d95; }
+  .step-narrative { background: #f9fafb; border-left: 3px solid #1d2939; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 12px 0; font-size: 13px; color: #344054; }
+  .step-narrative strong { color: #1d2939; }
 
   /* 表单 */
   .field-label { font-size: 14px; font-weight: 600; color: #1d2939; margin: 14px 0 8px; display: flex; align-items: center; gap: 6px; }
@@ -52,9 +50,8 @@
   .field-input { width: 100%; border: 1px solid #d0d5dd; border-radius: 6px; padding: 10px 14px; font-size: 13px; color: #1d2939; background: #fff; font-weight: 600; }
   .editor-area { border: 1px solid #eaecf0; border-radius: 6px; padding: 16px; color: #475467; font-size: 13px; min-height: 60px; background: #fff; }
   .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
-  .tag-pill { background: #ede9fe; border: 1px solid #ddd6fe; color: #6d28d9; font-size: 12px; padding: 4px 12px; border-radius: 14px; }
+  .tag-pill { background: #f3f4f7; border: 1px solid #eaecf0; color: #475467; font-size: 12px; padding: 4px 12px; border-radius: 14px; }
 
-  .mock-card-row { display: grid; gap: 10px; margin: 8px 0; }
   .mock-card { background: #fafafa; border: 1px solid #eaecf0; border-radius: 6px; padding: 10px 12px; font-size: 12px; }
   .mock-card .mc-title { font-weight: 600; color: #1d2939; margin-bottom: 4px; }
   .mock-card .mc-meta { color: #98a2b3; font-size: 11px; }
@@ -62,36 +59,62 @@
   .mock-tag.green { background: #d1fae5; color: #065f46; }
   .mock-tag.blue { background: #dbeafe; color: #1e40af; }
 
-  .footer-summary { margin-top: 20px; padding: 16px 22px; background: linear-gradient(135deg,#faf5ff 0%,#f3e8ff 100%); border: 1px solid #e9d5ff; border-radius: 10px; font-size: 13.5px; color: #6b21b8; }
-  .footer-summary strong { color: #4c1d95; }
+  .sub-block-title { font-size: 13px; font-weight: 600; color: #1d2939; margin: 14px 0 8px; padding-left: 10px; border-left: 3px solid #1d2939; }
+
+  .footer-summary { margin-top: 20px; padding: 16px 22px; background: #f9fafb; border: 1px solid #eaecf0; border-radius: 10px; font-size: 13.5px; color: #344054; }
+  .footer-summary strong { color: #1d2939; }
+
+  /* 话题汇总界面样式 */
+  .topic-hero { display: flex; align-items: center; gap: 16px; padding: 20px 22px; background: #fff; border: 1px solid #eaecf0; border-radius: 12px; margin-bottom: 14px; }
+  .topic-hero .hero-icon { width: 54px; height: 54px; border-radius: 12px; background: linear-gradient(135deg, #1d2939 0%, #475467 100%); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; flex-shrink: 0; letter-spacing: -1px; }
+  .topic-hero .hero-info { flex: 1; min-width: 0; }
+  .topic-hero .hero-title { font-size: 17px; font-weight: 700; color: #1d2939; margin-bottom: 4px; }
+  .topic-hero .hero-meta { font-size: 12.5px; color: #98a2b3; }
+  .topic-hero .hero-meta span { margin-right: 14px; }
+  .topic-hero .hero-cta { background: #1d2939; color: #fff; padding: 8px 16px; border-radius: 6px; font-size: 12.5px; font-weight: 500; cursor: pointer; }
+
+  .topic-list { background: #fff; border: 1px solid #eaecf0; border-radius: 10px; overflow: hidden; }
+  .topic-list .list-head { padding: 12px 18px; background: #f9fafb; border-bottom: 1px solid #eaecf0; display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; color: #475467; }
+  .topic-list .list-head .lh-title { font-weight: 600; color: #1d2939; }
+  .topic-list .list-head .lh-count { color: #98a2b3; }
+
+  .topic-row { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-bottom: 1px solid #f3f4f7; cursor: pointer; transition: background 0.15s; }
+  .topic-row:last-child { border-bottom: none; }
+  .topic-row:hover { background: #fafbfc; }
+  .topic-row .row-icon { width: 32px; height: 32px; border-radius: 8px; background: #f3f4f7; color: #475467; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .topic-row .row-body { flex: 1; min-width: 0; }
+  .topic-row .row-title { font-size: 14px; color: #1d2939; font-weight: 500; line-height: 1.5; }
+  .topic-row .row-meta { font-size: 11.5px; color: #98a2b3; margin-top: 3px; }
+  .topic-row .row-meta .author { color: #475467; font-weight: 500; }
+  .topic-row .row-side { display: flex; align-items: center; gap: 14px; font-size: 11.5px; color: #98a2b3; flex-shrink: 0; }
+  .topic-row .row-side .stat { display: flex; align-items: center; gap: 3px; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="section">
-    <h3>管理层话题全链路 Demo · 以「2026 Q3 季度目标」为例</h3>
-    <p class="desc">点击下方任一步骤，下方展开当前角色视角的页面演示。一个 #话题贯穿 5 个角色：管理层 → 项目组 → 员工 → 月底过会。</p>
+    <h3>2026 Q3 季度目标 Topic</h3>
+    <p class="desc">点击下方任一步骤，下方展开对应的页面演示。一个 # 话题贯穿 4 步：创建话题 → 发起 Topic → 项目组讲进展 / 汇报结项 → 月底过会。</p>
 
     <div class="scenario-stepper">
-      <div class="scenario-step active" onclick="switchScenario('sc-1', this)"><span class="step-num">1</span>创建 #话题</div>
-      <div class="scenario-step" onclick="switchScenario('sc-2', this)"><span class="step-num">2</span>发起首个 Topic</div>
-      <div class="scenario-step" onclick="switchScenario('sc-3', this)"><span class="step-num">3</span>项目组上传目标</div>
-      <div class="scenario-step" onclick="switchScenario('sc-4', this)"><span class="step-num">4</span>员工上传结项</div>
-      <div class="scenario-step" onclick="switchScenario('sc-5', this)"><span class="step-num">5</span>月底过会</div>
+      <div class="scenario-step active" onclick="switchScenario('sc-1', this)"><span class="step-num">1</span>创建话题</div>
+      <div class="scenario-step" onclick="switchScenario('sc-2', this)"><span class="step-num">2</span>发起 Topic</div>
+      <div class="scenario-step" onclick="switchScenario('sc-3', this)"><span class="step-num">3</span>项目组讲进展 / 汇报结项</div>
+      <div class="scenario-step" onclick="switchScenario('sc-4', this)"><span class="step-num">4</span>月底过会</div>
     </div>
 
-    <!-- Step 1 -->
+    <!-- Step 1：创建话题 -->
     <div class="scenario-pane active" id="sc-1">
-      <div class="step-narrative"><strong>第 1 步 · 管理层创建话题</strong>：老板进入 Nexus，创建一个带 # 的话题作为容器，明确这个季度大方向。</div>
+      <div class="step-narrative"><strong>第 1 步 · 创建话题</strong>：在 Nexus 上建一个带 # 的话题作为容器，明确这个季度大方向，并召集相关实验室进入。</div>
       <div class="scenario-frame">
-        <div class="sf-bar"><span class="sf-role boss">管理层视角</span>创建 #话题</div>
+        <div class="sf-bar">创建话题</div>
 
         <div class="field-label">话题名称 <span class="req">*</span></div>
         <div class="field-input"># 2026 Q3 季度目标</div>
 
         <div class="field-label">话题描述</div>
-        <div class="editor-area">这一季度 SSV 关注三件事：① AI 转型试点 ② 公益项目数字化 ③ 跨实验室协同。<br>欢迎各实验室在此话题下上传你们 Q3 的具体目标和进展，到 Q3 结束时我们一起回看。</div>
+        <div class="editor-area">这一季度 SSV 关注三件事：① AI 转型试点 ② 公益项目数字化 ③ 跨实验室协同。<br>欢迎各实验室在此话题下上传 Q3 的具体目标和进展，到 Q3 结束时一起回看。</div>
 
         <div class="field-label">召集对象 <span class="hint">将向他们发送通知</span></div>
         <div class="tag-row">
@@ -106,93 +129,129 @@
       </div>
     </div>
 
-    <!-- Step 2 -->
+    <!-- Step 2：发起 Topic -->
     <div class="scenario-pane" id="sc-2">
-      <div class="step-narrative"><strong>第 2 步 · 管理层发起首个 Topic</strong>：在话题下发第一条 Topic，把 SSV 大目标和各实验室子目标讲清楚，引导大家在下面跟发。</div>
-      <div class="scenario-frame">
-        <div class="sf-bar"><span class="sf-role boss">管理层视角</span># 2026 Q3 季度目标</div>
-        <div class="topic-card">
-          <span class="tc-tag">大目标 · 来自管理层</span>
-          <h6>Q3 SSV 整体目标 + 各实验室分工</h6>
-          <div class="tc-meta">由 管理层 · Boss 发布 · 2026-06-28</div>
-          <div class="tc-content">
-            <strong>SSV Q3 三件大事：</strong><br>
-            1. <strong>AI 转型试点</strong>：各实验室至少落地 1 个 AI 提效场景<br>
-            2. <strong>公益项目数字化</strong>：野朋友 / 守护家乡话两个核心项目完成第二阶段<br>
-            3. <strong>跨实验室协同</strong>：建立跨实验室双月同步机制<br><br>
+      <div class="step-narrative"><strong>第 2 步 · 发起 Topic</strong>：点击话题进入汇总界面，看到各团队负责人在话题下发布的 Q3 目标与重点事项汇总。</div>
 
-            <strong>各实验室 Q3 大目标（请下方跟发详细目标）：</strong><br>
-            · 产品实验室 → 完成 Cursor 试点 + 输出实践手册<br>
-            · 设计实验室 → 探索 Figma AI 工作流<br>
-            · 研发实验室 → 代码 Agent 试点 3 个项目<br>
-            · 公益实验室 → 野朋友数字孪生 V1 上线
+      <div class="topic-hero">
+        <div class="hero-icon">#</div>
+        <div class="hero-info">
+          <div class="hero-title">2026 Q3 目标</div>
+          <div class="hero-meta">
+            <span>4 个实验室参与</span>
+            <span>4 条 Topic</span>
+            <span>有效期：2026-07-01 ～ 2026-09-30</span>
           </div>
-          <div style="margin-top:12px;padding:10px 12px;background:#fef3c7;border-radius:6px;font-size:12px;color:#92400e;">
-            <strong>📌 引导动作：</strong>请各实验室负责人在<strong>本周内</strong>，在本话题下创建一条 Topic，写明你们 Q3 的具体目标（建议含：要做什么 / 关键里程碑 / 度量标准）。
+        </div>
+        <div class="hero-cta">+ 发布 Topic</div>
+      </div>
+
+      <div class="topic-list">
+        <div class="list-head">
+          <div class="lh-title">话题下的发布</div>
+          <div class="lh-count">按时间倒序 · 共 4 条</div>
+        </div>
+
+        <div class="topic-row">
+          <div class="row-icon">技</div>
+          <div class="row-body">
+            <div class="row-title">技术架构部 2026 Q3 目标与重点事项</div>
+            <div class="row-meta">发布人：<span class="author">brantli</span> · 2026-07-01</div>
+          </div>
+          <div class="row-side">
+            <div class="stat">💬 8</div>
+            <div class="stat">👁 42</div>
+          </div>
+        </div>
+
+        <div class="topic-row">
+          <div class="row-icon">公</div>
+          <div class="row-body">
+            <div class="row-title">公益平台部 2026 Q3 目标与重点事项</div>
+            <div class="row-meta">发布人：<span class="author">chaoteng</span> · 2026-07-02</div>
+          </div>
+          <div class="row-side">
+            <div class="stat">💬 5</div>
+            <div class="stat">👁 36</div>
+          </div>
+        </div>
+
+        <div class="topic-row">
+          <div class="row-icon">教</div>
+          <div class="row-body">
+            <div class="row-title">数字教育实验室 2026 Q3 目标与重要事项</div>
+            <div class="row-meta">发布人：<span class="author">hankcwang</span> · 2026-07-03</div>
+          </div>
+          <div class="row-side">
+            <div class="stat">💬 6</div>
+            <div class="stat">👁 28</div>
+          </div>
+        </div>
+
+        <div class="topic-row">
+          <div class="row-icon">文</div>
+          <div class="row-body">
+            <div class="row-title">数字文化实验室 2026 Q3 目标与重要事项</div>
+            <div class="row-meta">发布人：<span class="author">sevenshu</span> · 2026-07-03</div>
+          </div>
+          <div class="row-side">
+            <div class="stat">💬 3</div>
+            <div class="stat">👁 24</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Step 3 -->
+    <!-- Step 3：项目组讲进展 / 汇报结项 -->
     <div class="scenario-pane" id="sc-3">
-      <div class="step-narrative"><strong>第 3 步 · 项目组上传详细目标</strong>：各实验室在话题下跟发自己的 Topic，把抽象目标变成可执行的里程碑。</div>
+      <div class="step-narrative"><strong>第 3 步 · 项目组讲进展 / 汇报结项</strong>：随着 Q3 推进，每件重点事项的 Topic 下都会持续更新——<strong>过程中是事项进展</strong>，<strong>事项结束时是结项汇报</strong>。月底就直接基于这些内容讨论。</div>
+
+      <div class="sub-block-title">3.1 事项进展 · 项目过程中持续更新</div>
       <div class="scenario-frame">
-        <div class="sf-bar"><span class="sf-role team">项目组视角</span>在 # 2026 Q3 季度目标 下跟发</div>
+        <div class="sf-bar">在「AI 转型试点 · Cursor 推广」Topic 下跟发</div>
 
-        <div class="topic-card team">
-          <span class="tc-tag">实验室目标</span>
-          <h6>产品实验室 · Q3 详细目标</h6>
-          <div class="tc-meta">由 产品实验室 · Lily 发布 · 2026-07-02</div>
+        <div class="topic-card progress">
+          <span class="tc-tag">事项进展 · 中期</span>
+          <h6>Cursor 推广 · 8 月中期复盘</h6>
+          <div class="tc-meta">由 产品实验室 · 张三 发布 · 2026-08-15 · 含 2 个附件</div>
           <div class="tc-content">
-            <strong>1. Cursor 试点：</strong>3 名工程师 → 全员（共 12 人）<br>
-            <strong>2. 实践手册：</strong>输出 ≥10 个真实场景案例<br>
-            <strong>3. 关键里程碑：</strong>7/15 启动培训 · 8/15 中期复盘 · 9/15 手册定稿<br>
-            <strong>4. 度量标准：</strong>人均 AI 编辑器使用率 ≥80% · 案例可复用率 ≥70%
+            <strong>当前进度：</strong>9/12 人完成第一阶段培训，使用率 65%<br>
+            <strong>遇到的问题：</strong>① 工具链分散 ② 隐私合规未对齐<br>
+            <strong>下一步：</strong>本周对接安全组 → 9 月恢复正常推进
           </div>
         </div>
 
-        <div class="topic-card team">
-          <span class="tc-tag">实验室目标</span>
-          <h6>公益实验室 · Q3 详细目标</h6>
-          <div class="tc-meta">由 公益实验室 · Will 发布 · 2026-07-03</div>
+        <div class="topic-card progress">
+          <span class="tc-tag">事项进展 · 周报</span>
+          <h6>野朋友数字孪生 V1 · 8 月底进展同步</h6>
+          <div class="tc-meta">由 公益实验室 · Will 发布 · 2026-08-30 · 含 3 张图</div>
           <div class="tc-content">
-            <strong>1. 野朋友数字孪生 V1：</strong>选定 3 个 S 级物种 + 数据接入 + 内测<br>
-            <strong>2. 守护家乡话第二阶段：</strong>新增 5 个方言区 · 用户量 ×2<br>
-            <strong>3. 关键里程碑：</strong>7/30 V1 设计稿 · 8/31 内测 · 9/25 灰度
+            <strong>当前进度：</strong>3 个物种数据接入完成，内测准备进入最后调试<br>
+            <strong>用户反馈预热：</strong>种子用户访谈关键词"被看见 / 想参与"占比超 60%
           </div>
-        </div>
-
-        <div class="topic-card team" style="border-left-style:dashed;opacity:0.65;">
-          <span class="tc-tag">实验室目标</span>
-          <h6>研发实验室 · 待上传</h6>
-          <div class="tc-meta">系统提醒：未在本周内跟发 · 已 @ 负责人</div>
         </div>
       </div>
-    </div>
 
-    <!-- Step 4 -->
-    <div class="scenario-pane" id="sc-4">
-      <div class="step-narrative"><strong>第 4 步 · 员工 / 项目负责人上传结项报告</strong>：随着 Q3 推进，各项目逐步出结果，员工在对应实验室 Topic 下补发自己的结项报告。</div>
+      <div class="sub-block-title">3.2 事项结项 · 项目结束时汇报</div>
       <div class="scenario-frame">
-        <div class="sf-bar"><span class="sf-role staff">员工视角</span>在「产品实验室 · Q3 详细目标」Topic 下跟发</div>
+        <div class="sf-bar">在「AI 转型试点 · Cursor 推广」Topic 下跟发</div>
 
-        <div class="topic-card staff">
-          <span class="tc-tag">结项报告</span>
-          <h6>Cursor 试点 · 阶段复盘</h6>
+        <div class="topic-card report">
+          <span class="tc-tag">事项结项</span>
+          <h6>Cursor 推广 · 阶段结项</h6>
           <div class="tc-meta">由 产品实验室 · 张三 发布 · 2026-09-22 · 含 3 个附件</div>
           <div class="tc-content">
             <strong>关键成果：</strong>12 人全员上手 · 平均提效 35% · 输出 14 个案例<br>
             <strong>踩过的坑：</strong>① 工具链分散 ② 培训资料更新不及时 ③ 隐私合规需补<br>
             <strong>下一步：</strong>已有 3 个案例值得跨实验室分享 → 同步到 #AI 转型试点话题
           </div>
-          <div style="margin-top:8px;padding:6px 10px;background:#fef3c7;border-radius:4px;font-size:11px;color:#92400e;">
+          <div style="margin-top:8px;padding:6px 10px;background:#f3f4f7;border-radius:4px;font-size:11px;color:#475467;">
             ✨ AI 自动建议：检测到本 Topic 强相关于 #AI 转型试点 → 是否将精华段落同步过去？
           </div>
         </div>
 
-        <div class="topic-card staff">
-          <span class="tc-tag">结项报告</span>
+        <div class="topic-card report">
+          <span class="tc-tag">事项结项</span>
           <h6>野朋友数字孪生 V1 · 内测总结</h6>
           <div class="tc-meta">由 公益实验室 · Will 发布 · 2026-09-15 · 含 5 张图 + 1 段视频</div>
           <div class="tc-content">
@@ -204,11 +263,11 @@
       </div>
     </div>
 
-    <!-- Step 5 -->
-    <div class="scenario-pane" id="sc-5">
-      <div class="step-narrative"><strong>第 5 步 · 月底过会</strong>：到月底/季末，管理层不再让大家单独发 PPT 汇报——直接拿话题下沉淀的所有 Topic 过会，一切都已结构化。</div>
+    <!-- Step 4：月底过会 -->
+    <div class="scenario-pane" id="sc-4">
+      <div class="step-narrative"><strong>第 4 步 · 月底过会</strong>：到月底/季末，不再让大家单独发 PPT 汇报——直接拿话题下沉淀的所有 Topic 过会，一切都已结构化。</div>
       <div class="scenario-frame">
-        <div class="sf-bar"><span class="sf-role review">复盘视角</span># 2026 Q3 季度目标 · 季末驾驶舱</div>
+        <div class="sf-bar"># 2026 Q3 季度目标 · 季末驾驶舱</div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
           <div class="mock-card" style="background:#d1fae5;border-color:#a7f3d0;">
@@ -223,8 +282,8 @@
           </div>
         </div>
 
-        <div class="topic-card" style="border-left-color:#dc2626;background:#fff5f5;">
-          <span class="tc-tag" style="background:#fee2e2;color:#991b1b;">AI 季末汇总</span>
+        <div class="topic-card" style="border-left-color:#1d2939;background:#f9fafb;">
+          <span class="tc-tag">AI 季末汇总</span>
           <h6>本季度组织态势 · 一句话</h6>
           <div class="tc-content">
             AI 转型试点产出超预期（提效 35%），公益项目数字化按节奏推进，跨实验室协同机制初步建立但<strong>研发实验室进度滞后</strong>，建议下季度优先补齐。
@@ -246,14 +305,14 @@
           </div>
         </div>
 
-        <div style="padding:12px 16px;background:#f5f3ff;border:1px solid #ede9fe;border-radius:8px;font-size:13px;color:#6d28d9;">
-          <strong>会议产出：</strong>会上不再过 PPT，直接基于这页驾驶舱讨论 → 当场形成 Q4 共识 → 老板回复后自动归入 #2026 Q4 季度目标新话题，承接到下季度。
+        <div style="padding:12px 16px;background:#f3f4f7;border:1px solid #eaecf0;border-radius:8px;font-size:13px;color:#1d2939;">
+          <strong>会议产出：</strong>会上不再过 PPT，直接基于这页驾驶舱讨论 → 当场形成 Q4 共识 → 自动归入 #2026 Q4 季度目标新话题，承接到下季度。
         </div>
       </div>
     </div>
 
     <div class="footer-summary">
-      <strong>这条 Demo 想说的事：</strong>一个 # 话题，把"老板的关注 + 项目组的目标 + 员工的结项 + 月底的过会"串成<strong>同一根时间线</strong>——每一份内容都不浪费，沉淀下来的就是组织的记忆。
+      <strong>这条 Demo 想说的事：</strong>一个 # 话题，把"创建 + 发起 + 进展/结项 + 过会"串成<strong>同一根时间线</strong>——每一份内容都不浪费，沉淀下来的就是组织的记忆。
     </div>
   </div>
 

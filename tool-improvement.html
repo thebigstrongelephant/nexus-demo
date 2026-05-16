@@ -245,7 +245,7 @@
       <div class="ability-tab active" onclick="switchDemo('demo-a', this)">
         <span class="ab-tag">A · 怎么发</span>
         <h5>辅助输入更便捷</h5>
-        <p>AI 辅助输入 · 支持各类 HTML / 腾讯会议一键导入</p>
+        <p>多路径生成 · 智能建议 · 周/月报一键生成</p>
       </div>
       <div class="ability-tab" onclick="switchDemo('demo-b', this)">
         <span class="ab-tag">B · 怎么读</span>
@@ -340,6 +340,131 @@
 
         <div class="demo-footnote">
           <strong>核心价值：</strong>把附件 / 会议 / HTML 这些"已经存在的内容"零成本流入 Nexus，把发布门槛从"写一篇文章"降到"贴一个链接 + 微调"。
+        </div>
+
+        <h4>③ 基于已有 Topic / Event · 一键生成周报 / 月报</h4>
+        <p style="font-size:12px;color:#667085;">用户已经在 Topic 下沉淀了多条 Event（含时间信息）。AI 自动按时间窗口聚合、提炼，给出可直接发出的<strong>周报 / 月报初稿</strong>。</p>
+
+        <div class="with-sidebar">
+          <!-- 左侧：Topic 正文（参考线上"可持续手作计划"样式） -->
+          <div class="topic-create" style="padding: 18px 20px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span style="font-size:11px;color:#98a2b3;cursor:pointer;">← 返回</span>
+            </div>
+            <div style="font-size:18px;font-weight:700;color:#1d2939;margin-bottom:6px;">可持续手作计划</div>
+            <div style="font-size:11.5px;color:#667085;margin-bottom:8px;">zerozhao(赵力强) · 品牌管理中心 · 2026-04-23 12:21 · 可见范围：SSV</div>
+            <div style="font-size:11.5px;color:#667085;margin-bottom:14px;">👥 共同维护： <span style="color:#7c3aed;">chrischen(陈亮)</span> &nbsp; <span style="color:#7c3aed;">darcywang(王希)</span> &nbsp; <span style="color:#7c3aed;">yandou(窦岩)</span></div>
+
+            <!-- Event #1 展开 -->
+            <div style="border:1px solid #c4b5fd;border-radius:8px;padding:12px 14px;margin-bottom:8px;background:#faf5ff;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#1d2939;">
+                  <span style="color:#7c3aed;">▼</span>
+                  <span style="background:#ede9fe;color:#6d28d9;font-size:10px;padding:1px 6px;border-radius:3px;">#1</span>
+                  <span style="font-weight:600;">【可持续手作计划】第三、四期回顾：送你一朵麦秆花，把爱编进时光里</span>
+                </div>
+                <div style="font-size:11px;color:#98a2b3;">2026-04-23</div>
+              </div>
+              <div style="font-size:11.5px;color:#475467;line-height:1.7;">
+                <strong style="color:#1d2939;">我们相信：造好物，做好事。</strong><br>
+                母亲节前夕的 5 月 8 日，"可持续手作计划"第三期以"送你一朵麦秆花，把爱编进时光里"为主题，在腾讯北京总部 B1 向善空间举办……
+                <br><span style="color:#7c3aed;font-size:11px;cursor:pointer;">展开全文 →</span>
+              </div>
+            </div>
+
+            <!-- Event #2 #3 #4 折叠 -->
+            <div style="border:1px solid #eaecf0;border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#1d2939;">
+                <span style="color:#98a2b3;">▶</span>
+                <span style="background:#f3f4f7;color:#667085;font-size:10px;padding:1px 6px;border-radius:3px;">#2</span>
+                <span>【可持续手作计划】第二期【送你一朵小红花，我亲手做的】种子导师培养活动</span>
+              </div>
+              <div style="font-size:11px;color:#98a2b3;">2026-04-23</div>
+            </div>
+            <div style="border:1px solid #eaecf0;border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#1d2939;">
+                <span style="color:#98a2b3;">▶</span>
+                <span style="background:#f3f4f7;color:#667085;font-size:10px;padding:1px 6px;border-radius:3px;">#3</span>
+                <span>【可持续手作计划】第一期【送你一朵小红花，我亲手做的】</span>
+              </div>
+              <div style="font-size:11px;color:#98a2b3;">2026-04-23</div>
+            </div>
+            <div style="border:1px solid #eaecf0;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#1d2939;">
+                <span style="color:#98a2b3;">▶</span>
+                <span style="background:#f3f4f7;color:#667085;font-size:10px;padding:1px 6px;border-radius:3px;">#4</span>
+                <span>【可持续小店】上架鹅民公社，Q米购买公益文创，把善意带回家</span>
+              </div>
+              <div style="font-size:11px;color:#98a2b3;">2026-04-28</div>
+            </div>
+          </div>
+
+          <!-- 右侧：AI 报告生成面板 -->
+          <div class="sidebar-suggest" style="padding: 14px 16px;">
+            <div class="ss-title"><span class="ss-spark">📝</span>AI 报告生成</div>
+            <div class="ss-sub">基于本 Topic 的 4 个 Event · 自动按时间聚合</div>
+
+            <!-- 报告类型选择 -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
+              <div style="border:1.5px solid #7c3aed;background:#faf5ff;border-radius:6px;padding:8px 6px;text-align:center;cursor:pointer;">
+                <div style="font-size:16px;margin-bottom:2px;">📅</div>
+                <div style="font-size:11.5px;color:#6d28d9;font-weight:600;">周报</div>
+                <div style="font-size:10px;color:#98a2b3;margin-top:2px;">04.20 - 04.26</div>
+              </div>
+              <div style="border:1px solid #eaecf0;background:#fff;border-radius:6px;padding:8px 6px;text-align:center;cursor:pointer;">
+                <div style="font-size:16px;margin-bottom:2px;">🗓️</div>
+                <div style="font-size:11.5px;color:#475467;font-weight:600;">月报</div>
+                <div style="font-size:10px;color:#98a2b3;margin-top:2px;">2026 · 04 月</div>
+              </div>
+            </div>
+
+            <!-- 时间范围微调 -->
+            <div style="background:#f9fafb;border-radius:6px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:#475467;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span>📌 时间窗口</span>
+                <span style="color:#7c3aed;cursor:pointer;font-size:10.5px;">自定义 →</span>
+              </div>
+              <div style="color:#1d2939;font-weight:500;">2026-04-20 至 2026-04-26</div>
+              <div style="color:#98a2b3;margin-top:2px;font-size:10.5px;">命中 3 条 Event · 自动识别时间</div>
+            </div>
+
+            <!-- 内容选项 -->
+            <div style="font-size:11px;color:#475467;margin-bottom:6px;font-weight:600;">📋 包含内容</div>
+            <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:10px;font-size:11px;color:#344054;">
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" checked style="accent-color:#7c3aed;">本周关键进展</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" checked style="accent-color:#7c3aed;">数据指标（人数 / 完成率）</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" checked style="accent-color:#7c3aed;">下周计划 / 关键节点</label>
+              <label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" style="accent-color:#7c3aed;">风险与待确认事项</label>
+            </div>
+
+            <!-- 生成按钮 -->
+            <div style="background:linear-gradient(135deg,#a78bfa,#7c3aed);color:#fff;border-radius:6px;padding:9px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;margin-bottom:10px;">
+              ✨ 一键生成周报
+            </div>
+
+            <!-- 生成结果预览 -->
+            <div style="background:#faf5ff;border:1px solid #ede9fe;border-radius:8px;padding:10px 12px;font-size:11px;color:#475467;line-height:1.7;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span style="font-size:10.5px;color:#6d28d9;font-weight:600;">📄 周报预览</span>
+                <span style="font-size:10px;color:#98a2b3;">3 秒生成</span>
+              </div>
+              <div style="color:#1d2939;font-weight:600;margin-bottom:4px;">可持续手作计划 · 周报 04.20-04.26</div>
+              <div style="color:#475467;">
+                <strong style="color:#1d2939;">本周进展：</strong>第三、四期合计 <strong>47 人</strong>参与，沉淀 <strong>38 名</strong>种子导师，<strong>8 件</strong>作品捐赠至可持续小店义卖。<br>
+                <strong style="color:#1d2939;">关键节点：</strong>5 月 29 日志愿者大会将进行项目推介、导师分享及直播带货。<br>
+                <strong style="color:#1d2939;">下周待办：</strong>确认 29 日直播物料、导师名单、抽奖礼品闭环。
+              </div>
+              <div style="display:flex;gap:6px;margin-top:8px;">
+                <span style="background:#fff;border:1px solid #ede9fe;color:#7c3aed;font-size:10.5px;padding:3px 8px;border-radius:4px;cursor:pointer;">📋 复制</span>
+                <span style="background:#fff;border:1px solid #ede9fe;color:#7c3aed;font-size:10.5px;padding:3px 8px;border-radius:4px;cursor:pointer;">✏️ 编辑</span>
+                <span style="background:#fff;border:1px solid #ede9fe;color:#7c3aed;font-size:10.5px;padding:3px 8px;border-radius:4px;cursor:pointer;">📤 发布</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-footnote">
+          <strong>核心价值：</strong>已沉淀的 Topic / Event 不止"可读"，还能"<strong>自动复用</strong>"——AI 识别 Event 的时间信息，按周 / 月窗口聚合，让用户从「写周报」变成「<strong>选周期 → 生成 → 发布</strong>」三步搞定。
         </div>
       </div>
 
