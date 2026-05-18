@@ -489,7 +489,7 @@ body {
 <aside class="sidebar">
   <div class="sidebar-group">
     <div class="sidebar-group-label">Topics</div>
-    <div class="sidebar-item active" data-view="all" onclick="switchSidebar(this,'all')">
+    <div class="sidebar-item" data-view="all" onclick="switchSidebar(this,'all')">
       <span class="sidebar-icon">≡</span> ALL
     </div>
     <div class="sidebar-item" data-view="my" onclick="switchSidebar(this,'my')">
@@ -497,7 +497,7 @@ body {
     </div>
 
     <!-- 三个 # 入口（话题类型驱动） -->
-    <div class="sidebar-item hash-item" data-view="hash-q3" onclick="switchSidebar(this,'hash-q3')">
+    <div class="sidebar-item hash-item active" data-view="hash-q3" onclick="switchSidebar(this,'hash-q3')">
       <span class="sidebar-icon">#</span> Q3 目标
     </div>
     <div class="sidebar-item hash-item" data-view="hash-ai" onclick="switchSidebar(this,'hash-ai')">
@@ -907,8 +907,8 @@ const SHARE_PIN = {
 };
 
 // ================ 状态 ================
-let currentSidebar = 'all';      // all | my | team | hash-q3 | hash-ai | hash-share
-let currentTeam = 'jiaoyu';      // 默认选择教育实验室
+let currentSidebar = 'hash-q3';   // 默认进入 # Q3 目标
+let currentTeam = 'jishujiagou';  // 默认实验室：技术架构部
 let currentType = 'all';
 let currentSort = 'latest';      // latest | active
 let isManagerMode = true;        // 模拟管理层身份 → 看到驾驶舱（可在页面顶部切换）
