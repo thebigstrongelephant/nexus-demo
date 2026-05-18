@@ -703,6 +703,31 @@ const TOPICS = [
   { id:14, team:'wenhua', types:['ai','share'], starred:false,
     title:'敦煌壁画 AI 修复方法论 · 1 个修复师 1 个月 → AI 辅助 1 周',
     teamHash:'#项目', author:'sevenshu(舒展)', date:'2026-04-18',
+    replyAuthor:null, replyTime:null, replyContent:null },
+
+  // 技术架构部真实 Q3 Topic
+  { id:15, team:'jishujiagou', types:['q3','ai','jishu','share'], starred:false,
+    title:'Harness Schema —— Agent 基建治理',
+    teamHash:'#技术', author:'yikazhu(朱奕嘉)', date:'2026-04-28',
+    replyAuthor:'reynaldliu(刘敏)', replyTime:'1 天前',
+    replyContent:'「v1.1 协议草案已 review，下周开始 7 个 Provider 包并行开发…」' },
+  { id:16, team:'jishujiagou', types:['q3','ai','jishu'], starred:true,
+    title:'nexus_ai 能力优化 0506',
+    teamHash:'#技术', author:'weima(马巍)', date:'2026-05-06',
+    replyAuthor:'masonhyli(李文)', replyTime:'2 天前',
+    replyContent:'「移动端适配涉及阅读与交互逻辑拆分，需关注首期上线后的用户操作闭环…」' },
+  { id:17, team:'jishujiagou', types:['q3','ai','jishu','share'], starred:false,
+    title:'技术架构部 web 性能与体验优化 skill 专项',
+    teamHash:'#技术', author:'quannazhang(张琴)', date:'2026-05-07',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:18, team:'jishujiagou', types:['q3','ai','xiangmu','share'], starred:false,
+    title:'SSV 产品设计 skill',
+    teamHash:'#项目', author:'tevenxu(徐子闻)', date:'2026-04-28',
+    replyAuthor:'suriwang(王昕)', replyTime:'3 天前',
+    replyContent:'「看看企业微信 bot 的入口接入方案…」' },
+  { id:19, team:'jishujiagou', types:['q3','share','ai'], starred:false,
+    title:'野朋友心愿单 · 5 大产品方向 + AI Coding',
+    teamHash:'#项目', author:'leoou(欧阳)', date:'2026-04-27',
     replyAuthor:null, replyTime:null, replyContent:null }
 ];
 
@@ -722,16 +747,17 @@ const Q3_PIN = {
     stats:{ replies:24, eyes:386, updated:'2026-07-03 更新' }
   },
   'jishujiagou': {
-    badge:'Q3 目标 · 技术架构部（示例）', owner:'brantli (技术架构部)', ownerInitial:'B',
+    badge:'Q3 目标 · 技术架构部（示例）', owner:'yikazhu (技术架构部)', ownerInitial:'Y',
     title:'技术架构部 2026 Q3 目标与重点事项',
-    quote:'发布人：brantli · 2026-07-01。Q3 围绕「Agent 基建治理」展开，把 Harness Schema 从协议落到全量基建采集，让任意 Agent 拿到 yaml 就能开发。',
+    quote:'Q3 目标：把"AI 基建 + AI 应用 + 性能与体验"三件事做扎实——让 Agent 能开发、让产品能复用、让用户体验扛得住。下面 5 个 Topic 是当前已发布的重点事项。',
     keys:[
-      { num:1, title:'核心任务（示例）：Harness Schema v1.1 协议规范发布', desc:'8 大能力族 + 7 个 Provider 包，observe 族通过智研全量实现' },
-      { num:2, title:'核心任务（示例）：CLI 工具链与 harness init 闭环', desc:'用户走一遍向导即生成 yaml，bootstrap 一键就绪' },
-      { num:3, title:'核心任务（示例）：研发 SOP 6 阶段全员推广', desc:'读需求 → 选仓 → 开发 → 部署 → 验收 → 交接 闭环跑通' },
-      { num:4, title:'核心任务（示例）：教师助手项目 Schema 全量落地', desc:'作为首个 Pilot 项目验证协议完备度' }
+      { num:1, title:'Harness Schema —— Agent 基建治理', desc:'yikazhu · 2026-04-28 · 5 Event：协议 v1.1 / CLI / 消费链路 / Workflow SOP / ClawBot' },
+      { num:2, title:'nexus_ai 能力优化 0506', desc:'weima · 2026-05-06 · AI 总结质量评估 + 多渠道交叉分析 + 移动端深度问答' },
+      { num:3, title:'技术架构部 web 性能与体验优化 skill 专项', desc:'quannazhang · 2026-05-07 · LCP / FCP 优化 + Lighthouse 评分 + AI Coding 巡检 skill' },
+      { num:4, title:'SSV 产品设计 skill', desc:'tevenxu · 2026-04-28 · 产设研协同 · AI 一键生成高保真原型 · 公益平台首发' },
+      { num:5, title:'野朋友心愿单 · 5 大产品方向 + AI Coding', desc:'leoou · 2026-04-27 · 与 SSV 各实验室对接：AI / IoT / 数字资产 / 全民拍照 / POI 类产品' }
     ],
-    stats:{ replies:8, eyes:42, updated:'2026-07-01 更新' }
+    stats:{ replies:18, eyes:124, updated:'2026-05-07 更新' }
   },
   'gongyipingtai': {
     badge:'Q3 目标 · 公益平台部（示例）', owner:'chaoteng (公益平台部)', ownerInitial:'C',
