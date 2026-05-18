@@ -757,11 +757,11 @@ const Q3_PIN = {
     title:'技术架构部 2026 Q3 目标与重点事项',
     quote:'Q3 总体口径——技术侧需要完成「AI 实践三件套」：基建治理 + 应用打磨 + 性能体验；野朋友项目需要跑通 5 大产品方向的 AI Coding 化样板间；Nexus 需要把 AI 总结质量、多渠道交叉分析、移动端深度问答推到可交付状态；产品设计与 web 性能两条 skill 线作为面向 SSV 全员的能力底座。',
     keys:[
-      { num:1, title:'Harness Schema —— Agent 基建治理', desc:'yikazhu · 2026-04-28 · 5 Event：协议 v1.1 / CLI / 消费链路 / Workflow SOP / ClawBot' },
-      { num:2, title:'nexus_ai 能力优化 0506', desc:'weima · 2026-05-06 · AI 总结质量评估 + 多渠道交叉分析 + 移动端深度问答' },
-      { num:3, title:'技术架构部 web 性能与体验优化 skill 专项', desc:'quannazhang · 2026-05-07 · LCP / FCP 优化 + Lighthouse 评分 + AI Coding 巡检 skill' },
-      { num:4, title:'SSV 产品设计 skill', desc:'tevenxu · 2026-04-28 · 产设研协同 · AI 一键生成高保真原型 · 公益平台首发' },
-      { num:5, title:'野朋友心愿单 · 5 大产品方向 + AI Coding', desc:'leoou · 2026-04-27 · 与 SSV 各实验室对接：AI / IoT / 数字资产 / 全民拍照 / POI 类产品' }
+      { num:1, title:'完成技术侧 AI 基建治理', desc:'落地 Harness Schema v1.1 协议 + CLI 工具链，让任意 Agent 拿到 yaml 即可开发；研发 SOP 6 阶段闭环跑通' },
+      { num:2, title:'Nexus 完成 AI 能力优化交付', desc:'AI 总结质量评估 + 多渠道交叉分析 + 移动端深度问答，三项推到可交付状态' },
+      { num:3, title:'完成 web 性能与体验 skill 沉淀', desc:'LCP / FCP 指标优化 + Lighthouse 评分 + AI Coding 巡检 skill，作为 SSV 通用底座' },
+      { num:4, title:'打磨 SSV 产品设计 skill 闭环', desc:'产设研协同 + AI 一键生成高保真原型，公益平台首发并完成迭代' },
+      { num:5, title:'野朋友项目探索 5 大产品方向', desc:'AI / IoT / 数字资产 / 全民拍照 / POI 类产品，与 SSV 各实验室对接 + AI Coding 样板间' }
     ],
     stats:{ replies:18, eyes:124, updated:'2026-05-07 更新' }
   },
@@ -1125,7 +1125,7 @@ function renderHashPin(pinKind){
       ${pin.quote?`<div class="q3-pin-quote">${pin.quote}</div>`:''}
       <div class="q3-event-list">
         ${pin.keys.map(k=>`
-          <div class="q3-event-item" onclick="showToast('打开 Event：${k.title.replace(/'/g,'')}')">
+          <div class="q3-event-item" onclick="showToast('打开重点事项：${k.title.replace(/'/g,'')}')">
             <span class="q3-event-num">${k.num}</span>
             <div class="q3-event-body">
               <div class="q3-event-title">${k.title}</div>
@@ -1162,7 +1162,7 @@ function renderQ3Pin(){
       ${pin.quote?`<div class="q3-pin-quote">${pin.quote}</div>`:''}
       <div class="q3-event-list">
         ${pin.keys.map(k=>`
-          <div class="q3-event-item" onclick="showToast('打开 Event：${k.title.replace(/'/g,'')}')">
+          <div class="q3-event-item" onclick="showToast('打开重点事项：${k.title.replace(/'/g,'')}')">
             <span class="q3-event-num">${k.num}</span>
             <div class="q3-event-body">
               <div class="q3-event-title">${k.title}</div>
