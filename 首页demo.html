@@ -270,6 +270,12 @@ body {
 }
 .q3-pin-meta { font-size:11.5px; color:var(--ink-muted); margin-bottom:10px; }
 .q3-pin-meta .author { color:var(--ink-secondary); font-weight:500; }
+.q3-pin-quote {
+  font-size:12.5px; color:var(--ink-secondary); line-height:1.75;
+  background:rgba(255,255,255,0.7); border-left:3px solid var(--blue);
+  padding:9px 13px; border-radius:0 6px 6px 0; margin:8px 0 10px;
+}
+.q3-pin-quote strong { color:var(--ink-primary); font-weight:600; }
 
 .q3-event-list { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
 .q3-event-item {
@@ -747,9 +753,9 @@ const Q3_PIN = {
     stats:{ replies:24, eyes:386, updated:'2026-07-03 更新' }
   },
   'jishujiagou': {
-    badge:'Q3 目标 · 技术架构部（示例）', owner:'yikazhu (技术架构部)', ownerInitial:'Y',
+    badge:'Q3 目标 · 技术架构部（示例）', owner:'brantli (技术架构部)', ownerInitial:'B',
     title:'技术架构部 2026 Q3 目标与重点事项',
-    quote:'Q3 目标：把"AI 基建 + AI 应用 + 性能与体验"三件事做扎实——让 Agent 能开发、让产品能复用、让用户体验扛得住。下面 5 个 Topic 是当前已发布的重点事项。',
+    quote:'Q3 总体口径——技术侧需要完成「AI 实践三件套」：基建治理 + 应用打磨 + 性能体验；野朋友项目需要跑通 5 大产品方向的 AI Coding 化样板间；Nexus 需要把 AI 总结质量、多渠道交叉分析、移动端深度问答推到可交付状态；产品设计与 web 性能两条 skill 线作为面向 SSV 全员的能力底座。',
     keys:[
       { num:1, title:'Harness Schema —— Agent 基建治理', desc:'yikazhu · 2026-04-28 · 5 Event：协议 v1.1 / CLI / 消费链路 / Workflow SOP / ClawBot' },
       { num:2, title:'nexus_ai 能力优化 0506', desc:'weima · 2026-05-06 · AI 总结质量评估 + 多渠道交叉分析 + 移动端深度问答' },
@@ -1116,6 +1122,7 @@ function renderHashPin(pinKind){
       </div>
       <div class="q3-pin-title">${pin.title}</div>
       <div class="q3-pin-meta"><span class="author">${pin.owner}</span> · ${pin.stats.updated}</div>
+      ${pin.quote?`<div class="q3-pin-quote">${pin.quote}</div>`:''}
       <div class="q3-event-list">
         ${pin.keys.map(k=>`
           <div class="q3-event-item" onclick="showToast('打开 Event：${k.title.replace(/'/g,'')}')">
@@ -1152,6 +1159,7 @@ function renderQ3Pin(){
       </div>
       <div class="q3-pin-title">${pin.title}</div>
       <div class="q3-pin-meta"><span class="author">${pin.owner}</span> · ${pin.stats.updated}</div>
+      ${pin.quote?`<div class="q3-pin-quote">${pin.quote}</div>`:''}
       <div class="q3-event-list">
         ${pin.keys.map(k=>`
           <div class="q3-event-item" onclick="showToast('打开 Event：${k.title.replace(/'/g,'')}')">
