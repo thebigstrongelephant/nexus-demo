@@ -74,6 +74,8 @@ body {
 }
 .sidebar-item:hover { background:var(--bg-hover); color:var(--ink-primary); }
 .sidebar-item.active { background:var(--ink-primary); color:#fff; font-weight:600; }
+.sidebar-item.hash-item .sidebar-icon { color:var(--blue); font-weight:800; }
+.sidebar-item.hash-item.active .sidebar-icon { color:#fff; }
 .sidebar-icon { width:18px; text-align:center; font-size:13px; flex-shrink:0; }
 .sidebar-divider { height:1px; background:var(--border-light); margin:10px 12px; }
 
@@ -92,6 +94,16 @@ body {
 .team-select-trigger .ts-name { flex:1; font-weight:500; }
 .team-select-trigger .ts-arrow { color:var(--ink-muted); font-size:10px; transition:transform 0.15s; }
 .team-select-trigger.open .ts-arrow { transform:rotate(180deg); }
+
+/* 紧凑版（放在 H1 标题旁） */
+.team-select-wrap.inline { margin:0; display:inline-block; }
+.team-select-wrap.inline .team-select-trigger {
+  padding:5px 12px; border-radius:99px; gap:7px; background:var(--blue-light); border-color:var(--blue-mid);
+  font-size:13.5px; color:var(--blue); font-weight:600; min-width:170px;
+}
+.team-select-wrap.inline .team-select-trigger:hover { background:var(--blue-mid); }
+.team-select-wrap.inline .ts-arrow { color:var(--blue); }
+.team-select-wrap.inline .team-select-menu { min-width:200px; }
 .team-select-menu {
   position:absolute; top:calc(100% + 4px); left:0; right:0;
   background:#fff; border:1px solid var(--border); border-radius:var(--radius-md);
@@ -115,7 +127,7 @@ body {
 
 /* HEADER */
 .home-header { margin-bottom:14px; display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap; }
-.home-title-row { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+.home-title-row { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
 .home-title { font-size:24px; font-weight:800; letter-spacing:-0.5px; color:var(--ink-primary); }
 .home-sub { font-size:13px; color:var(--ink-secondary); margin-top:2px; }
 .btn-publish {
@@ -213,6 +225,169 @@ body {
 .topic-row-meta .author { color:var(--ink-secondary); font-weight:500; }
 .topic-row-meta .reply { color:var(--ink-secondary); }
 .topic-row-meta .reply em { color:var(--ink-primary); font-style:normal; }
+
+/* Q3 目标置顶 Topic（仅 # Q3 目标 Tab 出现）— 淡蓝底 Topic + Event 列表形态 */
+.q3-pin-card {
+  position:relative;
+  background:#eff6ff;
+  border:1px solid #dbeafe;
+  border-radius:var(--radius-md);
+  padding:16px 20px 14px;
+  margin:6px 0 14px;
+}
+.q3-pin-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+.q3-pin-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:11px; font-weight:700; padding:2px 10px; border-radius:3px;
+  background:var(--blue-mid); color:var(--blue);
+}
+.q3-pin-pin {
+  display:inline-flex; align-items:center; gap:3px;
+  font-size:11px; color:var(--blue); font-weight:500;
+}
+.q3-pin-owner {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11.5px; color:var(--ink-secondary);
+}
+.q3-pin-owner .owner-avatar {
+  width:18px; height:18px; border-radius:50%;
+  background:var(--ink-primary); color:#fff;
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:9.5px; font-weight:700;
+}
+.q3-pin-edit {
+  margin-left:auto; display:inline-flex; align-items:center; gap:4px;
+  background:#fff; border:1px solid var(--border); padding:5px 10px;
+  border-radius:6px; font-size:11.5px; color:var(--ink-secondary);
+  cursor:pointer; font-weight:500; transition:all 0.15s;
+}
+.q3-pin-edit:hover { border-color:var(--blue); color:var(--blue); background:var(--blue-light); }
+.q3-pin-edit .role { font-size:9.5px; padding:1px 5px; border-radius:3px; background:var(--violet-light); color:var(--violet); font-weight:700; margin-right:2px; }
+
+.q3-pin-title {
+  font-size:15.5px; font-weight:700; color:var(--ink-primary);
+  line-height:1.5; margin-bottom:5px;
+}
+.q3-pin-meta { font-size:11.5px; color:var(--ink-muted); margin-bottom:10px; }
+.q3-pin-meta .author { color:var(--ink-secondary); font-weight:500; }
+
+.q3-event-list { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+.q3-event-item {
+  background:#fff; border:1px solid #dbeafe; border-radius:6px;
+  padding:9px 12px; cursor:pointer; transition:background 0.12s;
+  display:flex; align-items:center; gap:10px;
+}
+.q3-event-item:hover { background:var(--blue-light); border-color:var(--blue-mid); }
+.q3-event-num {
+  flex-shrink:0; width:18px; height:18px; border-radius:3px;
+  background:var(--blue-light); color:var(--blue);
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:10.5px; font-weight:700;
+}
+.q3-event-body { flex:1; min-width:0; display:flex; align-items:center; gap:10px; }
+.q3-event-title { font-size:12.5px; font-weight:500; color:var(--ink-primary); flex:1; line-height:1.5; }
+.q3-event-meta { font-size:11px; color:var(--ink-muted); white-space:nowrap; }
+
+.q3-pin-foot {
+  display:flex; align-items:center; gap:14px; margin-top:10px;
+  padding-top:9px; border-top:1px dashed #dbeafe;
+  font-size:11.5px; color:var(--ink-muted);
+}
+.q3-pin-foot .stat { display:inline-flex; align-items:center; gap:3px; cursor:pointer; }
+.q3-pin-foot .stat:hover { color:var(--blue); }
+.q3-pin-foot .updated { margin-left:auto; }
+
+.q3-divider-label {
+  display:flex; align-items:center; gap:10px; margin:10px 0 6px;
+  font-size:11px; color:var(--ink-muted); letter-spacing:0.5px;
+}
+.q3-divider-label::before, .q3-divider-label::after {
+  content:''; flex:1; height:1px; background:var(--border-light);
+}
+
+/* 管理驾驶舱 */
+.cockpit-banner {
+  background:linear-gradient(135deg, #1a1d26 0%, #2d3343 100%);
+  color:#fff; border-radius:var(--radius-md); padding:14px 20px;
+  margin:6px 0 14px; display:flex; align-items:center; gap:14px;
+}
+.cockpit-banner .cb-tag {
+  background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
+  padding:4px 12px; border-radius:6px; font-size:12px; font-weight:600;
+}
+.cockpit-banner .cb-title { font-size:15px; font-weight:700; flex:1; }
+.cockpit-banner .cb-meta { font-size:11.5px; color:rgba(255,255,255,0.6); }
+
+.cockpit-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:14px; }
+.cockpit-card {
+  background:#fff; border:1px solid var(--border); border-radius:var(--radius-md);
+  padding:14px 16px; box-shadow:var(--shadow-sm);
+}
+.cockpit-card-head { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.cockpit-card-icon {
+  width:28px; height:28px; border-radius:7px; background:var(--bg-subtle);
+  display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;
+}
+.cockpit-card-title { font-size:13.5px; font-weight:700; }
+.cockpit-card-sub { font-size:11px; color:var(--ink-muted); margin-bottom:10px; }
+
+.cockpit-keyword-pills { display:flex; flex-wrap:wrap; gap:5px; margin-top:6px; }
+.cockpit-keyword-pill { font-size:11px; padding:4px 10px; border-radius:99px; background:var(--bg-subtle); color:var(--ink-secondary); border:1px solid var(--border-light); }
+.cockpit-keyword-pill.hot { background:var(--ink-primary); color:#fff; border-color:var(--ink-primary); font-weight:600; }
+.cockpit-keyword-pill.warn { background:var(--amber-light); color:var(--amber); border-color:#fde68a; }
+
+.cockpit-keyword-block { margin-top:8px; }
+.cockpit-block-label { font-size:11px; color:var(--ink-muted); margin-bottom:4px; }
+
+.team-bar-row { margin-bottom:8px; }
+.team-bar-row .tb-label { display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-secondary); margin-bottom:3px; }
+.team-bar-row .tb-label strong { color:var(--ink-primary); }
+.team-bar-row .tb-bar { height:5px; background:var(--bg-subtle); border-radius:3px; overflow:hidden; }
+.team-bar-row .tb-fill { height:100%; border-radius:3px; }
+
+.cockpit-insight {
+  margin-top:10px; padding:8px 10px; background:var(--amber-light);
+  border-radius:6px; font-size:11px; color:#92400e; line-height:1.65;
+}
+
+.cockpit-content-card {
+  background:var(--bg-subtle); border-radius:8px; padding:10px 12px;
+  margin-bottom:8px; cursor:pointer;
+}
+.cockpit-content-card:hover { background:var(--bg-hover); }
+.cockpit-content-card .cc-meta { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:5px; }
+.cockpit-content-card .cc-ai { background:var(--ink-primary); color:#fff; font-size:10px; padding:1px 6px; border-radius:3px; font-weight:700; }
+.cockpit-content-card .cc-flag { background:var(--amber-light); color:var(--amber); font-size:10px; padding:1px 6px; border-radius:3px; font-weight:600; }
+.cockpit-content-card .cc-title { font-size:12.5px; color:var(--ink-primary); font-weight:600; line-height:1.5; }
+.cockpit-content-card .cc-sub { font-size:11px; color:var(--ink-muted); margin-top:3px; }
+
+.cockpit-attention {
+  background:#fff; border:1px solid var(--border); border-radius:var(--radius-md);
+  padding:14px 18px; margin-bottom:14px; box-shadow:var(--shadow-sm);
+}
+.cockpit-attention .ca-title { font-size:12px; color:var(--ink-muted); margin-bottom:8px; }
+.cockpit-attention-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:7px 0; border-bottom:1px solid var(--border-light); font-size:12.5px; color:var(--ink-primary);
+}
+.cockpit-attention-row:last-child { border-bottom:none; }
+.cockpit-attention-num {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:22px; height:22px; border-radius:50%; background:var(--ink-primary); color:#fff; font-size:11px; font-weight:700;
+}
+
+.role-toggle-bar {
+  display:flex; align-items:center; gap:8px; padding:8px 12px;
+  background:var(--violet-light); border:1px dashed var(--violet);
+  border-radius:8px; font-size:11.5px; color:var(--violet); margin-bottom:14px;
+}
+.role-toggle-bar .role-toggle-btn {
+  background:#fff; border:1px solid var(--violet); color:var(--violet);
+  padding:3px 10px; border-radius:5px; font-size:11px; font-weight:600;
+  cursor:pointer; margin-left:auto;
+}
+.role-toggle-bar .role-toggle-btn:hover { background:var(--violet); color:#fff; }
+.role-toggle-bar .role-toggle-btn.on { background:var(--violet); color:#fff; }
 
 /* RIGHT (Nexus AI 简报) */
 .right-rail {
@@ -320,14 +495,16 @@ body {
     <div class="sidebar-item" data-view="my" onclick="switchSidebar(this,'my')">
       <span class="sidebar-icon">👤</span> MY
     </div>
-    <!-- Team 下拉（默认选一个 Team） -->
-    <div class="team-select-wrap" id="teamSelectWrap">
-      <div class="team-select-trigger" id="teamSelectTrigger" onclick="toggleTeamMenu()">
-        <span class="ts-emoji" id="tsEmoji">📚</span>
-        <span class="ts-name" id="tsName">教育实验室</span>
-        <span class="ts-arrow">▼</span>
-      </div>
-      <div class="team-select-menu" id="teamSelectMenu"></div>
+
+    <!-- 三个 # 入口（话题类型驱动） -->
+    <div class="sidebar-item hash-item" data-view="hash-q3" onclick="switchSidebar(this,'hash-q3')">
+      <span class="sidebar-icon">#</span> Q3 目标
+    </div>
+    <div class="sidebar-item hash-item" data-view="hash-ai" onclick="switchSidebar(this,'hash-ai')">
+      <span class="sidebar-icon">#</span> AI 提效
+    </div>
+    <div class="sidebar-item hash-item" data-view="hash-share" onclick="switchSidebar(this,'hash-share')">
+      <span class="sidebar-icon">#</span> 项目分享
     </div>
   </div>
 
@@ -469,25 +646,25 @@ const PIN_LIST = [
 
 // Topic 列表（实时流） · types 字段携带 # 类型标签 + team 字段
 const TOPICS = [
-  { id:1, team:'jiaoyu', types:['q3','xiangmu'], starred:false,
+  { id:1, team:'jiaoyu', types:['q3','xiangmu','share'], starred:false,
     title:'公益平台部 CICDCO 基建讨论',
     teamHash:'#技术', author:'dingyuan(袁丁)', date:'2026-05-15',
     replyAuthor:'brantli(李哲)', replyTime:'1 小时前',
     replyContent:'「这里的整体的工作是很全面的，很赞！不过近…」' },
-  { id:2, team:'jiaoyu', types:['xiangmu','jishu'], starred:false,
+  { id:2, team:'jiaoyu', types:['xiangmu','jishu','share','ai'], starred:false,
     title:'企鹅智慧学练和企鹅教师助手上架国家智慧中小学平台啦！诚邀各位深度使用体验',
     teamHash:'#项目', author:'lyali(李雅晴)', date:'2026-05-13',
     replyAuthor:null, replyTime:null, replyContent:null },
-  { id:3, team:'wenhua', types:['xiangmu','jishu'], starred:false,
+  { id:3, team:'wenhua', types:['xiangmu','jishu','ai','share'], starred:false,
     title:'数字文化 · 探元 AI 知识库：AI 驱动的文化遗产知识库开放平台',
     teamHash:'#技术', author:'ericjing(井博)', date:'2026-05-12',
     replyAuthor:'caitlynchen(陈菊红)', replyTime:'23 分钟前',
     replyContent:'回复了 sevenshu(舒展):「内测登陆有点问题…」' },
-  { id:4, team:'jishujiagou', types:['jishu','xiangmu','q3'], starred:false,
+  { id:4, team:'jishujiagou', types:['jishu','xiangmu','q3','ai'], starred:false,
     title:'SPM 埋点治理第二阶段：曝光补全 + 多跳归因 + 属性漏传防治 — 方案讨论',
     teamHash:'#技术', author:'hunterguo(郭晓波)', date:'2026-05-11',
     replyAuthor:null, replyTime:null, replyContent:null },
-  { id:5, team:'gongyipingtai', types:['xiangmu','q3'], starred:false,
+  { id:5, team:'gongyipingtai', types:['xiangmu','q3','ai'], starred:false,
     title:'公益测试工作提效讨论',
     teamHash:'#技术', author:'allenyhu(朱艳红)', date:'2026-05-09',
     replyAuthor:null, replyTime:null, replyContent:null },
@@ -495,29 +672,220 @@ const TOPICS = [
     title:'【目标 · Q3】教育实验室云南试点签约 + 部署',
     teamHash:'#月会', author:'李晨(管理层)', date:'2026-05-08',
     replyAuthor:null, replyTime:null, replyContent:null },
-  { id:7, team:'wenhua', types:['q3'], starred:false,
+  { id:7, team:'wenhua', types:['q3','share'], starred:false,
     title:'【目标 · Q3】敦煌壁画 200 幅 AI 修复交付计划',
     teamHash:'#月会', author:'刘芳(管理层)', date:'2026-05-06',
     replyAuthor:null, replyTime:null, replyContent:null },
-  { id:8, team:'jishujiagou', types:['q3','jishu'], starred:false,
+  { id:8, team:'jishujiagou', types:['q3','jishu','ai'], starred:false,
     title:'【目标 · Q3】Harness Schema v1.1 全量推广 — 7 个 Provider',
     teamHash:'#月会', author:'yikazhu(管理层)', date:'2026-05-05',
     replyAuthor:null, replyTime:null, replyContent:null },
-  { id:9, team:'jiaoyu', types:['hegui','jishu'], starred:false,
+  { id:9, team:'jiaoyu', types:['hegui','jishu','ai'], starred:false,
     title:'AI 学情数据合规评估 · 三省试点前置检查清单',
     teamHash:'#合规', author:'zhangshilong(张世龙)', date:'2026-05-04',
     replyAuthor:null, replyTime:null, replyContent:null },
-  { id:10, team:'gongyipingtai', types:['zhanlve','quanyuan'], starred:false,
+  { id:10, team:'gongyipingtai', types:['zhanlve','quanyuan','share'], starred:false,
     title:'公益平台 2026 战略升级路径思考',
     teamHash:'#战略', author:'ewellzhao(赵国臣)', date:'2026-04-29',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:11, team:'jishujiagou', types:['ai','jishu','share'], starred:false,
+    title:'ClawBot 企微集成上线 · 知识库 + Schema 一键查询',
+    teamHash:'#技术', author:'reynaldliu(李铭)', date:'2026-04-26',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:12, team:'gongyipingtai', types:['ai','xiangmu'], starred:false,
+    title:'AI 推荐系统 A/B 测试经验复盘',
+    teamHash:'#项目', author:'chaoteng(超腾)', date:'2026-04-22',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:13, team:'jiaoyu', types:['ai','share'], starred:false,
+    title:'教案生成器 v2 上线 · 多学科多学段教学反馈',
+    teamHash:'#项目', author:'hankcwang(黄寒)', date:'2026-04-20',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:14, team:'wenhua', types:['ai','share'], starred:false,
+    title:'敦煌壁画 AI 修复方法论 · 1 个修复师 1 个月 → AI 辅助 1 周',
+    teamHash:'#项目', author:'sevenshu(舒展)', date:'2026-04-18',
     replyAuthor:null, replyTime:null, replyContent:null }
 ];
 
+// Q3 目标置顶卡 — 仅在「# Q3 目标」Tab 顶部展示，按 Team 分别一份；切换其他 Tab/Team 不展示
+// 数据按截图：四个部门管理层 2026 Q3 目标与重点/重要事项
+const Q3_PIN = {
+  'all': {
+    badge:'Q3 目标 · SSV 整体（示例）', owner:'马晓宇 (SSV 总负责人)', ownerInitial:'马',
+    title:'SSV 2026 Q3 目标与重点事项',
+    quote:'让进展被公开、信号被看到、经验被传递。Q3 重点事项已对齐到各部门管理层，月会基于 Topic 讨论。',
+    keys:[
+      { num:1, title:'技术架构部 2026 Q3 目标与重点事项', desc:'发布人：brantli · 2026-07-01' },
+      { num:2, title:'公益平台部 2026 Q3 目标与重点事项', desc:'发布人：chaoteng · 2026-07-02' },
+      { num:3, title:'数字教育实验室 2026 Q3 目标与重要事项', desc:'发布人：hankcwang · 2026-07-03' },
+      { num:4, title:'数字文化实验室 2026 Q3 目标与重要事项', desc:'发布人：sevenshu · 2026-07-03' }
+    ],
+    stats:{ replies:24, eyes:386, updated:'2026-07-03 更新' }
+  },
+  'jishujiagou': {
+    badge:'Q3 目标 · 技术架构部（示例）', owner:'brantli (技术架构部)', ownerInitial:'B',
+    title:'技术架构部 2026 Q3 目标与重点事项',
+    quote:'发布人：brantli · 2026-07-01。Q3 围绕「Agent 基建治理」展开，把 Harness Schema 从协议落到全量基建采集，让任意 Agent 拿到 yaml 就能开发。',
+    keys:[
+      { num:1, title:'核心任务（示例）：Harness Schema v1.1 协议规范发布', desc:'8 大能力族 + 7 个 Provider 包，observe 族通过智研全量实现' },
+      { num:2, title:'核心任务（示例）：CLI 工具链与 harness init 闭环', desc:'用户走一遍向导即生成 yaml，bootstrap 一键就绪' },
+      { num:3, title:'核心任务（示例）：研发 SOP 6 阶段全员推广', desc:'读需求 → 选仓 → 开发 → 部署 → 验收 → 交接 闭环跑通' },
+      { num:4, title:'核心任务（示例）：教师助手项目 Schema 全量落地', desc:'作为首个 Pilot 项目验证协议完备度' }
+    ],
+    stats:{ replies:8, eyes:42, updated:'2026-07-01 更新' }
+  },
+  'gongyipingtai': {
+    badge:'Q3 目标 · 公益平台部（示例）', owner:'chaoteng (公益平台部)', ownerInitial:'C',
+    title:'公益平台部 2026 Q3 目标与重点事项',
+    quote:'发布人：chaoteng · 2026-07-02。Q3 主线：把 AI 推荐与资金透明化做到全量上线，NGO MVP 不再延期。',
+    keys:[
+      { num:1, title:'核心任务（示例）：AI 智能推荐系统 V1 全量上线', desc:'灰度命中率已达 38%，Q3 完成全量推送，CTR 提升 1.6 倍' },
+      { num:2, title:'核心任务（示例）：资金流向可视化大屏 GA', desc:'UAT 完成后正式发布，覆盖 100% 在线公益项目' },
+      { num:3, title:'核心任务（示例）：NGO 合作伙伴平台 MVP 上线', desc:'重新拆分版本节奏，9 月底前完成首批 NGO 入驻' }
+    ],
+    stats:{ replies:5, eyes:36, updated:'2026-07-02 更新' }
+  },
+  'jiaoyu': {
+    badge:'Q3 目标 · 数字教育实验室（示例）', owner:'hankcwang (数字教育实验室)', ownerInitial:'H',
+    title:'数字教育实验室 2026 Q3 目标与重要事项',
+    quote:'发布人：hankcwang · 2026-07-03。Q3 关键词：V2 + 云南首省试点 + 知识图谱扩展。学校网络是首要风险，提前对齐。',
+    keys:[
+      { num:1, title:'重要事项（示例）：V2 核心功能开发完成', desc:'学习路径引擎 + 教师看板，准确率从 68% 提升至 ≥ 82%' },
+      { num:2, title:'重要事项（示例）：云南省教育厅完成合作签约', desc:'5 月签约 → 6 月部署 → 7-8 月教师培训 → 秋季学期试用' },
+      { num:3, title:'重要事项（示例）：3 篇教育 AI 方法论白皮书', desc:'支撑政府合作和行业影响力建设' },
+      { num:4, title:'重要事项（示例）：数学知识图谱覆盖初中 90%', desc:'已覆盖 85% / 2,340 节点，Q3 通过专家评审' }
+    ],
+    stats:{ replies:6, eyes:28, updated:'2026-07-03 更新' }
+  },
+  'wenhua': {
+    badge:'Q3 目标 · 数字文化实验室（示例）', owner:'sevenshu (数字文化实验室)', ownerInitial:'S',
+    title:'数字文化实验室 2026 Q3 目标与重要事项',
+    quote:'发布人：sevenshu · 2026-07-03。200 幅是死线，专家评审通过率不能低于 90%。沉浸式展览要在 Q3 末发布。',
+    keys:[
+      { num:1, title:'重要事项（示例）：敦煌壁画 200 幅 AI 修复交付', desc:'已完成 144 幅初稿，专家评审通过率 92%' },
+      { num:2, title:'重要事项（示例）：沉浸式线上展览上线', desc:'技术方案已完成，Q3 末完成开发并对外发布' },
+      { num:3, title:'重要事项（示例）：文化 AI 知识图谱扩展', desc:'已有 4.2 万实体，Q3 接入非遗项目数据' }
+    ],
+    stats:{ replies:3, eyes:24, updated:'2026-07-03 更新' }
+  }
+};
+
+// AI 提效置顶卡 — 各实验室在 AI 提效方向的目标
+const AI_PIN = {
+  'all': {
+    badge:'AI 提效 · SSV 整体（示例）', owner:'马晓宇 (SSV 总负责人)', ownerInitial:'马',
+    title:'SSV 2026 AI 提效 · 全员落地',
+    quote:'AI 不是提议、而是工程。每个实验室至少落 1 个 AI 提效真实场景，季度内可量化。',
+    keys:[
+      { num:1, title:'重点事项（示例）：Topic 写作 Copilot v1', desc:'辅助输入 + 智能建议 + 周月报生成' },
+      { num:2, title:'重点事项（示例）：Nexus AI 检索覆盖核心场景', desc:'跨 Topic / 跨 Event 的语义检索 + 总结' },
+      { num:3, title:'重点事项（示例）：各实验室至少 1 个 AI 提效案例', desc:'量化提效百分比 / 节省时长 / 用户采纳率' }
+    ],
+    stats:{ replies:18, eyes:212, updated:'2026-07-04 更新' }
+  },
+  'jishujiagou': {
+    badge:'AI 提效 · 技术架构部（示例）', owner:'brantli (技术架构部)', ownerInitial:'B',
+    title:'技术架构部 · AI 提效落地路径',
+    quote:'让任意 Agent 拿到 harness.yaml 就能开发，是技术架构部对 SSV 的 AI 基建价值承诺。',
+    keys:[
+      { num:1, title:'核心任务（示例）：Harness Schema 全量推广', desc:'让 Agent 接入项目从 days → hours' },
+      { num:2, title:'核心任务（示例）：ClawBot 企微 AI 助手', desc:'知识库 + Schema 封装为对话入口' },
+      { num:3, title:'核心任务（示例）：CodeBuddy 统一研发入口', desc:'对接智研、SOP 工作流' }
+    ],
+    stats:{ replies:9, eyes:94, updated:'2026-07-04 更新' }
+  },
+  'gongyipingtai': {
+    badge:'AI 提效 · 公益平台部（示例）', owner:'chaoteng (公益平台部)', ownerInitial:'C',
+    title:'公益平台部 · AI 提效落地路径',
+    quote:'AI 推荐让捐赠匹配更精准，AI 审核让 NGO 入驻更高效。',
+    keys:[
+      { num:1, title:'核心任务（示例）：AI 智能推荐系统全量上线', desc:'命中率从 24% 提升到 38%' },
+      { num:2, title:'核心任务（示例）：项目审核助手', desc:'材料完整性 + 合规性自动检查' }
+    ],
+    stats:{ replies:5, eyes:48, updated:'2026-07-02 更新' }
+  },
+  'jiaoyu': {
+    badge:'AI 提效 · 数字教育实验室（示例）', owner:'hankcwang (数字教育实验室)', ownerInitial:'H',
+    title:'数字教育实验室 · AI 提效落地路径',
+    quote:'让 AI 在课堂里真正帮到老师 — 不是 demo，是日常使用工具。',
+    keys:[
+      { num:1, title:'重要事项（示例）：教案生成器 v2', desc:'多学科多学段，准确率 ≥ 90%' },
+      { num:2, title:'重要事项（示例）：智慧课堂助手', desc:'课堂实时互动 + 学情反馈' },
+      { num:3, title:'重要事项（示例）：教学效果分析', desc:'AI 自动生成班级 / 学生层级改进建议' }
+    ],
+    stats:{ replies:7, eyes:68, updated:'2026-07-03 更新' }
+  },
+  'wenhua': {
+    badge:'AI 提效 · 数字文化实验室（示例）', owner:'sevenshu (数字文化实验室)', ownerInitial:'S',
+    title:'数字文化实验室 · AI 提效落地路径',
+    quote:'让 AI 修复加速文物保护流程 — 一个修复师的 1 个月，AI 辅助下变成 1 周。',
+    keys:[
+      { num:1, title:'重要事项（示例）：敦煌壁画 AI 修复', desc:'专家评审通过率 92%，时长压缩 75%' },
+      { num:2, title:'重要事项（示例）：文物识别助手 v2', desc:'扩展非遗工艺品识别' }
+    ],
+    stats:{ replies:3, eyes:31, updated:'2026-07-03 更新' }
+  }
+};
+
+// 项目分享置顶卡 — 各实验室阶段性项目分享
+const SHARE_PIN = {
+  'all': {
+    badge:'项目分享 · SSV 整体（示例）', owner:'马晓宇 (SSV 总负责人)', ownerInitial:'马',
+    title:'SSV 2026 Q3 项目分享 · 跨实验室经验',
+    quote:'每月一次跨实验室项目分享，让经验流动起来 — 不是汇报，是把"踩过的坑"变成可复用资产。',
+    keys:[
+      { num:1, title:'重点事项（示例）：跨实验室经验集市', desc:'每月集中 1 次，30 分钟主题分享 + 60 分钟讨论' },
+      { num:2, title:'重点事项（示例）：项目复盘模板', desc:'背景 → 过程 → 结果 → 关键洞察 4 段式' },
+      { num:3, title:'重点事项（示例）：年度优秀项目评选', desc:'Q4 末由 SSV 全员投票产生年度 Top 5' }
+    ],
+    stats:{ replies:11, eyes:135, updated:'2026-07-05 更新' }
+  },
+  'jishujiagou': {
+    badge:'项目分享 · 技术架构部（示例）', owner:'brantli (技术架构部)', ownerInitial:'B',
+    title:'技术架构部 · 项目分享 / 复盘',
+    quote:'技术决策的复盘比项目本身更值钱 — 把每次架构选型背后的取舍记录下来。',
+    keys:[
+      { num:1, title:'核心任务（示例）：Harness Schema 协议设计复盘', desc:'8 大能力族抽象层为何这样设计' },
+      { num:2, title:'核心任务（示例）：研发 SOP 跑通经验', desc:'6 阶段闭环踩过的坑' }
+    ],
+    stats:{ replies:6, eyes:72, updated:'2026-07-05 更新' }
+  },
+  'gongyipingtai': {
+    badge:'项目分享 · 公益平台部（示例）', owner:'chaoteng (公益平台部)', ownerInitial:'C',
+    title:'公益平台部 · 项目分享 / 复盘',
+    quote:'公益项目的可复制性是核心价值 — 一个成功的模式能在多少地方落地，决定 SSV 的影响力。',
+    keys:[
+      { num:1, title:'核心任务（示例）：可持续手作计划复盘', desc:'47 人参与 / 38 名种子导师 / 8 件作品义卖的方法论' },
+      { num:2, title:'核心任务（示例）：AI 推荐 A/B 测试经验', desc:'命中率从 24% 到 38% 的关键 5 步' }
+    ],
+    stats:{ replies:4, eyes:55, updated:'2026-07-05 更新' }
+  },
+  'jiaoyu': {
+    badge:'项目分享 · 数字教育实验室（示例）', owner:'hankcwang (数字教育实验室)', ownerInitial:'H',
+    title:'数字教育实验室 · 项目分享 / 复盘',
+    quote:'乡村教育的真实场景比 demo 复杂得多 — 把试点经验沉淀下来，下一所学校就能少踩坑。',
+    keys:[
+      { num:1, title:'重要事项（示例）：云南试点经验复盘', desc:'网络基础设施风险识别 + 教师培训方法' },
+      { num:2, title:'重要事项（示例）：知识图谱标注方法论', desc:'与北师大合作的标注质量评审流程' }
+    ],
+    stats:{ replies:5, eyes:48, updated:'2026-07-05 更新' }
+  },
+  'wenhua': {
+    badge:'项目分享 · 数字文化实验室（示例）', owner:'sevenshu (数字文化实验室)', ownerInitial:'S',
+    title:'数字文化实验室 · 项目分享 / 复盘',
+    quote:'文化遗产数字化是一个慢工程 — 把每个项目的方法论沉淀好，才能让下一个项目站在肩膀上。',
+    keys:[
+      { num:1, title:'重要事项（示例）：敦煌壁画 AI 修复方法论', desc:'图像配准 + 风格保留 + 专家评审三段式' }
+    ],
+    stats:{ replies:2, eyes:18, updated:'2026-07-05 更新' }
+  }
+};
+
 // ================ 状态 ================
-let currentSidebar = 'all';      // all | my | team
+let currentSidebar = 'all';      // all | my | team | hash-q3 | hash-ai | hash-share
 let currentTeam = 'jiaoyu';      // 默认选择教育实验室
 let currentType = 'all';
 let currentSort = 'latest';      // latest | active
+let isManagerMode = true;        // 模拟管理层身份 → 看到驾驶舱（可在页面顶部切换）
 
 const $ = sel => document.querySelector(sel);
 const mainArea = $('#mainArea');
@@ -549,9 +917,8 @@ function pickTeam(key){
   $('#tsName').textContent = t.name;
   $('#teamSelectMenu').classList.remove('show');
   $('#teamSelectTrigger').classList.remove('open');
-  // 选 Team 后切到 team 视图
-  currentSidebar = 'team';
-  document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.remove('active'));
+  // 选 Team 后保持 #Q3 目标 视图（仅在 #Q3 目标页面才能看到下拉）
+  if(currentSidebar !== 'hash-q3') currentSidebar = 'hash-q3';
   render();
 }
 document.addEventListener('click', e=>{
@@ -569,22 +936,104 @@ function switchSidebar(el, view){
 }
 
 // ================ 渲染 ================
+// 把 sidebar 视图映射到一个 type 过滤值
+function sidebarToType(){
+  if(currentSidebar==='hash-q3') return 'q3';
+  if(currentSidebar==='hash-ai') return 'ai';
+  if(currentSidebar==='hash-share') return 'share';
+  return null;
+}
+
 function getFilteredTopics(){
   let list = TOPICS;
   if(currentSidebar==='team') list = list.filter(t=>t.team===currentTeam);
   if(currentSidebar==='my') list = list.filter(t=>t.author.includes('马巍') || t.starred);
+  // 三个 # 入口：在该 type 下过滤；同时如果当前 Team 下拉选了具体 Team，再叠加 Team 过滤
+  const sbType = sidebarToType();
+  if(sbType){
+    list = list.filter(t=>(t.types||[]).includes(sbType));
+  }
+  // tag 行 currentType
   if(currentType!=='all') list = list.filter(t=>(t.types||[]).includes(currentType));
   // 排序
   if(currentSort==='latest') list = [...list].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   return list;
 }
 
+// 三个 # 入口的页面元数据
+const HASH_VIEWS = {
+  'hash-q3': {
+    title:'# Q3 目标',
+    sub:'本季度由管理层制定的目标 + 实验室对应进展',
+    pinKind:'q3',          // 用 Q3_PIN 数据
+    bottomLabel:'下方为本季度 Q3 相关进展 / 思考 Topic'
+  },
+  'hash-ai': {
+    title:'# AI 提效',
+    sub:'各实验室在 AI 提效方向的目标与实践沉淀',
+    pinKind:'ai',
+    bottomLabel:'下方为各实验室 AI 提效方向的进展 / 实践 Topic'
+  },
+  'hash-share': {
+    title:'# 项目分享',
+    sub:'实验室阶段性项目分享与跨团队经验沉淀',
+    pinKind:'share',
+    bottomLabel:'下方为各实验室的项目分享 / 复盘 Topic'
+  }
+};
+
 function render(){
   const t = TEAM_MAP[currentTeam];
   let scopeTitle = 'ALL Topic', scopeSub = '发起重要的事，追踪关心的事';
   if(currentSidebar==='my'){ scopeTitle = 'MY Topic'; scopeSub = '我发布的 / 我关注的'; }
   else if(currentSidebar==='team'){ scopeTitle = `${t.emoji} ${t.name} · Topic`; scopeSub = `仅展示 # ${t.name} 相关 Topic`; }
+  else if(HASH_VIEWS[currentSidebar]){
+    scopeTitle = HASH_VIEWS[currentSidebar].title;
+    scopeSub = HASH_VIEWS[currentSidebar].sub;
+  }
 
+  // hash 入口的页面：标题 → 实验室置顶卡 → 下方 Topic 列表
+  if(HASH_VIEWS[currentSidebar]){
+    const hv = HASH_VIEWS[currentSidebar];
+    const isQ3 = currentSidebar==='hash-q3';
+    const subExtra = isQ3
+      ? `${scopeSub} · 当前展示：<strong style="color:var(--ink-primary);">${t.emoji} ${t.name}</strong>（点右侧下拉切换实验室）`
+      : scopeSub;
+    const titleInline = isQ3
+      ? `<div class="home-title-row">
+           <div class="home-title">${scopeTitle}</div>
+           <div class="team-select-wrap inline" id="teamSelectWrap">
+             <div class="team-select-trigger" id="teamSelectTrigger" onclick="toggleTeamMenu()">
+               <span class="ts-emoji" id="tsEmoji">${t.emoji}</span>
+               <span class="ts-name" id="tsName">${t.name}</span>
+               <span class="ts-arrow">▼</span>
+             </div>
+             <div class="team-select-menu" id="teamSelectMenu"></div>
+           </div>
+         </div>`
+      : `<div class="home-title">${scopeTitle}</div>`;
+    mainArea.innerHTML = `
+      <div class="home-header">
+        <div>
+          ${titleInline}
+          <div class="home-sub">${subExtra}</div>
+        </div>
+        <button class="btn-publish" onclick="openDrawer()">+ 发布 Topic</button>
+      </div>
+
+      <div id="hashPinSlot">${renderHashPin(hv.pinKind)}</div>
+
+      <div class="topic-section-head">
+        <h3>≡ ${hv.title} 已发布 Topic</h3>
+        <div class="search-box">🔍 <input placeholder="输入关键词后按回车搜索"></div>
+      </div>
+
+      <div id="topicList">${renderTopicRows(getHashViewTopics(hv.pinKind))}</div>
+    `;
+    return;
+  }
+
+  // 默认 ALL / MY / Team 视图
   mainArea.innerHTML = `
     <div class="home-header">
       <div>
@@ -611,8 +1060,95 @@ function render(){
       </div>
     </div>
 
+    <div id="q3PinSlot">${renderQ3Pin()}</div>
+
     <div id="topicList">${renderTopicRows(getFilteredTopics())}</div>
   `;
+}
+
+// hash 入口：q3 仅当前 Team；ai/share 跨 Team 全量
+function getHashViewTopics(typeKey){
+  let list = TOPICS.filter(t=>(t.types||[]).includes(typeKey));
+  if(typeKey==='q3') list = list.filter(t=>t.team===currentTeam);
+  list = [...list].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  return list;
+}
+
+// hash 入口顶部的实验室目标置顶 Topic — Topic + Event 形态（淡蓝底）
+function renderHashPin(pinKind){
+  // 用户要求：AI 提效 / 项目分享 下面不再展示置顶目标内容
+  if(pinKind!=='q3') return '';
+  let pin = Q3_PIN[currentTeam] || Q3_PIN['all'];
+  if(!pin) return '<p style="color:var(--ink-muted);font-size:13px;padding:14px;">该实验室暂无置顶内容</p>';
+  return `
+    <div class="q3-pin-card">
+      <div class="q3-pin-head">
+        <span class="q3-pin-badge">📌 # Q3 目标</span>
+        <span class="q3-pin-pin">实验室管理层目标 Topic</span>
+        <button class="q3-pin-edit" onclick="event.stopPropagation();editQ3Pin('${currentTeam}');"><span class="role">管理层</span>✏ 编辑</button>
+      </div>
+      <div class="q3-pin-title">${pin.title}</div>
+      <div class="q3-pin-meta"><span class="author">${pin.owner}</span> · ${pin.stats.updated}</div>
+      <div class="q3-event-list">
+        ${pin.keys.map(k=>`
+          <div class="q3-event-item" onclick="showToast('打开 Event：${k.title.replace(/'/g,'')}')">
+            <span class="q3-event-num">${k.num}</span>
+            <div class="q3-event-body">
+              <div class="q3-event-title">${k.title}</div>
+              <div class="q3-event-meta">${k.desc}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="q3-pin-foot">
+        <span class="stat">💬 ${pin.stats.replies}</span>
+        <span class="stat">👁 ${pin.stats.eyes}</span>
+        <span class="stat">↗ 进入 Topic 详情</span>
+        <span class="updated">${pin.stats.updated}</span>
+      </div>
+    </div>
+  `;
+}
+
+// 仅当 currentType==='q3' 时（在 ALL/MY/Team 视图里点 # Q3 目标 tag pill）展示
+function renderQ3Pin(){
+  if(currentType!=='q3') return '';
+  let scopeKey = 'all';
+  if(currentSidebar==='team') scopeKey = currentTeam;
+  const pin = Q3_PIN[scopeKey] || Q3_PIN['all'];
+  return `
+    <div class="q3-pin-card">
+      <div class="q3-pin-head">
+        <span class="q3-pin-badge">📌 # Q3 目标</span>
+        <span class="q3-pin-pin">实验室管理层目标 Topic</span>
+        <button class="q3-pin-edit" onclick="event.stopPropagation();editQ3Pin('${scopeKey}');"><span class="role">管理层</span>✏ 编辑</button>
+      </div>
+      <div class="q3-pin-title">${pin.title}</div>
+      <div class="q3-pin-meta"><span class="author">${pin.owner}</span> · ${pin.stats.updated}</div>
+      <div class="q3-event-list">
+        ${pin.keys.map(k=>`
+          <div class="q3-event-item" onclick="showToast('打开 Event：${k.title.replace(/'/g,'')}')">
+            <span class="q3-event-num">${k.num}</span>
+            <div class="q3-event-body">
+              <div class="q3-event-title">${k.title}</div>
+              <div class="q3-event-meta">${k.desc}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="q3-pin-foot">
+        <span class="stat">💬 ${pin.stats.replies}</span>
+        <span class="stat">👁 ${pin.stats.eyes}</span>
+        <span class="stat">↗ 进入 Topic 详情</span>
+        <span class="updated">${pin.stats.updated}</span>
+      </div>
+    </div>
+    <div class="q3-divider-label">下方为本季度 Q3 相关进展 / 思考 Topic</div>
+  `;
+}
+
+function editQ3Pin(scope){
+  showToast('🔒 管理层权限已识别 · 进入「Q3 目标 Topic」编辑模式（文案 + 重点事项）');
 }
 
 function renderPinSection(){
@@ -669,10 +1205,11 @@ function renderTopicRows(list){
 
 function pickType(key){
   currentType = key;
-  // 仅刷新筛选区与列表，避免 SSV 上墙重新滚动
+  // 仅刷新筛选区、置顶区、列表，避免 SSV 上墙重新滚动
   document.querySelectorAll('.tag-pill').forEach(el=>el.classList.remove('active'));
   const el = [...document.querySelectorAll('.tag-pill')].find(e=>e.getAttribute('onclick').includes("'"+key+"'"));
   if(el) el.classList.add('active');
+  const slot = $('#q3PinSlot'); if(slot) slot.innerHTML = renderQ3Pin();
   $('#topicList').innerHTML = renderTopicRows(getFilteredTopics());
 }
 function pickSort(s){ currentSort = s; render(); }
