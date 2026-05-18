@@ -921,6 +921,7 @@ function showToast(msg){ const t=$('#toast'); t.textContent=msg; t.style.display
 // ================ Team 下拉 ================
 function buildTeamMenu(){
   const m = $('#teamSelectMenu');
+  if(!m) return;  // 该入口的下拉只在 hash-q3 视图渲染后才存在
   m.innerHTML = TEAMS.map(t=>`
     <div class="team-option ${t.key===currentTeam?'selected':''}" onclick="pickTeam('${t.key}')">
       <span style="font-size:14px;">${t.emoji}</span>
@@ -1291,8 +1292,8 @@ function submitTopic(){
 }
 
 // ================ 初始化 ================
-buildTeamMenu();
-render();
+render();           // 先渲染主区，让 hash-q3 视图把 teamSelectMenu DOM 挂上
+buildTeamMenu();    // 再填充下拉菜单内容
 </script>
 
 </body>
