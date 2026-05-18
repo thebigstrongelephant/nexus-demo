@@ -669,7 +669,8 @@ const TOPICS = [
   { id:4, team:'jishujiagou', types:['jishu','xiangmu','q3','ai'], starred:false,
     title:'SPM 埋点治理第二阶段：曝光补全 + 多跳归因 + 属性漏传防治 — 方案讨论',
     teamHash:'#技术', author:'hunterguo(郭晓波)', date:'2026-05-11',
-    replyAuthor:null, replyTime:null, replyContent:null },
+    replyAuthor:null, replyTime:null, replyContent:null,
+    hidden:true /* 用户要求隐藏 */ },
   { id:5, team:'gongyipingtai', types:['xiangmu','q3','ai'], starred:false,
     title:'公益测试工作提效讨论',
     teamHash:'#技术', author:'allenyhu(朱艳红)', date:'2026-05-09',
@@ -684,7 +685,7 @@ const TOPICS = [
     replyAuthor:null, replyTime:null, replyContent:null },
   { id:8, team:'jishujiagou', types:['q3','jishu','ai'], starred:false,
     title:'【目标 · Q3】Harness Schema v1.1 全量推广 — 7 个 Provider',
-    teamHash:'#月会', author:'yikazhu(管理层)', date:'2026-05-05',
+    teamHash:'#月会', author:'yikazhu(朱奕嘉)', date:'2026-05-05',
     replyAuthor:null, replyTime:null, replyContent:null },
   { id:9, team:'jiaoyu', types:['hegui','jishu','ai'], starred:false,
     title:'AI 学情数据合规评估 · 三省试点前置检查清单',
@@ -977,7 +978,7 @@ function sidebarToType(){
 }
 
 function getFilteredTopics(){
-  let list = TOPICS;
+  let list = TOPICS.filter(t=>!t.hidden);
   if(currentSidebar==='team') list = list.filter(t=>t.team===currentTeam);
   if(currentSidebar==='my') list = list.filter(t=>t.author.includes('马巍') || t.starred);
   // 三个 # 入口：在该 type 下过滤；同时如果当前 Team 下拉选了具体 Team，再叠加 Team 过滤
@@ -1100,7 +1101,7 @@ function render(){
 
 // hash 入口：q3 仅当前 Team；ai/share 跨 Team 全量
 function getHashViewTopics(typeKey){
-  let list = TOPICS.filter(t=>(t.types||[]).includes(typeKey));
+  let list = TOPICS.filter(t=>!t.hidden && (t.types||[]).includes(typeKey));
   if(typeKey==='q3') list = list.filter(t=>t.team===currentTeam);
   list = [...list].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   return list;
