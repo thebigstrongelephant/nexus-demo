@@ -30,11 +30,11 @@ body {
 /* TOP NAV */
 .top-nav {
   position:fixed; top:0; left:0; right:0; z-index:100;
-  background:rgba(255,255,255,0.92); backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border); height:56px;
-  display:flex; align-items:center; justify-content:space-between; padding:0 24px;
+  background:rgba(255,255,255,0.94); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border); height:54px;
+  display:flex; align-items:center; justify-content:space-between; padding:0 22px;
 }
-.nav-left { display:flex; align-items:center; gap:20px; }
+.nav-left { display:flex; align-items:center; gap:16px; }
 .nav-brand { display:flex; align-items:center; gap:10px; }
 .nav-logo {
   width:28px; height:28px; background:var(--ink-primary);
@@ -42,33 +42,25 @@ body {
   font-size:13px; font-weight:800; color:#fff; letter-spacing:-0.5px;
 }
 .nav-title { font-size:15px; font-weight:800; color:var(--ink-primary); letter-spacing:-0.3px; }
-.nav-sep { width:1px; height:20px; background:var(--border); }
-.nav-search {
-  display:flex; align-items:center; gap:8px;
-  background:var(--bg); border:1px solid var(--border); border-radius:8px;
-  padding:6px 14px; font-size:13px; color:var(--ink-muted);
-  cursor:pointer; min-width:280px;
-}
-.nav-search kbd { margin-left:auto; font-size:10px; padding:2px 6px; border-radius:4px; background:#fff; border:1px solid var(--border); color:var(--ink-muted); }
-.nav-right { display:flex; align-items:center; gap:12px; }
-.btn-publish {
-  background:var(--ink-primary); color:#fff; border:none; padding:7px 14px;
-  border-radius:8px; font-size:12.5px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px;
-}
-.btn-publish:hover { background:#000; }
-.nav-bell { font-size:16px; color:var(--ink-secondary); cursor:pointer; }
+.nav-slogan { font-size:12.5px; color:var(--ink-secondary); margin-left:10px; }
+.nav-right { display:flex; align-items:center; gap:14px; }
+.nav-op { display:flex; align-items:center; gap:5px; font-size:12.5px; color:var(--ink-secondary); cursor:pointer; padding:5px 10px; border-radius:6px; }
+.nav-op:hover { background:var(--bg-hover); }
+.nav-bell { position:relative; font-size:16px; color:var(--ink-secondary); cursor:pointer; }
+.nav-bell::after { content:''; position:absolute; top:-2px; right:-2px; width:7px; height:7px; border-radius:50%; background:var(--rose); }
+.nav-user-name { font-size:13px; color:var(--ink-secondary); }
 .nav-avatar {
-  width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--blue),var(--violet));
-  display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff;
+  width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--blue),var(--violet));
+  display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff;
 }
 
 /* LAYOUT */
-.app-layout { margin-top:56px; display:flex; min-height:calc(100vh - 56px); }
+.app-layout { margin-top:54px; display:flex; min-height:calc(100vh - 54px); }
 
 /* SIDEBAR */
 .sidebar {
-  width:230px; flex-shrink:0; background:#fff;
-  border-right:1px solid var(--border); padding:16px 10px; overflow-y:auto;
+  width:200px; flex-shrink:0; background:#fff;
+  border-right:1px solid var(--border); padding:18px 12px; overflow-y:auto;
 }
 .sidebar-group { margin-bottom:8px; }
 .sidebar-group-label {
@@ -76,143 +68,178 @@ body {
   color:var(--ink-muted); padding:8px 12px 6px;
 }
 .sidebar-item {
-  display:flex; align-items:center; gap:10px; padding:8px 12px;
-  border-radius:var(--radius-md); font-size:13px; font-weight:500;
+  display:flex; align-items:center; gap:10px; padding:9px 12px;
+  border-radius:var(--radius-sm); font-size:13px; font-weight:500;
   color:var(--ink-secondary); cursor:pointer; transition:all 0.15s; position:relative;
 }
 .sidebar-item:hover { background:var(--bg-hover); color:var(--ink-primary); }
-.sidebar-item.active { background:var(--blue-light); color:var(--blue); font-weight:600; }
-.sidebar-item.active::before {
-  content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
-  width:3px; height:18px; background:var(--blue); border-radius:0 3px 3px 0;
-}
-.sidebar-icon { width:20px; text-align:center; font-size:14px; flex-shrink:0; }
-.sidebar-badge {
-  margin-left:auto; font-size:10px; font-weight:700;
-  padding:1px 7px; border-radius:10px; background:var(--blue-light); color:var(--blue);
-}
+.sidebar-item.active { background:var(--ink-primary); color:#fff; font-weight:600; }
+.sidebar-icon { width:18px; text-align:center; font-size:13px; flex-shrink:0; }
 .sidebar-divider { height:1px; background:var(--border-light); margin:10px 12px; }
 
+/* Team 下拉 */
+.team-select-wrap {
+  margin: 4px 4px 0;
+  position:relative;
+}
+.team-select-trigger {
+  display:flex; align-items:center; gap:8px; padding:9px 12px;
+  border:1px solid var(--border); border-radius:var(--radius-sm);
+  font-size:13px; color:var(--ink-primary); cursor:pointer; background:#fff; transition:all 0.15s;
+}
+.team-select-trigger:hover { border-color:var(--border-active); background:var(--bg-subtle); }
+.team-select-trigger .ts-emoji { font-size:14px; }
+.team-select-trigger .ts-name { flex:1; font-weight:500; }
+.team-select-trigger .ts-arrow { color:var(--ink-muted); font-size:10px; transition:transform 0.15s; }
+.team-select-trigger.open .ts-arrow { transform:rotate(180deg); }
+.team-select-menu {
+  position:absolute; top:calc(100% + 4px); left:0; right:0;
+  background:#fff; border:1px solid var(--border); border-radius:var(--radius-md);
+  box-shadow:var(--shadow-md); padding:5px; z-index:50; display:none;
+}
+.team-select-menu.show { display:block; }
+.team-option {
+  display:flex; align-items:center; gap:9px; padding:8px 10px;
+  border-radius:var(--radius-sm); font-size:12.5px; color:var(--ink-secondary);
+  cursor:pointer; transition:background 0.12s;
+}
+.team-option:hover { background:var(--bg-hover); color:var(--ink-primary); }
+.team-option.selected { background:var(--blue-light); color:var(--blue); font-weight:600; }
+.team-option .check { margin-left:auto; color:var(--blue); font-size:13px; visibility:hidden; }
+.team-option.selected .check { visibility:visible; }
+
 /* MAIN */
-.main-area { flex:1; padding:24px 28px 60px; max-width:calc(100% - 230px); overflow:hidden; }
+.main-area {
+  flex:1; padding:22px 26px 50px; max-width:calc(100% - 200px - 360px); overflow-x:hidden;
+}
 
 /* HEADER */
-.home-header { margin-bottom:20px; display:flex; align-items:flex-end; justify-content:space-between; }
-.home-title { font-size:22px; font-weight:800; letter-spacing:-0.5px; color:var(--ink-primary); margin-bottom:4px; }
-.home-sub { font-size:13px; color:var(--ink-secondary); }
-.home-meta { font-size:12px; color:var(--ink-muted); }
+.home-header { margin-bottom:14px; display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap; }
+.home-title-row { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+.home-title { font-size:24px; font-weight:800; letter-spacing:-0.5px; color:var(--ink-primary); }
+.home-sub { font-size:13px; color:var(--ink-secondary); margin-top:2px; }
+.btn-publish {
+  background:var(--ink-primary); color:#fff; border:none; padding:9px 18px;
+  border-radius:99px; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px;
+  white-space:nowrap; box-shadow:var(--shadow-sm);
+}
+.btn-publish:hover { background:#000; }
 
-/* DOUBLE LAYOUT */
-.dual-grid { display:grid; grid-template-columns: 1.4fr 1fr; gap:20px; }
-
-/* LEFT (OKR + Q3 机动目标) */
-.left-col { display:flex; flex-direction:column; gap:18px; }
-.section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-.section-head h2 { font-size:14px; font-weight:700; display:flex; align-items:center; gap:8px; color:var(--ink-primary); }
-.section-head h2 .dot { width:7px; height:7px; border-radius:50%; background:var(--emerald); box-shadow:0 0 0 3px rgba(5,150,105,0.15); }
-.section-head .sub-meta { font-size:11.5px; color:var(--ink-muted); display:flex; align-items:center; gap:8px; }
-.btn-edit-okr {
-  font-size:11px; color:var(--blue); background:var(--blue-light); padding:3px 9px;
-  border:none; border-radius:5px; cursor:pointer; font-weight:600;
-}
-.btn-edit-okr:hover { background:var(--blue-mid); }
-.role-tag {
-  font-size:10px; padding:2px 7px; border-radius:4px; font-weight:600;
-  background:var(--violet-light); color:var(--violet);
-}
-
-/* OKR */
-.okr-card {
-  background:#fff; border:1px solid var(--border); border-radius:var(--radius-lg);
-  padding:18px 22px; box-shadow:var(--shadow-sm); margin-bottom:12px;
-}
-.okr-period {
-  display:inline-flex; align-items:center; gap:6px;
-  font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px;
-  color:var(--blue); background:var(--blue-light); padding:3px 10px; border-radius:4px; margin-bottom:10px;
-}
-.okr-objective { font-size:14px; font-weight:700; line-height:1.55; color:var(--ink-primary); }
-.okr-krs { list-style:none; margin-top:10px; }
-.okr-kr {
-  display:flex; align-items:center; gap:10px; padding:7px 0;
-  font-size:12.5px; color:var(--ink-secondary); border-bottom:1px solid var(--border-light);
-}
-.okr-kr:last-child { border-bottom:none; }
-.okr-kr-bar { flex:1; height:4px; background:var(--bg); border-radius:2px; overflow:hidden; min-width:60px; }
-.okr-kr-fill { height:100%; border-radius:2px; }
-.okr-kr-pct { font-size:11.5px; font-weight:700; color:var(--ink-secondary); min-width:36px; text-align:right; }
-
-/* Q3 机动目标卡 */
-.q3-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.q3-card {
+/* SSV 上墙 (置顶) */
+.ssv-pin-section { margin-bottom:18px; }
+.ssv-pin-head { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.ssv-pin-head h3 { font-size:14px; font-weight:700; color:var(--ink-primary); display:flex; align-items:center; gap:6px; }
+.ssv-pin-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; }
+.pin-card {
   background:#fff; border:1px solid var(--border); border-radius:var(--radius-md);
-  padding:14px 16px; cursor:pointer; transition:all 0.18s; position:relative; overflow:hidden;
+  padding:14px 16px; cursor:pointer; transition:all 0.15s; position:relative;
 }
-.q3-card:hover { border-color:var(--border-active); box-shadow:var(--shadow-md); transform:translateY(-1px); }
-.q3-card::before {
-  content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--ink-faint);
+.pin-card:hover { border-color:var(--border-active); box-shadow:var(--shadow-sm); }
+.pin-card.active { border-color:var(--blue); box-shadow:0 0 0 2px var(--blue-light); }
+.pin-card-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.pin-tag {
+  display:inline-block; font-size:10.5px; padding:2px 8px; border-radius:3px; font-weight:600;
+  background:var(--blue-light); color:var(--blue);
 }
-.q3-card.amber::before { background:var(--amber); }
-.q3-card.blue::before { background:var(--blue); }
-.q3-card.violet::before { background:var(--violet); }
-.q3-card.emerald::before { background:var(--emerald); }
-.q3-card-tag {
-  display:inline-block; font-size:9.5px; font-weight:700; padding:2px 7px; border-radius:3px;
-  background:var(--amber-light); color:var(--amber); margin-bottom:6px; letter-spacing:0.4px;
+.pin-tag.violet { background:var(--violet-light); color:var(--violet); }
+.pin-tag.amber { background:var(--amber-light); color:var(--amber); }
+.pin-date { font-size:11px; color:var(--ink-muted); }
+.pin-title { font-size:13.5px; font-weight:700; color:var(--ink-primary); line-height:1.5; margin-bottom:6px; }
+.pin-author { font-size:11.5px; color:var(--ink-secondary); margin-bottom:6px; font-weight:500; }
+.pin-content { font-size:12px; color:var(--ink-muted); line-height:1.7; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.pin-star { position:absolute; top:14px; right:14px; color:var(--amber); font-size:12px; }
+.see-all-btn {
+  width:100%; padding:9px; background:var(--bg-subtle); border:1px solid var(--border-light);
+  border-radius:var(--radius-md); margin-top:10px; font-size:12.5px; color:var(--ink-secondary);
+  cursor:pointer; text-align:center; transition:all 0.15s;
 }
-.q3-card.blue .q3-card-tag { background:var(--blue-light); color:var(--blue); }
-.q3-card.violet .q3-card-tag { background:var(--violet-light); color:var(--violet); }
-.q3-card.emerald .q3-card-tag { background:var(--emerald-light); color:var(--emerald); }
-.q3-card h4 { font-size:13.5px; font-weight:700; color:var(--ink-primary); line-height:1.45; margin-bottom:5px; }
-.q3-card .q3-desc { font-size:11.5px; color:var(--ink-muted); line-height:1.6; margin-bottom:8px; }
-.q3-card .q3-foot { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--ink-muted); }
-.q3-card .q3-foot .q3-arrow { color:var(--blue); font-weight:600; }
-.q3-card .q3-progress { height:3px; background:var(--bg); border-radius:2px; margin-top:6px; overflow:hidden; }
-.q3-card .q3-progress-fill { height:100%; border-radius:2px; }
+.see-all-btn:hover { background:var(--bg-hover); color:var(--ink-primary); }
 
-/* RIGHT (Topic feed) */
-.right-col { display:flex; flex-direction:column; gap:0; }
-.feed-tabs { display:flex; gap:0; margin-bottom:12px; border-bottom:1px solid var(--border); }
-.feed-tab {
-  padding:8px 14px; font-size:12.5px; font-weight:600; color:var(--ink-muted);
-  cursor:pointer; border-bottom:2px solid transparent;
+/* Topic 列表 */
+.topic-section-head { display:flex; align-items:center; justify-content:space-between; margin:24px 0 14px; }
+.topic-section-head h3 { font-size:15px; font-weight:700; display:flex; align-items:center; gap:8px; color:var(--ink-primary); }
+.search-box {
+  display:flex; align-items:center; gap:6px;
+  background:var(--bg); border:1px solid var(--border); border-radius:7px;
+  padding:5px 12px; font-size:12px; color:var(--ink-muted); min-width:240px;
 }
-.feed-tab.active { color:var(--blue); border-bottom-color:var(--blue); }
-.feed-tab .count { margin-left:5px; font-size:10.5px; padding:1px 6px; border-radius:8px; background:var(--bg); color:var(--ink-muted); font-weight:700; }
-.feed-tab.active .count { background:var(--blue-light); color:var(--blue); }
+.search-box input { border:none; outline:none; background:transparent; flex:1; font-size:12px; color:var(--ink-primary); font-family:inherit; }
 
-.topic-feed { display:flex; flex-direction:column; gap:10px; }
-.topic-item {
-  background:#fff; border:1px solid var(--border); border-radius:var(--radius-md);
-  padding:14px 16px; cursor:pointer; transition:all 0.15s;
+.tag-filter-row {
+  display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;
+  padding-bottom:10px; border-bottom:1px solid var(--border-light);
 }
-.topic-item:hover { border-color:var(--border-active); box-shadow:var(--shadow-sm); }
-.topic-item-head { display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
-.topic-item-avatar {
-  width:22px; height:22px; border-radius:50%; background:var(--bg-active); color:var(--ink-secondary);
-  display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0;
+.tag-pill {
+  font-size:12px; padding:4px 12px; border-radius:99px; cursor:pointer;
+  background:var(--bg-subtle); color:var(--ink-secondary); border:1px solid transparent;
+  transition:all 0.15s; font-weight:500;
 }
-.topic-item-author { font-size:12px; font-weight:600; color:var(--ink-primary); }
-.topic-item-time { font-size:11px; color:var(--ink-muted); margin-left:auto; }
-.topic-hash {
+.tag-pill:hover { background:var(--bg-hover); color:var(--ink-primary); }
+.tag-pill.active { background:var(--ink-primary); color:#fff; }
+.tag-pill.hash {
+  background:var(--blue-light); color:var(--blue); border-color:var(--blue-mid);
+}
+.tag-pill.hash:hover { background:var(--blue-mid); }
+.tag-pill.hash.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+.tag-divider { width:1px; height:18px; background:var(--border); margin:0 4px; }
+
+.sort-row {
+  display:flex; gap:14px; margin-left:auto;
+}
+.sort-row .sort-item { font-size:12px; color:var(--ink-muted); cursor:pointer; padding:3px 10px; border-radius:5px; }
+.sort-row .sort-item.active { background:var(--ink-primary); color:#fff; font-weight:600; }
+
+/* Topic row */
+.topic-row {
+  background:#fff; border-bottom:1px solid var(--border-light);
+  padding:14px 4px; cursor:pointer; transition:background 0.12s;
+}
+.topic-row:hover { background:var(--bg-subtle); }
+.topic-row-title-row { display:flex; align-items:center; gap:8px; margin-bottom:5px; flex-wrap:wrap; }
+.topic-row-title { font-size:14px; font-weight:600; color:var(--ink-primary); line-height:1.5; }
+.topic-row-tags { display:flex; gap:5px; }
+.row-tag-sm {
   font-size:10.5px; padding:2px 7px; border-radius:3px; font-weight:600;
-  background:var(--blue-light); color:var(--blue); cursor:pointer;
+  background:var(--blue-light); color:var(--blue);
 }
-.topic-hash.violet { background:var(--violet-light); color:var(--violet); }
-.topic-hash.emerald { background:var(--emerald-light); color:var(--emerald); }
-.topic-hash.amber { background:var(--amber-light); color:var(--amber); }
-.topic-hash.cyan { background:var(--cyan-light); color:var(--cyan); }
-.topic-item-title { font-size:13px; font-weight:600; color:var(--ink-primary); margin-bottom:4px; line-height:1.5; }
-.topic-item-content { font-size:12px; color:var(--ink-secondary); line-height:1.7; margin-bottom:6px; }
-.topic-item-foot { display:flex; align-items:center; gap:12px; font-size:11px; color:var(--ink-muted); }
-.topic-item-foot .stat { display:flex; align-items:center; gap:3px; cursor:pointer; }
-.topic-item-foot .stat:hover { color:var(--blue); }
-.topic-mgr-tag {
-  font-size:9.5px; padding:1px 6px; border-radius:3px; font-weight:700;
-  background:#fef3c7; color:#92400e; letter-spacing:0.4px;
-}
+.row-tag-sm.violet { background:var(--violet-light); color:var(--violet); }
+.row-tag-sm.amber { background:var(--amber-light); color:var(--amber); }
+.row-tag-sm.emerald { background:var(--emerald-light); color:var(--emerald); }
+.row-tag-sm.rose { background:var(--rose-light); color:var(--rose); }
+.row-tag-sm.hash { background:#fef3c7; color:#92400e; }
+.row-star { margin-left:auto; color:var(--ink-faint); font-size:13px; cursor:pointer; }
+.row-star.on { color:var(--amber); }
+.topic-row-meta { font-size:11.5px; color:var(--ink-muted); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.topic-row-meta .author { color:var(--ink-secondary); font-weight:500; }
+.topic-row-meta .reply { color:var(--ink-secondary); }
+.topic-row-meta .reply em { color:var(--ink-primary); font-style:normal; }
 
-/* PUBLISH DRAWER */
+/* RIGHT (Nexus AI 简报) */
+.right-rail {
+  width:340px; flex-shrink:0; background:#fff;
+  border-left:1px solid var(--border); padding:22px 22px 40px;
+  overflow-y:auto; max-height:calc(100vh - 54px); position:sticky; top:54px;
+}
+.rail-header {
+  display:flex; align-items:center; gap:8px; margin-bottom:18px;
+  padding-bottom:14px; border-bottom:1px solid var(--border-light);
+}
+.rail-header .ai-spark { color:var(--violet); font-size:18px; }
+.rail-title { font-size:15px; font-weight:800; }
+.rail-badge { font-size:10px; padding:2px 7px; border-radius:4px; background:var(--violet-light); color:var(--violet); font-weight:700; letter-spacing:0.5px; }
+.rail-section-title { font-size:13.5px; color:var(--blue); font-weight:600; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+.rail-card {
+  background:var(--bg-subtle); border-radius:var(--radius-md); padding:14px 16px; margin-bottom:14px;
+}
+.rail-card h4 { font-size:13px; font-weight:700; color:var(--ink-primary); margin-bottom:6px; }
+.rail-card-meta { font-size:11px; color:var(--ink-muted); margin-bottom:10px; }
+.rail-card-section { margin-bottom:12px; }
+.rail-card-section:last-child { margin-bottom:0; }
+.rail-card-section h5 { font-size:12px; font-weight:700; margin-bottom:5px; }
+.rail-card-section p { font-size:12px; color:var(--ink-secondary); line-height:1.75; }
+.rail-card-section a { color:var(--blue); text-decoration:none; }
+
+/* Drawer & Toast (沿用) */
 .drawer-mask {
   position:fixed; inset:0; background:rgba(20,25,35,0.4); backdrop-filter:blur(2px);
   z-index:200; display:none; align-items:center; justify-content:center;
@@ -225,8 +252,9 @@ body {
 .drawer h3 { font-size:17px; font-weight:700; margin-bottom:6px; }
 .drawer .drawer-sub { font-size:12.5px; color:var(--ink-muted); margin-bottom:18px; }
 .drawer .field { margin-bottom:14px; }
-.drawer .field-label { font-size:12px; font-weight:600; color:var(--ink-secondary); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+.drawer .field-label { font-size:12px; font-weight:600; color:var(--ink-secondary); margin-bottom:6px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
 .drawer .field-label .req { color:var(--rose); }
+.drawer .field-label .hint { font-weight:400; color:var(--ink-muted); font-size:11px; }
 .drawer input.text-input, .drawer textarea.text-input {
   width:100%; border:1px solid var(--border); border-radius:8px; padding:9px 12px;
   font-size:13px; color:var(--ink-primary); font-family:inherit; outline:none; transition:border 0.15s;
@@ -246,38 +274,18 @@ body {
 .drawer .footer-row { display:flex; justify-content:space-between; align-items:center; margin-top:18px; padding-top:14px; border-top:1px solid var(--border-light); }
 .drawer .footer-tip { font-size:11px; color:var(--ink-muted); }
 .drawer .footer-actions { display:flex; gap:8px; }
-.drawer .btn-cancel {
-  background:#fff; border:1px solid var(--border); padding:7px 14px; border-radius:7px;
-  font-size:12.5px; color:var(--ink-secondary); cursor:pointer;
-}
-.drawer .btn-submit {
-  background:var(--blue); color:#fff; border:none; padding:7px 16px; border-radius:7px;
-  font-size:12.5px; font-weight:600; cursor:pointer;
-}
+.drawer .btn-cancel { background:#fff; border:1px solid var(--border); padding:7px 14px; border-radius:7px; font-size:12.5px; color:var(--ink-secondary); cursor:pointer; }
+.drawer .btn-submit { background:var(--blue); color:#fff; border:none; padding:7px 16px; border-radius:7px; font-size:12.5px; font-weight:600; cursor:pointer; }
 .drawer .btn-submit:disabled { background:var(--ink-faint); cursor:not-allowed; }
-
-/* TOAST */
 .toast {
   position:fixed; bottom:30px; left:50%; transform:translateX(-50%);
   background:var(--ink-primary); color:#fff; padding:10px 18px;
   border-radius:8px; font-size:12.5px; box-shadow:var(--shadow-lg);
-  z-index:300; display:none; animation:fadeUp 0.3s ease;
+  z-index:300; display:none;
 }
-@keyframes fadeUp { from { opacity:0; transform:translateX(-50%) translateY(8px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
 
-/* DEPT VIEW (点击 Q3 机动目标后) */
-.dept-banner {
-  background:linear-gradient(135deg, #fff, #f8f9fb); border:1px solid var(--border); border-radius:var(--radius-lg);
-  padding:18px 22px; margin-bottom:16px; display:flex; align-items:center; gap:14px;
-}
-.dept-banner .dept-emoji { width:42px; height:42px; border-radius:10px; background:var(--blue-light); display:flex; align-items:center; justify-content:center; font-size:22px; }
-.dept-banner h2 { font-size:18px; font-weight:800; color:var(--ink-primary); margin-bottom:3px; }
-.dept-banner p { font-size:12.5px; color:var(--ink-secondary); }
-.dept-banner .back-link { margin-left:auto; font-size:12px; color:var(--ink-muted); cursor:pointer; padding:6px 12px; border-radius:6px; }
-.dept-banner .back-link:hover { background:var(--bg-hover); color:var(--blue); }
-
-@media (max-width:1100px) { .dual-grid { grid-template-columns:1fr; } .q3-grid { grid-template-columns:1fr 1fr; } }
-@media (max-width:768px) { .sidebar { display:none; } .main-area { max-width:100%; padding:18px 14px; } .q3-grid { grid-template-columns:1fr; } }
+@media (max-width:1300px) { .right-rail { display:none; } .main-area { max-width:calc(100% - 200px); } .ssv-pin-grid { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:900px) { .sidebar { display:none; } .main-area { max-width:100%; padding:18px 14px; } .ssv-pin-grid { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -289,15 +297,12 @@ body {
       <div class="nav-logo">N</div>
       <div class="nav-title">SSV Nexus</div>
     </div>
-    <div class="nav-sep"></div>
-    <div class="nav-search">
-      <span>🔍</span> 搜索 Topic、目标、人…
-      <kbd>⌘K</kbd>
-    </div>
+    <div class="nav-slogan">透明即上下文，上下文即生产力</div>
   </div>
   <div class="nav-right">
-    <button class="btn-publish" onclick="openDrawer()">+ 发布 Topic</button>
+    <div class="nav-op">⚙ 运营</div>
     <span class="nav-bell">🔔</span>
+    <span class="nav-user-name">Hi, 马巍</span>
     <div class="nav-avatar" title="马巍">马</div>
   </div>
 </nav>
@@ -308,53 +313,73 @@ body {
 <!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-group">
-    <div class="sidebar-group-label">Home</div>
-    <div class="sidebar-item active" data-view="home" onclick="goHome()">
-      <span class="sidebar-icon">🏠</span> SSV 首页
+    <div class="sidebar-group-label">Topics</div>
+    <div class="sidebar-item active" data-view="all" onclick="switchSidebar(this,'all')">
+      <span class="sidebar-icon">≡</span> ALL
+    </div>
+    <div class="sidebar-item" data-view="my" onclick="switchSidebar(this,'my')">
+      <span class="sidebar-icon">👤</span> MY
+    </div>
+    <!-- Team 下拉（默认选一个 Team） -->
+    <div class="team-select-wrap" id="teamSelectWrap">
+      <div class="team-select-trigger" id="teamSelectTrigger" onclick="toggleTeamMenu()">
+        <span class="ts-emoji" id="tsEmoji">📚</span>
+        <span class="ts-name" id="tsName">教育实验室</span>
+        <span class="ts-arrow">▼</span>
+      </div>
+      <div class="team-select-menu" id="teamSelectMenu"></div>
     </div>
   </div>
 
   <div class="sidebar-divider"></div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-label">Teams</div>
-    <div class="sidebar-item" data-team="gongyipingtai" onclick="goDept('gongyipingtai')">
-      <span class="sidebar-icon">💚</span> 公益平台
-    </div>
-    <div class="sidebar-item" data-team="jiaoyu" onclick="goDept('jiaoyu')">
-      <span class="sidebar-icon">📚</span> 教育实验室
-    </div>
-    <div class="sidebar-item" data-team="wenhua" onclick="goDept('wenhua')">
-      <span class="sidebar-icon">🎭</span> 文化实验室
-    </div>
-    <div class="sidebar-item" data-team="shiguang" onclick="goDept('shiguang')">
-      <span class="sidebar-icon">🕰️</span> 时光实验室
-    </div>
-    <div class="sidebar-item" data-team="xinjishi" onclick="goDept('xinjishi')">
-      <span class="sidebar-icon">🔬</span> 新基石
-    </div>
-    <div class="sidebar-item" data-team="jishujiagou" onclick="goDept('jishujiagou')">
-      <span class="sidebar-icon">⚙️</span> 技术架构部
-    </div>
+    <div class="sidebar-group-label">Tools</div>
+    <div class="sidebar-item"><span class="sidebar-icon">⚡</span> 技能</div>
+    <div class="sidebar-item"><span class="sidebar-icon">🧩</span> 插件</div>
   </div>
 
   <div class="sidebar-divider"></div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-label">My</div>
-    <div class="sidebar-item">
-      <span class="sidebar-icon">📌</span> 我发布的
-      <span class="sidebar-badge">7</span>
-    </div>
-    <div class="sidebar-item">
-      <span class="sidebar-icon">⭐</span> 我关注的
-      <span class="sidebar-badge">12</span>
-    </div>
+    <div class="sidebar-group-label">Admin</div>
+    <div class="sidebar-item"><span class="sidebar-icon">📍</span> 定位</div>
+    <div class="sidebar-item"><span class="sidebar-icon">📜</span> 宪章</div>
+    <div class="sidebar-item"><span class="sidebar-icon">⚙</span> 设置</div>
   </div>
 </aside>
 
 <!-- MAIN AREA -->
 <main class="main-area" id="mainArea"></main>
+
+<!-- RIGHT RAIL (Nexus AI 简报) -->
+<aside class="right-rail">
+  <div class="rail-header">
+    <span class="ai-spark">✦</span>
+    <span class="rail-title">Nexus AI</span>
+    <span class="rail-badge">AI</span>
+  </div>
+  <div class="rail-section-title">📡 SSV 简报</div>
+  <div class="rail-card">
+    <h4>📜 SSV 简报 · 2026-05-18</h4>
+    <div class="rail-card-meta">📊 上墙速览 · 自动生成</div>
+
+    <div class="rail-card-section">
+      <h5><a>- Nexus 产品进展和一些思考：</a></h5>
+      <p>SSV Nexus AI 已完成初期上线并进入功能密集迭代期，目前重点由基础文档提炼向多渠道信息交叉分析演进。当前正处于移动端分阶段适配及 AI 深度问答能力的开发过程中。⚠️ 提醒：移动端适配涉及阅读与交互逻辑拆分，需关注首期上线后的用户操作闭环。</p>
+    </div>
+
+    <div class="rail-card-section">
+      <h5><a>- 探讨：你心目中的 SSV 理念是什么？</a></h5>
+      <p>正值战略发布五周年，理念重新对齐的前置条件是明确"组织、战略、理念"三个维度的定义框架，否则容易导致收集到的反馈过于零散。</p>
+    </div>
+
+    <div class="rail-card-section">
+      <h5><a>- 【AI 时代 SSV 的"二次创业"】：从探索者到先锋军</a></h5>
+      <p>SSV 战略升级全员沟通会沉淀。战略重心从广泛探索转向平台化与垂直深耕，意味着存量项目需根据"开放平台"或"垂直领域"重新定位…</p>
+    </div>
+  </div>
+</aside>
 
 </div>
 
@@ -362,7 +387,7 @@ body {
 <div class="drawer-mask" id="drawerMask" onclick="if(event.target.id==='drawerMask') closeDrawer()">
   <div class="drawer">
     <h3>发布 Topic</h3>
-    <p class="drawer-sub">在首页或左侧发布 Topic 时，请关联（挂 # 号）对应的部门，方便沉淀到该部门的 Topic 流。</p>
+    <p class="drawer-sub">在首页或 Team 下发布 Topic 时，请关联（挂 # 号）：① 至少 1 个 Team；② 可选「类型 #」（如 # Q3 目标、# 战略、# 经营）</p>
 
     <div class="field">
       <div class="field-label">Topic 标题 <span class="req">*</span></div>
@@ -375,16 +400,14 @@ body {
     </div>
 
     <div class="field">
-      <div class="field-label">关联部门 <span class="req">*</span><span style="font-weight:400;color:var(--ink-muted);font-size:11px;">点击 # 标签关联部门（必选 1 个以上）</span></div>
-      <div class="hashtag-row" id="hashtagRow">
-        <span class="hashtag-pill" data-tag="gongyipingtai" onclick="toggleHash(this)"># 公益平台</span>
-        <span class="hashtag-pill" data-tag="jiaoyu" onclick="toggleHash(this)"># 教育实验室</span>
-        <span class="hashtag-pill" data-tag="wenhua" onclick="toggleHash(this)"># 文化实验室</span>
-        <span class="hashtag-pill" data-tag="shiguang" onclick="toggleHash(this)"># 时光实验室</span>
-        <span class="hashtag-pill" data-tag="xinjishi" onclick="toggleHash(this)"># 新基石</span>
-        <span class="hashtag-pill" data-tag="jishujiagou" onclick="toggleHash(this)"># 技术架构部</span>
-      </div>
-      <div class="hashtag-required">⚠ 未选择部门将无法发布 — 这是为了让你的 Topic 能被对应团队看见</div>
+      <div class="field-label">关联 Team <span class="req">*</span><span class="hint">必选 1 个以上</span></div>
+      <div class="hashtag-row" id="teamHashRow"></div>
+      <div class="hashtag-required">⚠ 未选择 Team 将无法发布 — 这是为了让你的 Topic 能被对应团队看见</div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">关联类型 <span class="hint">可选 · 用于驱动业务结构（如 Q3 目标、战略、经营）</span></div>
+      <div class="hashtag-row" id="typeHashRow"></div>
     </div>
 
     <div class="footer-row">
@@ -397,320 +420,278 @@ body {
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
 // ================ 数据 ================
-const DEPTS = {
-  'gongyipingtai': { emoji:'💚', name:'公益平台', color:'emerald', desc:'连接善意与需求，让每一份爱心精准抵达' },
-  'jiaoyu': { emoji:'📚', name:'教育实验室', color:'blue', desc:'以技术驱动教育公平，探索 AI 在教育场景的创新应用' },
-  'wenhua': { emoji:'🎭', name:'文化实验室', color:'violet', desc:'以数字技术助力中华优秀传统文化保护与传承' },
-  'shiguang': { emoji:'🕰️', name:'时光实验室', color:'amber', desc:'关注银发群体数字化体验，打造适老化技术解决方案' },
-  'xinjishi': { emoji:'🔬', name:'新基石', color:'cyan', desc:'支持基础科研，资助原创性科学探索' },
-  'jishujiagou': { emoji:'⚙️', name:'技术架构部', color:'slate', desc:'向公益平台和各实验室提供技术服务，构建 SSV 统一技术底座' }
-};
+const TEAMS = [
+  { key:'jiaoyu',        emoji:'📚', name:'教育实验室',   color:'blue' },
+  { key:'gongyipingtai', emoji:'💚', name:'公益平台',     color:'emerald' },
+  { key:'wenhua',        emoji:'🎭', name:'文化实验室',   color:'violet' },
+  { key:'shiguang',      emoji:'🕰️', name:'时光实验室',   color:'amber' },
+  { key:'xinjishi',      emoji:'🔬', name:'新基石',       color:'cyan' },
+  { key:'jishujiagou',   emoji:'⚙️', name:'技术架构部',   color:'slate' }
+];
+const TEAM_MAP = Object.fromEntries(TEAMS.map(t=>[t.key,t]));
 
-// SSV 整体 OKR（首页用）
-const SSV_OKR = {
-  annual: {
-    period: '2026 年度',
-    objective: 'SSV 透明度与协同效率显著提升 · 让进展被公开、信号被看到、经验被传递',
-    krs: [
-      { text:'各团队 OKR 公开率 100% · Topic 沉淀月增长 ≥ 30%', pct:62, color:'var(--emerald)' },
-      { text:'Nexus DAU 覆盖 SSV 80%+ 员工', pct:48, color:'var(--blue)' },
-      { text:'AI 总结/检索能力覆盖核心场景，节省汇报时间 30%', pct:55, color:'var(--violet)' }
-    ]
-  },
-  quarterly: {
-    period: '2026 Q3',
-    objective: '完成 Topic 写作 Copilot v1 + 各部门季度目标 Topic 全部入库',
-    krs: [
-      { text:'Copilot 上线，覆盖辅助输入 / 智能建议 / 周月报生成 3 大能力', pct:70, color:'var(--blue)' },
-      { text:'6 个部门完成 Q3 目标 Topic 发布并保持月度更新', pct:55, color:'var(--emerald)' },
-      { text:'Nexus AI 周月报采纳率 ≥ 50%', pct:30, color:'var(--violet)' }
-    ]
-  }
-};
-
-// 部门级别 OKR（点进去看）
-const DEPT_OKR = {
-  'jiaoyu': { quarterly:{ period:'2026 Q3', objective:'完成教学系统 V2 核心功能开发，启动云南首省试点',
-    krs:[ {text:'V2 核心功能完成开发',pct:80,color:'var(--blue)'},
-          {text:'与云南省教育厅完成合作签约',pct:55,color:'var(--emerald)'},
-          {text:'产出 3 篇教育 AI 方法论白皮书',pct:33,color:'var(--amber)'} ] } },
-  'gongyipingtai':{ quarterly:{ period:'2026 Q3', objective:'AI 智能推荐系统上线 · 提升捐赠匹配效率',
-    krs:[ {text:'AI 推荐命中率 > 35%',pct:60,color:'var(--blue)'},
-          {text:'平台月活提升 20%',pct:38,color:'var(--emerald)'} ] } },
-  'wenhua':{ quarterly:{ period:'2026 Q3', objective:'敦煌壁画 AI 修复项目交付验收',
-    krs:[ {text:'200 幅壁画 AI 辅助修复',pct:72,color:'var(--violet)'},
-          {text:'沉浸式线上展览上线',pct:45,color:'var(--blue)'} ] } },
-  'shiguang':{ quarterly:{ period:'2026 Q3', objective:'语音助手核心场景适配完成',
-    krs:[ {text:'医疗 / 出行 / 社交 3 大场景覆盖',pct:60,color:'var(--amber)'} ] } },
-  'xinjishi':{ quarterly:{ period:'2026 Q3', objective:'第三批资助评审启动',
-    krs:[ {text:'申请材料初筛',pct:70,color:'var(--cyan)'} ] } },
-  'jishujiagou':{ quarterly:{ period:'2026 Q3', objective:'Harness Schema —— Agent 基建治理 v1.1 落地',
-    krs:[ {text:'v1.1 协议 + CLI 工具链',pct:80,color:'var(--slate)'},
-          {text:'7 个 Provider 包',pct:60,color:'var(--blue)'} ] } }
-};
-
-// Q3 机动目标 = 每个部门下方"明显的标识卡片"，点击进部门 Topic
-const Q3_TARGETS = [
-  { dept:'jiaoyu', color:'blue', tag:'Q3 机动目标', title:'教育 · 云南省试点签约 + 部署',
-    desc:'昆明 5 所乡村中学完成签约 → 部署 → 教师培训', pct:55, owner:'李晨' },
-  { dept:'gongyipingtai', color:'emerald', tag:'Q3 机动目标', title:'公益 · AI 智能推荐 V1 上线',
-    desc:'命中率 ≥ 35% · 月活提升 20%', pct:60, owner:'陈琳' },
-  { dept:'wenhua', color:'violet', tag:'Q3 机动目标', title:'文化 · 敦煌壁画 200 幅 AI 修复交付',
-    desc:'专家评审通过率 ≥ 90% · 沉浸式展览上线', pct:72, owner:'刘芳' },
-  { dept:'jishujiagou', color:'amber', tag:'Q3 机动目标', title:'技术 · Harness Schema v1.1 全量推广',
-    desc:'7 个 Provider · observe 族 · 教师助手项目落地', pct:80, owner:'yikazhu' }
+// 类型 # 标签：通过类型驱动业务结构
+const TYPE_TAGS = [
+  { key:'all',    label:'全部',     active:true },
+  { key:'q3',     label:'# Q3 目标', hash:true },
+  { key:'yuehui', label:'月会' },
+  { key:'zhanlve',label:'战略' },
+  { key:'hegui',  label:'合规' },
+  { key:'jingying',label:'经营' },
+  { key:'jishu',  label:'技术' },
+  { key:'quanyuan',label:'全员行动' },
+  { key:'xiangmu',label:'项目' },
+  { key:'qita',   label:'其他' }
 ];
 
-// 部门 Topic 流（动态汇聚到首页 + 部门页）
-const TOPIC_FEED = [
-  { id:1, dept:'jishujiagou', deptName:'技术架构部', author:'yikazhu', authorInitial:'Y', time:'2 小时前',
-    isMgr:true, title:'【目标 · Q3】Harness Schema v1.1 推广路线图',
-    content:'Q3 重点：把 v1.1 协议规范从教师助手扩展到 zhiyan / galileo 两个 Provider。新增 harness link 命令解决多项目联通…',
-    replies:8, eyes:124 },
-  { id:2, dept:'jiaoyu', deptName:'教育实验室', author:'张明', authorInitial:'张', time:'5 小时前',
-    isMgr:false, title:'V2 学习路径引擎算法调优 · 准确率从 68% 提升至 82%',
-    content:'本周完成模型微调，关键改动：① 引入知识点难度权重 ② 增加学生历史路径序列特征。下一步进入教师看板对接…',
-    replies:3, eyes:56 },
-  { id:3, dept:'wenhua', deptName:'文化实验室', author:'刘芳', authorInitial:'刘', time:'昨天',
-    isMgr:true, title:'【目标 · Q3】敦煌壁画 AI 修复 · 200 幅交付计划',
-    content:'已完成 144/200 幅初稿，专家评审通过率 92%。重点风险：6 月底前需完成沉浸式展览技术评审…',
-    replies:5, eyes:88 },
-  { id:4, dept:'gongyipingtai', deptName:'公益平台', author:'陈琳', authorInitial:'陈',  time:'昨天',
-    isMgr:false, title:'AI 推荐系统 A/B 测试结果 · 新算法命中率 38%',
-    content:'灰度测试 7 天，新算法 vs 老算法命中率 38% / 24%，CTR 提升 1.6 倍。下周进入全量灰度…',
-    replies:6, eyes:97 },
-  { id:5, dept:'jiaoyu', deptName:'教育实验室', author:'李晨', authorInitial:'李', time:'2 天前',
-    isMgr:false, title:'⚠ 云南试点首批学校网络基础设施需升级',
-    content:'实地调研 5 所学校，3 所网络条件不达标，需要先与省教育厅对齐升级方案…',
-    replies:11, eyes:142 },
-  { id:6, dept:'shiguang', deptName:'时光实验室', author:'孙健', authorInitial:'孙', time:'3 天前',
-    isMgr:false, title:'适老化语音助手 V2 · 医疗问诊场景测试报告',
-    content:'银发用户实测 30 人，任务完成率 78%，相比 V1 提升 22 个百分点…',
-    replies:2, eyes:43 }
+// SSV 上墙置顶
+const PIN_LIST = [
+  { tag:'全员行动', tagColor:'amber', date:'2026-04-28',
+    title:'【AI 时代 SSV 的"二次创业"】：从探索者到先锋军…',
+    author:'jasonxdong(东旭)', authorInitial:'J',
+    content:'SSV 步入第二个五年战略升级期，核心方向从"广泛探索"转向"平台化与垂直深耕"…',
+    starred:false, active:true },
+  { tag:'探讨', tagColor:'blue', date:'2026-04-23',
+    title:'探讨：你心目中的 SSV 理念是什么？',
+    author:'ewellzhao(赵国臣)', authorInitial:'E',
+    content:'正值 SSV 战略发布五周年，发起关于 SSV 核心理念（是组织、战略还是…）',
+    starred:false, active:false },
+  { tag:'产品', tagColor:'violet', date:'2026-04-21',
+    title:'Nexus 产品进展和一些思考',
+    author:'suriwang(王昕)', authorInitial:'S',
+    content:'Nexus 发布了可见范围按人 / 多人筛选功能，并通过"后台存储池 + 在…',
+    starred:true, active:false }
+];
+
+// Topic 列表（实时流） · types 字段携带 # 类型标签 + team 字段
+const TOPICS = [
+  { id:1, team:'jiaoyu', types:['q3','xiangmu'], starred:false,
+    title:'公益平台部 CICDCO 基建讨论',
+    teamHash:'#技术', author:'dingyuan(袁丁)', date:'2026-05-15',
+    replyAuthor:'brantli(李哲)', replyTime:'1 小时前',
+    replyContent:'「这里的整体的工作是很全面的，很赞！不过近…」' },
+  { id:2, team:'jiaoyu', types:['xiangmu','jishu'], starred:false,
+    title:'企鹅智慧学练和企鹅教师助手上架国家智慧中小学平台啦！诚邀各位深度使用体验',
+    teamHash:'#项目', author:'lyali(李雅晴)', date:'2026-05-13',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:3, team:'wenhua', types:['xiangmu','jishu'], starred:false,
+    title:'数字文化 · 探元 AI 知识库：AI 驱动的文化遗产知识库开放平台',
+    teamHash:'#技术', author:'ericjing(井博)', date:'2026-05-12',
+    replyAuthor:'caitlynchen(陈菊红)', replyTime:'23 分钟前',
+    replyContent:'回复了 sevenshu(舒展):「内测登陆有点问题…」' },
+  { id:4, team:'jishujiagou', types:['jishu','xiangmu','q3'], starred:false,
+    title:'SPM 埋点治理第二阶段：曝光补全 + 多跳归因 + 属性漏传防治 — 方案讨论',
+    teamHash:'#技术', author:'hunterguo(郭晓波)', date:'2026-05-11',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:5, team:'gongyipingtai', types:['xiangmu','q3'], starred:false,
+    title:'公益测试工作提效讨论',
+    teamHash:'#技术', author:'allenyhu(朱艳红)', date:'2026-05-09',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:6, team:'jiaoyu', types:['q3','jingying'], starred:true,
+    title:'【目标 · Q3】教育实验室云南试点签约 + 部署',
+    teamHash:'#月会', author:'李晨(管理层)', date:'2026-05-08',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:7, team:'wenhua', types:['q3'], starred:false,
+    title:'【目标 · Q3】敦煌壁画 200 幅 AI 修复交付计划',
+    teamHash:'#月会', author:'刘芳(管理层)', date:'2026-05-06',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:8, team:'jishujiagou', types:['q3','jishu'], starred:false,
+    title:'【目标 · Q3】Harness Schema v1.1 全量推广 — 7 个 Provider',
+    teamHash:'#月会', author:'yikazhu(管理层)', date:'2026-05-05',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:9, team:'jiaoyu', types:['hegui','jishu'], starred:false,
+    title:'AI 学情数据合规评估 · 三省试点前置检查清单',
+    teamHash:'#合规', author:'zhangshilong(张世龙)', date:'2026-05-04',
+    replyAuthor:null, replyTime:null, replyContent:null },
+  { id:10, team:'gongyipingtai', types:['zhanlve','quanyuan'], starred:false,
+    title:'公益平台 2026 战略升级路径思考',
+    teamHash:'#战略', author:'ewellzhao(赵国臣)', date:'2026-04-29',
+    replyAuthor:null, replyTime:null, replyContent:null }
 ];
 
 // ================ 状态 ================
-let currentView = 'home'; // home | dept
-let currentDept = null;
-const mainArea = document.getElementById('mainArea');
+let currentSidebar = 'all';      // all | my | team
+let currentTeam = 'jiaoyu';      // 默认选择教育实验室
+let currentType = 'all';
+let currentSort = 'latest';      // latest | active
 
-// ================ 工具 ================
-function $(sel){ return document.querySelector(sel); }
-function showToast(msg){
-  const t = $('#toast'); t.textContent = msg; t.style.display = 'block';
-  clearTimeout(window.__t); window.__t = setTimeout(()=>{ t.style.display='none'; }, 2200);
-}
+const $ = sel => document.querySelector(sel);
+const mainArea = $('#mainArea');
 
-function colorOfDept(deptKey){ return (DEPTS[deptKey]||{}).color || 'blue'; }
+function showToast(msg){ const t=$('#toast'); t.textContent=msg; t.style.display='block'; clearTimeout(window.__t); window.__t=setTimeout(()=>{t.style.display='none';},2200); }
 
-// ================ 渲染 ================
-function render(){
-  if(currentView==='home') renderHome();
-  else if(currentView==='dept') renderDept();
-  // sidebar active
-  document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.remove('active'));
-  if(currentView==='home'){
-    document.querySelector('.sidebar-item[data-view="home"]').classList.add('active');
-  } else {
-    const el = document.querySelector('.sidebar-item[data-team="'+currentDept+'"]');
-    if(el) el.classList.add('active');
-  }
-}
-
-function renderHome(){
-  mainArea.innerHTML = `
-    <div class="home-header">
-      <div>
-        <div class="home-title">SSV 首页 · 2026 Q3</div>
-        <div class="home-sub">看 SSV 整体目标，看各部门动态，发起属于你的 Topic</div>
-      </div>
-      <div class="home-meta">最近更新 · 今日 10:30 · 6 个部门</div>
-    </div>
-
-    <div class="dual-grid">
-      <!-- 左：OKR + Q3 机动目标 -->
-      <div class="left-col">
-        <!-- OKR 区 -->
-        <div>
-          <div class="section-head">
-            <h2><span class="dot"></span>SSV 整体 OKR</h2>
-            <div class="sub-meta">
-              <span class="role-tag">管理层</span>
-              <button class="btn-edit-okr" onclick="showToast('管理层身份已识别 · 进入编辑模式')">✏ 编辑目标</button>
-            </div>
-          </div>
-          <div class="okr-card">
-            <span class="okr-period">${SSV_OKR.annual.period}</span>
-            <div class="okr-objective">${SSV_OKR.annual.objective}</div>
-            <ul class="okr-krs">
-              ${SSV_OKR.annual.krs.map(kr=>`
-                <li class="okr-kr">
-                  <div style="flex:1;">${kr.text}</div>
-                  <div class="okr-kr-bar"><div class="okr-kr-fill" style="width:${kr.pct}%;background:${kr.color};"></div></div>
-                  <span class="okr-kr-pct">${kr.pct}%</span>
-                </li>
-              `).join('')}
-            </ul>
-          </div>
-
-          <div class="okr-card">
-            <span class="okr-period" style="background:var(--violet-light);color:var(--violet);">${SSV_OKR.quarterly.period}</span>
-            <div class="okr-objective">${SSV_OKR.quarterly.objective}</div>
-            <ul class="okr-krs">
-              ${SSV_OKR.quarterly.krs.map(kr=>`
-                <li class="okr-kr">
-                  <div style="flex:1;">${kr.text}</div>
-                  <div class="okr-kr-bar"><div class="okr-kr-fill" style="width:${kr.pct}%;background:${kr.color};"></div></div>
-                  <span class="okr-kr-pct">${kr.pct}%</span>
-                </li>
-              `).join('')}
-            </ul>
-          </div>
-        </div>
-
-        <!-- Q3 机动目标卡片 -->
-        <div>
-          <div class="section-head">
-            <h2><span class="dot" style="background:var(--amber);box-shadow:0 0 0 3px rgba(217,119,6,0.15);"></span>Q3 机动目标 · 点击进入对应部门</h2>
-            <div class="sub-meta">4 个跨部门重点 · 月度跟进</div>
-          </div>
-          <div class="q3-grid">
-            ${Q3_TARGETS.map(t=>`
-              <div class="q3-card ${t.color}" onclick="goDept('${t.dept}')">
-                <span class="q3-card-tag">${t.tag}</span>
-                <h4>${t.title}</h4>
-                <div class="q3-desc">${t.desc}</div>
-                <div class="q3-progress"><div class="q3-progress-fill" style="width:${t.pct}%;background:var(--${t.color});"></div></div>
-                <div class="q3-foot">
-                  <span>${DEPTS[t.dept].emoji} ${DEPTS[t.dept].name} · ${t.owner}</span>
-                  <span class="q3-arrow">${t.pct}% →</span>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      </div>
-
-      <!-- 右：Topic 流 -->
-      <div class="right-col">
-        <div class="section-head">
-          <h2><span class="dot" style="background:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,0.15);"></span>大家发布的 Topic</h2>
-          <div class="sub-meta">实时同步 · 6 部门 · 今日 12 条</div>
-        </div>
-        <div class="feed-tabs">
-          <div class="feed-tab active" onclick="switchFeedTab(this,'all')">全部 <span class="count">${TOPIC_FEED.length}</span></div>
-          <div class="feed-tab" onclick="switchFeedTab(this,'mgr')">管理层目标 <span class="count">${TOPIC_FEED.filter(t=>t.isMgr).length}</span></div>
-          <div class="feed-tab" onclick="switchFeedTab(this,'staff')">员工进展 <span class="count">${TOPIC_FEED.filter(t=>!t.isMgr).length}</span></div>
-        </div>
-        <div class="topic-feed" id="topicFeed">
-          ${renderTopicList(TOPIC_FEED)}
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function renderTopicList(list){
-  return list.map(t=>`
-    <div class="topic-item" onclick="goDept('${t.dept}')">
-      <div class="topic-item-head">
-        <div class="topic-item-avatar">${t.authorInitial}</div>
-        <span class="topic-item-author">${t.author}</span>
-        <span class="topic-hash ${colorOfDept(t.dept)}">#${t.deptName}</span>
-        ${t.isMgr ? '<span class="topic-mgr-tag">目标 · 管理层</span>' : ''}
-        <span class="topic-item-time">${t.time}</span>
-      </div>
-      <div class="topic-item-title">${t.title}</div>
-      <div class="topic-item-content">${t.content}</div>
-      <div class="topic-item-foot">
-        <span class="stat">💬 ${t.replies}</span>
-        <span class="stat">👁 ${t.eyes}</span>
-        <span class="stat">↗ 进入 #${t.deptName}</span>
-      </div>
+// ================ Team 下拉 ================
+function buildTeamMenu(){
+  const m = $('#teamSelectMenu');
+  m.innerHTML = TEAMS.map(t=>`
+    <div class="team-option ${t.key===currentTeam?'selected':''}" onclick="pickTeam('${t.key}')">
+      <span style="font-size:14px;">${t.emoji}</span>
+      <span>${t.name}</span>
+      <span class="check">✓</span>
     </div>
   `).join('');
 }
+function toggleTeamMenu(){
+  const trigger = $('#teamSelectTrigger');
+  const menu = $('#teamSelectMenu');
+  const open = menu.classList.contains('show');
+  if(open){ menu.classList.remove('show'); trigger.classList.remove('open'); }
+  else { menu.classList.add('show'); trigger.classList.add('open'); buildTeamMenu(); }
+}
+function pickTeam(key){
+  currentTeam = key;
+  const t = TEAM_MAP[key];
+  $('#tsEmoji').textContent = t.emoji;
+  $('#tsName').textContent = t.name;
+  $('#teamSelectMenu').classList.remove('show');
+  $('#teamSelectTrigger').classList.remove('open');
+  // 选 Team 后切到 team 视图
+  currentSidebar = 'team';
+  document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.remove('active'));
+  render();
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('#teamSelectWrap')){
+    const m = $('#teamSelectMenu'); if(m){ m.classList.remove('show'); $('#teamSelectTrigger')?.classList.remove('open'); }
+  }
+});
 
-function switchFeedTab(el, kind){
-  el.parentElement.querySelectorAll('.feed-tab').forEach(t=>t.classList.remove('active'));
+// ================ Sidebar 切换 ================
+function switchSidebar(el, view){
+  document.querySelectorAll('.sidebar-item').forEach(x=>x.classList.remove('active'));
   el.classList.add('active');
-  let list = TOPIC_FEED;
-  if(kind==='mgr') list = TOPIC_FEED.filter(t=>t.isMgr);
-  if(kind==='staff') list = TOPIC_FEED.filter(t=>!t.isMgr);
-  $('#topicFeed').innerHTML = renderTopicList(list);
+  currentSidebar = view;
+  render();
 }
 
-function renderDept(){
-  const d = DEPTS[currentDept];
-  const okr = (DEPT_OKR[currentDept]||{}).quarterly;
-  const deptTopics = TOPIC_FEED.filter(t=>t.dept===currentDept);
+// ================ 渲染 ================
+function getFilteredTopics(){
+  let list = TOPICS;
+  if(currentSidebar==='team') list = list.filter(t=>t.team===currentTeam);
+  if(currentSidebar==='my') list = list.filter(t=>t.author.includes('马巍') || t.starred);
+  if(currentType!=='all') list = list.filter(t=>(t.types||[]).includes(currentType));
+  // 排序
+  if(currentSort==='latest') list = [...list].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  return list;
+}
+
+function render(){
+  const t = TEAM_MAP[currentTeam];
+  let scopeTitle = 'ALL Topic', scopeSub = '发起重要的事，追踪关心的事';
+  if(currentSidebar==='my'){ scopeTitle = 'MY Topic'; scopeSub = '我发布的 / 我关注的'; }
+  else if(currentSidebar==='team'){ scopeTitle = `${t.emoji} ${t.name} · Topic`; scopeSub = `仅展示 # ${t.name} 相关 Topic`; }
+
   mainArea.innerHTML = `
-    <div class="dept-banner">
-      <div class="dept-emoji" style="background:var(--${d.color}-light);">${d.emoji}</div>
+    <div class="home-header">
       <div>
-        <h2># ${d.name}</h2>
-        <p>${d.desc}</p>
+        <div class="home-title">${scopeTitle}</div>
+        <div class="home-sub">${scopeSub}</div>
       </div>
-      <span class="back-link" onclick="goHome()">← 返回首页</span>
+      <button class="btn-publish" onclick="openDrawer()">+ 发布 Topic</button>
     </div>
 
-    <div class="dual-grid">
-      <div class="left-col">
-        <div>
-          <div class="section-head">
-            <h2><span class="dot"></span>${d.name} · OKR</h2>
-            <div class="sub-meta">
-              <span class="role-tag">部门管理者</span>
-              <button class="btn-edit-okr" onclick="showToast('部门管理者身份已识别 · 进入编辑模式')">✏ 编辑目标</button>
-            </div>
-          </div>
-          ${okr ? `
-            <div class="okr-card">
-              <span class="okr-period">${okr.period}</span>
-              <div class="okr-objective">${okr.objective}</div>
-              <ul class="okr-krs">
-                ${okr.krs.map(kr=>`
-                  <li class="okr-kr">
-                    <div style="flex:1;">${kr.text}</div>
-                    <div class="okr-kr-bar"><div class="okr-kr-fill" style="width:${kr.pct}%;background:${kr.color};"></div></div>
-                    <span class="okr-kr-pct">${kr.pct}%</span>
-                  </li>
-                `).join('')}
-              </ul>
-            </div>
-          ` : '<p style="color:var(--ink-muted);font-size:13px;padding:14px;">本部门暂未发布 Q3 OKR</p>'}
-        </div>
-      </div>
+    ${currentSidebar==='all' ? renderPinSection() : ''}
 
-      <div class="right-col">
-        <div class="section-head">
-          <h2><span class="dot" style="background:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,0.15);"></span>#${d.name} · Topic 流</h2>
-          <div class="sub-meta">${deptTopics.length} 条 Topic · 实时同步</div>
-        </div>
-        <div class="topic-feed">
-          ${deptTopics.length ? renderTopicList(deptTopics) : '<p style="color:var(--ink-muted);font-size:13px;padding:14px;">本部门暂无 Topic · 用顶部「+ 发布 Topic」开始</p>'}
-        </div>
+    <div class="topic-section-head">
+      <h3>≡ Topic</h3>
+      <div class="search-box">🔍 <input placeholder="输入关键词后按回车搜索"></div>
+    </div>
+
+    <div class="tag-filter-row">
+      ${TYPE_TAGS.map(tag=>`
+        <span class="tag-pill ${tag.hash?'hash':''} ${currentType===tag.key?'active':''}" onclick="pickType('${tag.key}')">${tag.label}</span>
+      `).join('')}
+      <div class="sort-row">
+        <span class="sort-item ${currentSort==='latest'?'active':''}" onclick="pickSort('latest')">最新发布</span>
+        <span class="sort-item ${currentSort==='active'?'active':''}" onclick="pickSort('active')">最近活跃</span>
       </div>
+    </div>
+
+    <div id="topicList">${renderTopicRows(getFilteredTopics())}</div>
+  `;
+}
+
+function renderPinSection(){
+  return `
+    <div class="ssv-pin-section">
+      <div class="ssv-pin-head">
+        <h3>🔔 SSV 上墙</h3>
+      </div>
+      <div class="ssv-pin-grid">
+        ${PIN_LIST.map(p=>`
+          <div class="pin-card ${p.active?'active':''}">
+            <div class="pin-card-head">
+              <span class="pin-tag ${p.tagColor}">${p.tag}</span>
+              <span class="pin-date">${p.date}</span>
+            </div>
+            <div class="pin-title">${p.title}</div>
+            <div class="pin-author">${p.author}</div>
+            <div class="pin-content">${p.content}</div>
+            ${p.starred?'<span class="pin-star">★</span>':''}
+          </div>
+        `).join('')}
+      </div>
+      <div class="see-all-btn">查看全部 →</div>
     </div>
   `;
 }
 
-// ================ 路由 ================
-function goHome(){ currentView='home'; currentDept=null; render(); }
-function goDept(deptKey){ currentView='dept'; currentDept=deptKey; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+function renderTopicRows(list){
+  if(!list.length) return '<p style="color:var(--ink-muted);font-size:13px;padding:30px;text-align:center;">暂无 Topic · 用顶部「+ 发布 Topic」开始</p>';
+  return list.map(t=>{
+    const team = TEAM_MAP[t.team];
+    const isQ3 = (t.types||[]).includes('q3');
+    return `
+      <div class="topic-row" onclick="showToast('打开 Topic：${t.title.replace(/'/g,'')}')">
+        <div class="topic-row-title-row">
+          <span class="topic-row-title">${t.title}</span>
+          <span class="topic-row-tags">
+            <span class="row-tag-sm ${team.color}">#${team.name}</span>
+            ${isQ3 ? '<span class="row-tag-sm hash"># Q3 目标</span>' : ''}
+            ${t.teamHash ? `<span class="row-tag-sm">${t.teamHash}</span>` : ''}
+          </span>
+          <span class="row-star ${t.starred?'on':''}">${t.starred?'★':'☆'}</span>
+        </div>
+        <div class="topic-row-meta">
+          <span class="author">${t.author}</span>
+          <span>·</span>
+          <span>${t.date}</span>
+          ${t.replyAuthor ? `<span>·</span><span class="reply"><em>${t.replyAuthor}</em> ${t.replyContent}</span><span>·</span><span>${t.replyTime}</span>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function pickType(key){
+  currentType = key;
+  // 仅刷新筛选区与列表，避免 SSV 上墙重新滚动
+  document.querySelectorAll('.tag-pill').forEach(el=>el.classList.remove('active'));
+  const el = [...document.querySelectorAll('.tag-pill')].find(e=>e.getAttribute('onclick').includes("'"+key+"'"));
+  if(el) el.classList.add('active');
+  $('#topicList').innerHTML = renderTopicRows(getFilteredTopics());
+}
+function pickSort(s){ currentSort = s; render(); }
 
 // ================ Drawer ================
+function buildDrawerHashes(){
+  $('#teamHashRow').innerHTML = TEAMS.map(t=>`
+    <span class="hashtag-pill" data-tag="${t.key}" data-kind="team" onclick="toggleHash(this)">${t.emoji} #${t.name}</span>
+  `).join('');
+  $('#typeHashRow').innerHTML = TYPE_TAGS.filter(x=>x.key!=='all').map(tg=>`
+    <span class="hashtag-pill" data-tag="${tg.key}" data-kind="type" onclick="toggleHash(this)"># ${tg.label.replace(/^#\s*/,'')}</span>
+  `).join('');
+}
 function openDrawer(){
+  buildDrawerHashes();
   $('#drawerMask').classList.add('show');
-  // 默认带上当前部门 hash
-  document.querySelectorAll('.hashtag-pill').forEach(p=>p.classList.remove('active'));
-  if(currentView==='dept' && currentDept){
-    const pill = document.querySelector('.hashtag-pill[data-tag="'+currentDept+'"]');
+  // 默认带上当前 Team
+  if(currentSidebar==='team'){
+    const pill = document.querySelector('.hashtag-pill[data-kind="team"][data-tag="'+currentTeam+'"]');
     if(pill) pill.classList.add('active');
   }
   $('#topicTitle').value=''; $('#topicBody').value='';
@@ -719,35 +700,35 @@ function openDrawer(){
 function closeDrawer(){ $('#drawerMask').classList.remove('show'); }
 function toggleHash(el){ el.classList.toggle('active'); validateSubmit(); }
 function validateSubmit(){
-  const has = document.querySelectorAll('.hashtag-pill.active').length>0;
+  const hasTeam = document.querySelectorAll('.hashtag-pill[data-kind="team"].active').length>0;
   const title = $('#topicTitle').value.trim();
-  $('#btnSubmit').disabled = !(has && title);
+  $('#btnSubmit').disabled = !(hasTeam && title);
 }
-$('#topicTitle').addEventListener?.('input', validateSubmit);
 document.addEventListener('input', e=>{ if(e.target.id==='topicTitle') validateSubmit(); });
 
 function submitTopic(){
-  const tags = Array.from(document.querySelectorAll('.hashtag-pill.active')).map(p=>p.dataset.tag);
-  if(!tags.length){ showToast('⚠ 请至少关联一个部门 #'); return; }
+  const teamTags = [...document.querySelectorAll('.hashtag-pill[data-kind="team"].active')].map(p=>p.dataset.tag);
+  const typeTags = [...document.querySelectorAll('.hashtag-pill[data-kind="type"].active')].map(p=>p.dataset.tag);
+  if(!teamTags.length){ showToast('⚠ 请至少关联一个 Team #'); return; }
   const title = $('#topicTitle').value.trim();
-  const body = $('#topicBody').value.trim() || '（无正文）';
   if(!title){ showToast('请输入 Topic 标题'); return; }
-  // 模拟插入到 feed 顶部
-  tags.forEach(tag=>{
-    TOPIC_FEED.unshift({
-      id: Date.now()+Math.random(),
-      dept: tag, deptName: DEPTS[tag].name,
-      author:'马巍', authorInitial:'马', time:'刚刚', isMgr:false,
-      title, content: body.length>120 ? body.slice(0,120)+'…' : body,
-      replies:0, eyes:0
-    });
+  const body = $('#topicBody').value.trim() || '（无正文）';
+  TOPICS.unshift({
+    id:Date.now(), team:teamTags[0], types:typeTags,
+    title, teamHash:'#新发布',
+    author:'马巍', date:'今天',
+    replyAuthor:null, replyTime:null, replyContent:null,
+    starred:false
   });
   closeDrawer();
-  showToast('✓ Topic 已发布到 ' + tags.map(t=>'#'+DEPTS[t].name).join('、'));
+  const teamNames = teamTags.map(k=>'#'+TEAM_MAP[k].name).join('、');
+  const typeText = typeTags.length?(' · 已关联 '+typeTags.map(k=>{const t=TYPE_TAGS.find(x=>x.key===k);return '#'+(t?t.label.replace(/^#\s*/,''):k);}).join('、')):'';
+  showToast('✓ Topic 已发布到 ' + teamNames + typeText);
   render();
 }
 
-// 初始化
+// ================ 初始化 ================
+buildTeamMenu();
 render();
 </script>
 
