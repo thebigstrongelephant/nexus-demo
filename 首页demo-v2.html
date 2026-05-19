@@ -79,6 +79,771 @@ body {
 .sidebar-icon { width:18px; text-align:center; font-size:13px; flex-shrink:0; }
 .sidebar-divider { height:1px; background:var(--border-light); margin:10px 12px; }
 
+/* ============ 全局 OKR 入口 + SSV 大目标可折叠框 ============ */
+.global-okr-entry {
+  font-size:11.5px; padding:5px 11px; border-radius:99px;
+  background:#fff; border:1px solid #c4b5fd; color:#7c3aed; cursor:pointer;
+  font-weight:600; display:inline-flex; align-items:center; gap:5px;
+}
+.global-okr-entry:hover { background:#faf5ff; border-color:#7c3aed; }
+
+.ssv-goal-toggle {
+  font-size:11.5px; padding:5px 11px; border-radius:99px;
+  background:#fff7ed; border:1px solid #fed7aa; color:#ea580c; cursor:pointer;
+  font-weight:600; display:inline-flex; align-items:center; gap:5px;
+}
+.ssv-goal-toggle:hover { background:#ffedd5; border-color:#fb923c; }
+.ssv-goal-toggle.open { background:#ea580c; color:#fff; border-color:#ea580c; }
+
+.ssv-goal-box {
+  display:none; margin-top:12px; padding:14px 18px;
+  background:linear-gradient(135deg,#fff7ed 0%,#fff 70%);
+  border:1px solid #fed7aa; border-radius:10px;
+}
+.ssv-goal-box.open { display:block; }
+.ssv-goal-box .ssvg-head { display:flex; align-items:center; gap:10px; margin-bottom:6px; flex-wrap:wrap; }
+.ssv-goal-box .ssvg-badge {
+  font-size:10px; padding:2px 9px; border-radius:99px;
+  background:#ea580c; color:#fff; font-weight:700; letter-spacing:0.3px;
+}
+.ssv-goal-box .ssvg-owner { font-size:11.5px; color:var(--ink-secondary); }
+.ssv-goal-box .ssvg-title { font-size:15px; font-weight:700; color:var(--ink-primary); margin-bottom:10px; }
+.ssv-goal-box .ssvg-krs { display:flex; flex-direction:column; gap:6px; }
+.ssv-goal-box .ssvg-kr {
+  background:#fff; border:1px solid #fed7aa; border-radius:7px; padding:7px 12px;
+  font-size:12.5px; color:var(--ink-secondary); display:flex; align-items:center; gap:10px;
+}
+.ssv-goal-box .ssvg-kr-num {
+  flex-shrink:0; font-size:10.5px; padding:2px 8px; border-radius:99px;
+  background:#fed7aa; color:#9a3412; font-weight:700; font-style:italic;
+}
+.ssv-goal-box .ssvg-foot {
+  margin-top:10px; font-size:11px; color:var(--ink-muted); padding-top:8px;
+  border-top:1px dashed #fed7aa;
+}
+
+/* ============ 其他管理层"按人进入"模式 ============ */
+.wb-people-bar {
+  display:flex; align-items:center; gap:8px; padding:10px 18px;
+  background:#fff; border:1px solid var(--border); border-top:none;
+  flex-wrap:wrap;
+}
+.wb-people-bar .wb-people-label {
+  font-size:11.5px; color:var(--ink-muted); margin-right:4px;
+}
+.wb-people-bar .wb-person-pill {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:4px 10px; border-radius:99px; font-size:11.5px; cursor:pointer;
+  background:var(--bg-subtle); color:var(--ink-secondary); border:1px solid transparent;
+  font-weight:500;
+}
+.wb-people-bar .wb-person-pill:hover { background:#ede9fe; color:#7c3aed; }
+.wb-people-bar .wb-person-pill.active {
+  background:#7c3aed; color:#fff; font-weight:600;
+}
+.wb-people-bar .wb-person-pill.me {
+  background:#fff; color:#7c3aed; border:1px solid #c4b5fd;
+}
+.wb-people-bar .wb-person-pill.me.active { background:#7c3aed; color:#fff; border-color:#7c3aed; }
+.wb-people-bar .wb-person-pill .pp-avatar {
+  width:18px; height:18px; border-radius:50%; background:#fff; color:#7c3aed;
+  font-size:9px; font-weight:700; display:inline-flex; align-items:center; justify-content:center;
+}
+.wb-people-bar .wb-person-pill.active .pp-avatar { background:rgba(255,255,255,0.25); color:#fff; }
+
+/* ============ 发布 Topic Drawer 中：关联 KR 字段 ============ */
+.kr-link-box {
+  border:1px solid var(--border); border-radius:8px; padding:8px;
+  background:#fafbfc;
+  display:flex; flex-direction:column; gap:4px; max-height:240px; overflow-y:auto;
+}
+.kr-link-group {
+  border:1px solid #ddd6fe; border-radius:6px; padding:8px 10px; background:#fff;
+}
+.kr-link-group .klg-head {
+  display:flex; align-items:center; gap:8px; padding-bottom:6px;
+  border-bottom:1px dashed #e5e7eb; margin-bottom:6px;
+}
+.kr-link-group .klg-onum {
+  flex-shrink:0; padding:2px 8px; border-radius:99px;
+  background:#7c3aed; color:#fff; font-size:10px; font-weight:700;
+}
+.kr-link-group .klg-otitle {
+  font-size:12px; font-weight:600; color:var(--ink-primary); flex:1;
+}
+.kr-link-group .klg-oowner { font-size:10.5px; color:var(--ink-muted); }
+
+.kr-link-item {
+  display:flex; align-items:center; gap:8px; padding:6px 10px;
+  border-radius:5px; cursor:pointer; user-select:none;
+  font-size:12px; color:var(--ink-secondary);
+}
+.kr-link-item:hover { background:#f5f3ff; }
+.kr-link-item.selected { background:#7c3aed; color:#fff; font-weight:600; }
+.kr-link-item.selected .klr-num { background:#fff; color:#7c3aed; }
+.kr-link-item .klr-radio {
+  flex-shrink:0; width:14px; height:14px; border-radius:50%;
+  border:1.5px solid #cbd5e1; background:#fff; display:inline-flex;
+  align-items:center; justify-content:center;
+}
+.kr-link-item.selected .klr-radio { border-color:#fff; }
+.kr-link-item.selected .klr-radio::after {
+  content:""; width:7px; height:7px; border-radius:50%; background:#fff;
+}
+.kr-link-item .klr-num {
+  flex-shrink:0; padding:1px 7px; border-radius:99px;
+  background:#dbeafe; color:#1d4ed8; font-size:9.5px; font-weight:700; font-style:italic;
+}
+.kr-link-item .klr-title { flex:1; }
+.kr-link-item .klr-owner { font-size:10.5px; color:var(--ink-muted); white-space:nowrap; }
+.kr-link-item.selected .klr-owner { color:rgba(255,255,255,0.85); }
+
+/* ============ O 卡折叠态 ============ */
+.wb-o-card.collapsed .wb-mention,
+.wb-o-card.collapsed .wb-kr-list,
+.wb-o-card.collapsed .wb-add-kr,
+.wb-o-card.collapsed .wb-o-foot,
+.wb-o-card.collapsed .wb-o-align,
+.wb-o-card.collapsed .wb-o-input { display:none; }
+.wb-o-card.collapsed .wb-o-summary { display:flex; }
+.wb-o-summary { display:none; margin-top:4px; font-size:12.5px; color:var(--ink-secondary); align-items:center; gap:8px; }
+.wb-o-card .wb-o-collapse {
+  flex-shrink:0; cursor:pointer; padding:3px 8px; border-radius:4px;
+  font-size:13px; color:var(--ink-muted); user-select:none;
+}
+.wb-o-card .wb-o-collapse:hover { background:var(--bg-subtle); color:var(--ink-primary); }
+
+/* ============ 管理者视角下：OKR 工作台 ============ */
+body.viewer-mgr .q3-pin-card,
+body.viewer-mgr .q3-mgr-actions { display:none !important; }
+body.viewer-mgr #okrWorkbench { display:block; }
+#okrWorkbench { display:none; margin-bottom:18px; }
+
+.okr-wb-head {
+  display:flex; align-items:center; gap:12px; padding:14px 18px;
+  background:#fff; border:1px solid var(--border); border-radius:10px 10px 0 0;
+  border-bottom:none;
+}
+.okr-wb-head h3 {
+  font-size:15px; font-weight:700; color:var(--ink-primary);
+  display:flex; align-items:center; gap:8px;
+}
+.okr-wb-head h3 .wb-emoji { font-size:18px; }
+.okr-wb-head .wb-pull {
+  background:#7c3aed; color:#fff; border:none;
+  padding:8px 16px; border-radius:7px; font-size:12.5px; font-weight:600; cursor:pointer;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.okr-wb-head .wb-pull:hover { background:#6d28d9; }
+.okr-wb-head .wb-overview {
+  margin-left:auto; background:#fff; color:#7c3aed; border:1px solid #c4b5fd;
+  padding:8px 14px; border-radius:7px; font-size:12.5px; font-weight:600; cursor:pointer;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.okr-wb-head .wb-overview:hover { background:#faf5ff; border-color:#7c3aed; }
+
+.okr-wb-tabs {
+  display:flex; gap:0; padding:0 18px; background:#fff;
+  border:1px solid var(--border); border-top:none; border-bottom:1px solid var(--border);
+}
+.okr-wb-tabs .wb-tab {
+  padding:10px 14px; font-size:12.5px; font-weight:600; color:var(--ink-muted);
+  cursor:pointer; border-bottom:2px solid transparent; user-select:none;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.okr-wb-tabs .wb-tab.active { color:#7c3aed; border-color:#7c3aed; }
+.okr-wb-tabs .wb-tab:hover { color:var(--ink-secondary); }
+.okr-wb-tabs .wb-tab .wb-count {
+  background:#ede9fe; color:#7c3aed; font-size:10px; padding:1px 7px; border-radius:99px; font-weight:700;
+}
+.okr-wb-tabs .wb-tab.active .wb-count { background:#7c3aed; color:#fff; }
+
+.okr-wb-body {
+  background:#fafbfc; border:1px solid var(--border); border-top:none;
+  border-radius:0 0 10px 10px; padding:18px;
+  min-height:280px;
+}
+
+/* 空白态 */
+.okr-wb-empty {
+  border:2px dashed #c7d2fe; border-radius:12px; padding:42px 24px; text-align:center;
+  background:#fff; color:var(--ink-muted);
+}
+.okr-wb-empty .empty-icon { font-size:36px; margin-bottom:12px; }
+.okr-wb-empty .empty-title { font-size:15px; font-weight:700; color:var(--ink-primary); margin-bottom:6px; }
+.okr-wb-empty .empty-sub { font-size:12.5px; margin-bottom:18px; line-height:1.7; }
+.okr-wb-empty .empty-actions { display:flex; gap:10px; justify-content:center; }
+.okr-wb-empty .empty-btn {
+  background:#7c3aed; color:#fff; border:none; padding:10px 20px; border-radius:7px;
+  font-size:13px; font-weight:600; cursor:pointer;
+}
+.okr-wb-empty .empty-btn.ghost { background:#fff; color:#7c3aed; border:1px solid #c4b5fd; }
+.okr-wb-empty .empty-btn:hover { opacity:0.92; }
+
+/* 单条 O 卡片（管理者工作台内联编辑） */
+.wb-o-card {
+  background:#fff; border:1px solid var(--border); border-radius:10px;
+  padding:18px 20px; margin-bottom:14px; position:relative;
+}
+.wb-o-card.editing { border-color:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,0.08); }
+.wb-o-card .wb-o-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.wb-o-card .wb-o-num {
+  flex-shrink:0; padding:3px 10px; border-radius:99px;
+  background:var(--blue); color:#fff; font-size:11px; font-weight:700;
+}
+.wb-o-card .wb-o-owner {
+  display:inline-flex; align-items:center; gap:5px; font-size:11.5px; color:var(--ink-secondary);
+}
+.wb-o-card .wb-o-owner .ow-avatar {
+  width:18px; height:18px; border-radius:50%; background:var(--ink-primary); color:#fff;
+  font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center;
+}
+.wb-o-card .wb-o-role-tag {
+  font-size:9.5px; padding:1px 7px; border-radius:3px; font-weight:700; letter-spacing:0.3px;
+}
+.wb-o-card .wb-o-role-tag.gm { background:#fef3c7; color:#92400e; }
+.wb-o-card .wb-o-role-tag.other { background:#e0e7ff; color:#4f46e5; }
+
+.wb-o-card .wb-o-align {
+  margin:6px 0 8px; font-size:11.5px; color:var(--ink-muted);
+  background:#f5f3ff; border:1px solid #e9d5ff; border-radius:6px; padding:6px 10px;
+}
+.wb-o-card .wb-o-align strong { color:#7c3aed; font-weight:700; }
+.wb-o-card .wb-add-align {
+  margin-left:8px; font-size:11px; color:#7c3aed; cursor:pointer; font-weight:600;
+}
+.wb-o-card .wb-add-align:hover { text-decoration:underline; }
+.wb-o-card .wb-o-tools { margin-left:auto; display:flex; gap:6px; font-size:11px; color:var(--ink-muted); }
+.wb-o-card .wb-o-tools span { cursor:pointer; padding:3px 7px; border-radius:4px; }
+.wb-o-card .wb-o-tools span:hover { background:var(--bg-subtle); color:var(--ink-primary); }
+
+.wb-o-card .wb-o-input {
+  width:100%; border:1px solid var(--border); border-radius:7px; padding:9px 12px;
+  font-size:14px; font-weight:600; color:var(--ink-primary); font-family:inherit; outline:none;
+  background:#fff; box-sizing:border-box;
+}
+.wb-o-card .wb-o-input::placeholder { color:#94a3b8; font-weight:400; }
+.wb-o-card .wb-o-input:focus { border-color:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,0.08); }
+
+.wb-o-card .wb-mention { font-size:11.5px; color:var(--blue); margin:8px 0 4px; cursor:pointer; }
+.wb-o-card .wb-mention:hover { text-decoration:underline; }
+
+.wb-kr-list { margin-top:10px; padding-left:14px; border-left:2px solid #e0e7ff; }
+.wb-kr-row {
+  display:flex; align-items:center; gap:8px; padding:6px 0;
+}
+.wb-kr-row .wb-kr-num {
+  flex-shrink:0; padding:2px 9px; border-radius:99px;
+  background:#dbeafe; color:#1d4ed8; font-size:10.5px; font-weight:700; font-style:italic;
+}
+.wb-kr-row .wb-kr-input {
+  flex:1; border:1px solid var(--border); border-radius:6px; padding:7px 10px;
+  font-size:12.5px; color:var(--ink-secondary); font-family:inherit; outline:none;
+  background:#fff; box-sizing:border-box;
+}
+.wb-kr-row .wb-kr-input::placeholder { color:#94a3b8; }
+.wb-kr-row .wb-kr-input:focus { border-color:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,0.08); }
+.wb-kr-row .wb-kr-owner {
+  flex-shrink:0; font-size:11px; color:var(--ink-muted);
+  display:inline-flex; align-items:center; gap:4px;
+  border:1px dashed var(--border); border-radius:99px; padding:2px 8px; cursor:pointer;
+}
+.wb-kr-row .wb-kr-owner:hover { border-color:#7c3aed; color:#7c3aed; }
+.wb-kr-row .wb-kr-del {
+  flex-shrink:0; color:var(--ink-faint); font-size:14px; cursor:pointer; padding:2px 6px;
+}
+.wb-kr-row .wb-kr-del:hover { color:var(--rose); }
+
+.wb-add-kr {
+  margin-top:6px; margin-left:14px; color:var(--blue); font-size:12px; font-weight:600;
+  cursor:pointer; display:inline-block; padding:3px 0;
+}
+.wb-add-kr:hover { text-decoration:underline; }
+
+.wb-o-foot {
+  margin-top:12px; padding-top:10px; border-top:1px solid var(--border);
+  display:flex; align-items:center; gap:14px; font-size:11.5px; color:var(--ink-muted);
+}
+.wb-o-foot .wb-o-meta { display:inline-flex; align-items:center; gap:5px; }
+.wb-o-foot .wb-o-publish-status.draft { color:var(--ink-muted); }
+.wb-o-foot .wb-o-publish-status.published { color:var(--emerald); font-weight:600; }
+.wb-o-foot .wb-o-actions { margin-left:auto; display:flex; gap:6px; }
+.wb-o-foot .wb-o-actions button {
+  border:1px solid var(--border); background:#fff; padding:5px 12px; border-radius:6px;
+  font-size:11.5px; font-weight:600; cursor:pointer; color:var(--ink-secondary);
+}
+.wb-o-foot .wb-o-actions button.primary { background:#7c3aed; color:#fff; border-color:#7c3aed; }
+.wb-o-foot .wb-o-actions button.primary:hover { background:#6d28d9; }
+.wb-o-foot .wb-o-actions button:hover:not(.primary) { border-color:var(--ink-secondary); color:var(--ink-primary); }
+
+.wb-add-o-row {
+  padding:14px 18px; border:1px dashed #c7d2fe; border-radius:10px;
+  color:#7c3aed; font-size:13px; font-weight:600; cursor:pointer;
+  text-align:center; background:#fff;
+}
+.wb-add-o-row:hover { background:#faf5ff; border-color:#7c3aed; }
+
+/* ============ 员工视角：OKR 对齐树（融合原 Q3 置顶卡） ============ */
+body:not(.viewer-mgr) #okrAlignTree { display:block; }
+#okrAlignTree { display:none; margin-bottom:18px; }
+/* 员工视角下：隐藏旧 Q3 蓝卡（已合并到对齐树）*/
+body:not(.viewer-mgr) .q3-pin-card { display:none !important; }
+
+.align-tree {
+  background:#eff6ff; border:1px solid #dbeafe; border-radius:10px;
+  padding:14px 18px;
+}
+.align-tree-head {
+  display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap;
+}
+.align-tree-head .at-badge {
+  background:#fff; color:#2563eb; padding:3px 10px; border-radius:99px;
+  border:1px solid #bfdbfe; font-size:11px; font-weight:700;
+  display:inline-flex; align-items:center; gap:4px;
+}
+.align-tree-head .at-pin {
+  font-size:11.5px; color:var(--ink-secondary); font-weight:500;
+}
+.align-tree-head .at-toggle {
+  margin-left:auto; font-size:11px; color:var(--ink-muted);
+  padding:4px 10px; border:1px solid var(--border); background:#fff;
+  border-radius:99px; cursor:pointer;
+}
+.align-tree-head .at-toggle:hover { border-color:var(--blue); color:var(--blue); }
+
+.align-tree-title { font-size:18px; font-weight:700; color:var(--ink-primary); margin-top:2px; }
+.align-tree-meta { font-size:11.5px; color:var(--ink-muted); margin-top:2px; margin-bottom:8px; }
+.align-tree-meta .author { color:var(--ink-secondary); font-weight:500; }
+.align-tree-quote {
+  background:rgba(255,255,255,0.7); border-left:3px solid var(--blue);
+  padding:9px 13px; border-radius:0 6px 6px 0; margin:8px 0 14px;
+  font-size:12.5px; color:var(--ink-secondary); line-height:1.7;
+}
+
+.at-objective { margin-bottom:10px; }
+.at-root {
+  background:#fff; border:1px solid #ddd6fe; border-radius:8px; padding:10px 16px;
+}
+.at-root-line {
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.at-root-num {
+  flex-shrink:0; padding:3px 10px; border-radius:99px;
+  background:#7c3aed; color:#fff; font-size:11px; font-weight:700;
+}
+.at-root-title { font-size:14px; font-weight:700; color:var(--ink-primary); flex:1; }
+.at-root-meta { font-size:11.5px; color:var(--ink-muted); white-space:nowrap; }
+
+.at-children { margin-top:8px; padding-left:24px; border-left:2px dashed #c7d2fe; }
+.at-child {
+  background:#fff; border:1px solid var(--border); border-radius:8px;
+  padding:10px 16px; margin-bottom:6px; position:relative;
+}
+.at-child::before {
+  content:""; position:absolute; left:-24px; top:18px; width:22px; height:1px;
+  background:#c7d2fe;
+}
+.at-child .at-child-head { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.at-child .at-child-num {
+  flex-shrink:0; padding:2px 8px; border-radius:99px; background:var(--blue); color:#fff;
+  font-size:10.5px; font-weight:700;
+}
+.at-child .at-child-title { font-size:13px; font-weight:600; color:var(--ink-primary); flex:1; }
+.at-child .at-child-owner {
+  font-size:11px; color:var(--ink-muted); display:inline-flex; align-items:center; gap:4px;
+}
+.at-child .at-kr-mini {
+  font-size:11.5px; color:var(--ink-muted); padding:4px 0; padding-left:10px;
+  display:none;  /* 子说明默认隐藏，保持紧凑 */
+}
+
+.align-tree-foot {
+  margin-top:14px; padding-top:10px; border-top:1px solid #dbeafe;
+  display:flex; align-items:center; gap:14px; font-size:11.5px; color:var(--ink-muted);
+}
+.align-tree-foot .stat { display:inline-flex; align-items:center; gap:5px; }
+.align-tree-foot .at-edit {
+  margin-left:auto; padding:4px 12px; border:1px solid var(--border); background:#fff;
+  border-radius:6px; font-size:11px; color:var(--ink-secondary); cursor:pointer;
+  display:inline-flex; align-items:center; gap:5px;
+}
+.align-tree-foot .at-edit .role {
+  font-size:9.5px; padding:1px 5px; border-radius:3px;
+  background:var(--violet-light); color:var(--violet); font-weight:700;
+}
+.align-tree-foot .at-edit:hover { border-color:var(--blue); color:var(--blue); }
+
+/* ============ OKR 全局视图（自由画布脑图） ============ */
+.okr-overview-mask {
+  position:fixed; inset:0; background:#fff;
+  z-index:998; display:none; flex-direction:column;
+}
+.okr-overview-mask.show { display:flex; }
+.okr-overview {
+  width:100%; height:100%; display:flex; flex-direction:column;
+}
+.okr-overview-head {
+  padding:14px 24px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:12px; background:#fff; flex-shrink:0;
+}
+.okr-overview-head h3 {
+  font-size:16px; font-weight:700; color:var(--ink-primary);
+  display:inline-flex; align-items:center; gap:8px;
+}
+.okr-overview-head .ov-team {
+  font-size:11.5px; color:var(--ink-muted); margin-left:4px; font-weight:500;
+}
+.okr-overview-head .ov-stats {
+  margin-left:auto; font-size:11.5px; color:var(--ink-muted);
+}
+.okr-overview-head .close { font-size:18px; color:var(--ink-muted); cursor:pointer; padding:4px 8px; }
+.okr-overview-head .close:hover { color:var(--ink-primary); }
+.okr-overview-head .back-btn {
+  display:inline-flex; align-items:center; gap:4px; padding:6px 12px;
+  border:1px solid var(--border); border-radius:6px; background:#fff;
+  font-size:12.5px; color:var(--ink-secondary); cursor:pointer; user-select:none;
+  margin-right:6px;
+}
+.okr-overview-head .back-btn:hover { border-color:#7c3aed; color:#7c3aed; background:#faf5ff; }
+
+/* 画布层 */
+.ov-canvas-wrap {
+  flex:1; position:relative; overflow:auto;
+  background:
+    radial-gradient(circle, #e2e8f0 1px, transparent 1px) 0 0/24px 24px,
+    #fafbfc;
+}
+.ov-canvas {
+  position:relative; width:1700px; height:980px;
+}
+.ov-canvas svg.ov-lines {
+  position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:1;
+}
+
+/* OKR 节点卡（同 align-view demo） */
+.ov-node {
+  position:absolute; width:320px; background:#fff; border:1px solid var(--border);
+  border-radius:10px; padding:12px 14px; box-shadow:0 1px 3px rgba(15,23,42,0.04); z-index:5;
+}
+.ov-node:hover { border-color:#c4b5fd; box-shadow:0 4px 14px rgba(124,58,237,0.12); }
+.ov-node.center { border-color:#c4b5fd; box-shadow:0 4px 14px rgba(124,58,237,0.12); }
+.ov-node.unaligned { border:1px dashed #cbd5e1; background:#fafbfc; }
+
+.ov-node .ovh { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.ov-node .ovh-avatar {
+  width:22px; height:22px; border-radius:50%; flex-shrink:0;
+  background:#fef3c7; color:#92400e; font-size:10px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+.ov-node .ovh-name { font-size:12.5px; font-weight:600; color:var(--ink-primary); }
+.ov-node .ovh-role { font-size:10px; color:var(--ink-muted); margin-left:auto; }
+.ov-node .ovh-tag {
+  font-size:9.5px; padding:1px 7px; border-radius:3px; font-weight:700;
+  background:#fef3c7; color:#92400e; margin-left:auto;
+}
+
+.ov-node .ovo-row { display:flex; align-items:flex-start; gap:8px; margin-bottom:5px; }
+.ov-node .ovo-num {
+  flex-shrink:0; padding:2px 8px; border-radius:99px; background:#7c3aed; color:#fff;
+  font-size:10px; font-weight:700;
+}
+.ov-node .ovo-title { font-size:12px; line-height:1.55; color:var(--ink-primary); flex:1; font-weight:500; }
+
+.ov-node .ovkr-row { display:flex; align-items:flex-start; gap:8px; margin-top:5px; padding-left:6px; }
+.ov-node .ovkr-num {
+  flex-shrink:0; padding:1px 7px; border-radius:99px; background:#dbeafe; color:#1d4ed8;
+  font-size:9.5px; font-weight:700; font-style:italic;
+}
+.ov-node .ovkr-title { font-size:11.5px; color:var(--ink-secondary); flex:1; line-height:1.5; }
+.ov-node .ovkr-mention { color:var(--blue); }
+
+.ov-node .ovp-row {
+  margin-top:8px; padding-top:7px; border-top:1px solid var(--border-light);
+  display:flex; align-items:center; gap:8px;
+}
+.ov-node .ovp-bar { flex:1; height:4px; border-radius:2px; background:#fee2e2; overflow:hidden; }
+.ov-node .ovp-bar-fill { height:100%; background:#ef4444; border-radius:2px; }
+.ov-node .ovp-pct { font-size:10.5px; color:var(--ink-secondary); font-weight:600; min-width:34px; text-align:right; }
+.ov-node .ovp-records {
+  margin-top:6px; font-size:10.5px; color:var(--ink-muted);
+  display:flex; align-items:center; gap:5px;
+}
+.ov-node .ovp-records:hover { color:#7c3aed; cursor:pointer; }
+
+/* 未对齐空卡 */
+.ov-node.unaligned-empty {
+  text-align:center; padding:24px 16px; min-height:140px;
+  display:flex; flex-direction:column; justify-content:center; align-items:center; gap:10px;
+}
+.ov-node.unaligned-empty .empty-text { font-size:11.5px; color:var(--ink-muted); }
+.ov-node.unaligned-empty .empty-btn {
+  background:#ede9fe; color:#7c3aed; border:none; padding:6px 16px; border-radius:6px;
+  font-size:11.5px; font-weight:600; cursor:pointer;
+}
+.ov-node.unaligned-empty .empty-btn:hover { background:#7c3aed; color:#fff; }
+
+/* 连线上的小数字 badge */
+.ov-line-badge {
+  position:absolute; padding:1px 6px; border-radius:99px; background:#fff;
+  border:1px solid #c4b5fd; color:#7c3aed; font-size:10px; font-weight:700; z-index:6;
+}
+
+/* 缩放控制（左下） */
+.ov-zoom {
+  position:absolute; left:24px; bottom:24px; z-index:30;
+  background:#fff; border:1px solid var(--border); border-radius:10px;
+  box-shadow:0 4px 12px rgba(15,23,42,0.06); padding:10px 12px;
+  display:flex; flex-direction:column; gap:8px; width:180px;
+}
+.ov-zoom .zb-controls {
+  display:flex; align-items:center; gap:4px; font-size:13px; color:var(--ink-secondary);
+}
+.ov-zoom .zb-btn {
+  width:24px; height:24px; border-radius:5px; border:1px solid var(--border); background:#fff;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+}
+.ov-zoom .zb-btn:hover { border-color:#7c3aed; color:#7c3aed; }
+.ov-zoom .zb-pct { flex:1; text-align:center; font-size:12px; font-weight:600; }
+.ov-zoom .zb-row {
+  display:flex; align-items:center; gap:8px; padding-top:8px; border-top:1px solid var(--border-light);
+  font-size:12px; color:var(--ink-secondary);
+}
+.ov-zoom .zb-row .switch {
+  width:30px; height:16px; background:#7c3aed; border-radius:99px; position:relative; cursor:pointer; margin-left:auto;
+}
+.ov-zoom .zb-row .switch::after {
+  content:""; position:absolute; right:2px; top:2px; width:12px; height:12px; background:#fff; border-radius:50%;
+}
+.ov-zoom .zb-row .switch.off { background:#cbd5e1; }
+.ov-zoom .zb-row .switch.off::after { right:auto; left:2px; }
+
+/* 图例（顶部右下角） */
+.ov-legend {
+  display:flex; gap:14px; font-size:11px; color:var(--ink-muted);
+  background:rgba(255,255,255,0.92); padding:6px 12px; border-radius:6px;
+  border:1px solid var(--border);
+}
+.ov-legend-item { display:inline-flex; align-items:center; gap:5px; }
+.ov-legend-dot { width:10px; height:10px; border-radius:3px; display:inline-block; }
+.ov-legend-dot.gm { background:#7c3aed; }
+.ov-legend-dot.kr { background:var(--blue); }
+.ov-legend-dot.other { background:#fff; border:1px dashed #4f46e5; }
+
+/* ============ 视角切换器（最左侧顶部） ============ */
+.viewer-switch {
+  margin:0 8px 14px; padding:4px;
+  background:var(--bg-subtle); border:1px solid var(--border); border-radius:8px;
+  display:flex; gap:2px;
+}
+.viewer-switch .vs-btn {
+  flex:1; text-align:center; padding:7px 6px; font-size:11.5px; font-weight:600;
+  color:var(--ink-muted); border-radius:6px; cursor:pointer; user-select:none;
+  display:flex; align-items:center; justify-content:center; gap:4px;
+}
+.viewer-switch .vs-btn:hover { color:var(--ink-secondary); }
+.viewer-switch .vs-btn.active {
+  background:var(--ink-primary); color:#fff;
+  box-shadow:0 1px 2px rgba(15,23,42,0.12);
+}
+.viewer-switch .vs-btn.active.mgr { background:#7c3aed; }
+.viewer-switch .vs-icon { font-size:13px; }
+.viewer-mgr-badge {
+  display:none; font-size:10px; font-weight:700; padding:1px 6px; border-radius:3px;
+  background:#ede9fe; color:#7c3aed; margin-left:6px; vertical-align:middle;
+  letter-spacing:0.3px;
+}
+body.viewer-mgr .viewer-mgr-badge { display:inline-block; }
+
+/* 管理者视角下：Q3 卡片右上角"操作组" */
+.q3-mgr-actions { display:none; gap:8px; margin-left:auto; }
+body.viewer-mgr .q3-mgr-actions { display:flex; }
+body.viewer-mgr .q3-pin-edit { display:none; }  /* 用新 actions 替换旧的"编辑"按钮 */
+.q3-mgr-actions .mgr-btn {
+  border:1px solid var(--border); background:#fff; color:var(--ink-secondary);
+  padding:5px 11px; border-radius:6px; font-size:11.5px; font-weight:600; cursor:pointer;
+  display:inline-flex; align-items:center; gap:4px;
+}
+.q3-mgr-actions .mgr-btn:hover { border-color:#7c3aed; color:#7c3aed; background:#faf5ff; }
+.q3-mgr-actions .mgr-btn.primary { background:#7c3aed; color:#fff; border-color:#7c3aed; }
+.q3-mgr-actions .mgr-btn.primary:hover { background:#6d28d9; }
+
+/* ============ OKR 编辑器抽屉 ============ */
+.okr-editor-mask {
+  position:fixed; inset:0; background:rgba(15,23,42,0.45); backdrop-filter:blur(2px);
+  z-index:998; display:none; align-items:center; justify-content:center;
+}
+.okr-editor-mask.show { display:flex; }
+.okr-editor {
+  width:min(900px, 92vw); max-height:88vh; background:#fff; border-radius:14px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25); overflow:hidden; display:flex; flex-direction:column;
+}
+.okr-editor-head {
+  padding:18px 24px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:10px;
+}
+.okr-editor-head h3 { font-size:17px; font-weight:700; color:var(--ink-primary); flex:1; }
+.okr-editor-head .role-pill {
+  font-size:10px; padding:2px 8px; border-radius:3px; background:#ede9fe; color:#7c3aed;
+  font-weight:700; letter-spacing:0.3px;
+}
+.okr-editor-head .close { font-size:18px; color:var(--ink-muted); cursor:pointer; padding:4px 8px; }
+.okr-editor-head .close:hover { color:var(--ink-primary); }
+
+.okr-editor-tabs {
+  display:flex; gap:4px; padding:0 24px; border-bottom:1px solid var(--border);
+}
+.okr-editor-tabs .tab {
+  padding:11px 14px; font-size:13px; font-weight:600; color:var(--ink-muted);
+  cursor:pointer; border-bottom:2px solid transparent; user-select:none;
+}
+.okr-editor-tabs .tab.active { color:var(--ink-primary); border-color:#7c3aed; }
+.okr-editor-tabs .tab:hover { color:var(--ink-secondary); }
+
+.okr-editor-body { padding:20px 24px; overflow-y:auto; flex:1; }
+
+/* 编辑器：单条 O */
+.okr-o-card {
+  border:1px solid var(--border); border-radius:10px; padding:18px; margin-bottom:14px;
+  background:#fff; position:relative;
+}
+.okr-o-card .o-row {
+  display:flex; align-items:flex-start; gap:12px;
+  padding-left:36px; position:relative;
+}
+.okr-o-card .o-avatar {
+  position:absolute; left:0; top:6px; width:28px; height:28px; border-radius:50%;
+  background:var(--ink-primary); color:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700;
+}
+.okr-o-card .o-num {
+  flex-shrink:0; padding:4px 10px; border-radius:99px;
+  background:var(--blue); color:#fff; font-size:11px; font-weight:700;
+}
+.okr-o-card .o-input,
+.okr-o-card .kr-input {
+  flex:1; border:1px solid var(--border); border-radius:7px; padding:8px 12px;
+  font-size:13px; color:var(--ink-primary); font-family:inherit; outline:none;
+  background:#fff; transition:border 0.15s;
+}
+.okr-o-card .o-input:focus,
+.okr-o-card .kr-input:focus { border-color:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,0.08); }
+.okr-o-card .weight-input {
+  flex-shrink:0; width:78px; border:1px solid var(--border); border-radius:7px;
+  padding:8px 10px; font-size:12px; outline:none; text-align:right;
+}
+.okr-o-card .weight-label { font-size:11px; color:var(--ink-muted); margin-bottom:4px; }
+
+.okr-o-card .o-tools {
+  padding-left:36px; margin-top:8px; display:flex; align-items:center; gap:14px;
+  font-size:11.5px;
+}
+.okr-o-card .o-tool {
+  color:var(--blue); cursor:pointer; display:inline-flex; align-items:center; gap:3px;
+}
+.okr-o-card .o-tool:hover { text-decoration:underline; }
+.okr-o-card .o-add-align { color:var(--blue); font-weight:600; }
+.okr-o-card .o-mention { color:var(--ink-muted); font-weight:500; }
+
+.okr-o-card .kr-list { margin-top:12px; padding-left:36px; }
+.okr-o-card .kr-row {
+  display:flex; align-items:center; gap:10px; margin-bottom:8px;
+}
+.okr-o-card .kr-num {
+  flex-shrink:0; padding:4px 10px; border-radius:99px;
+  background:#dbeafe; color:#1d4ed8; font-size:10.5px; font-weight:700; font-style:italic;
+}
+.okr-o-card .kr-more {
+  flex-shrink:0; width:36px; height:32px; border:1px solid var(--border); border-radius:7px;
+  display:flex; align-items:center; justify-content:center; color:var(--ink-muted);
+  cursor:pointer; font-size:14px;
+}
+.okr-o-card .kr-more:hover { color:var(--ink-primary); border-color:var(--ink-secondary); }
+
+.okr-o-card .add-kr {
+  margin-top:6px; padding-left:36px; color:var(--blue); font-size:12.5px; font-weight:600;
+  cursor:pointer; display:inline-block;
+}
+.okr-o-card .add-kr:hover { text-decoration:underline; }
+
+.okr-o-card .o-meta-row {
+  margin-top:14px; padding-top:14px; border-top:1px solid var(--border);
+  display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+}
+.okr-o-card .o-meta-row label {
+  font-size:12px; color:var(--ink-muted); margin-right:6px;
+}
+.okr-o-card .o-meta-row select,
+.okr-o-card .o-meta-row .scope-input {
+  border:1px solid var(--border); border-radius:6px; padding:6px 10px; font-size:12.5px;
+  background:#fff; outline:none; min-width:120px; font-family:inherit;
+}
+.okr-o-card .o-delete {
+  margin-left:auto; color:var(--ink-muted); font-size:12px; cursor:pointer;
+}
+.okr-o-card .o-delete:hover { color:var(--rose); }
+
+.add-objective-row {
+  padding:14px 18px; border:1px dashed var(--border); border-radius:10px;
+  color:var(--blue); font-size:13px; font-weight:600; cursor:pointer;
+  text-align:center; background:#fafbfc;
+}
+.add-objective-row:hover { background:#f1f5f9; border-color:#7c3aed; color:#7c3aed; }
+
+.okr-editor-foot {
+  padding:14px 24px; border-top:1px solid var(--border);
+  display:flex; align-items:center; gap:10px; background:#fafbfc;
+}
+.okr-editor-foot .foot-tip { font-size:11.5px; color:var(--ink-muted); flex:1; }
+.okr-editor-foot button {
+  border:1px solid var(--border); background:#fff; color:var(--ink-secondary);
+  padding:8px 16px; border-radius:7px; font-size:12.5px; font-weight:600; cursor:pointer;
+}
+.okr-editor-foot button.primary { background:#7c3aed; color:#fff; border-color:#7c3aed; }
+.okr-editor-foot button.primary:hover { background:#6d28d9; }
+.okr-editor-foot button:not(.primary):hover { border-color:var(--ink-secondary); color:var(--ink-primary); }
+
+/* 拉取数据 Tab */
+.import-source-list { display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
+.import-source-card {
+  border:1px solid var(--border); border-radius:10px; padding:14px 16px; cursor:pointer;
+  display:flex; align-items:center; gap:12px; background:#fff; transition:all 0.12s;
+}
+.import-source-card:hover { border-color:#7c3aed; background:#faf5ff; }
+.import-source-card.selected { border-color:#7c3aed; background:#faf5ff; box-shadow:0 0 0 3px rgba(124,58,237,0.08); }
+.import-source-card .src-icon {
+  width:36px; height:36px; border-radius:8px; flex-shrink:0;
+  background:var(--bg-subtle); display:flex; align-items:center; justify-content:center; font-size:18px;
+}
+.import-source-card .src-name { font-size:13.5px; font-weight:700; color:var(--ink-primary); }
+.import-source-card .src-desc { font-size:11.5px; color:var(--ink-muted); margin-top:2px; }
+.import-source-card .src-status { margin-left:auto; font-size:11px; color:var(--emerald); font-weight:600; }
+.import-source-card .src-status.off { color:var(--ink-muted); }
+
+.import-preview {
+  border:1px solid var(--border); border-radius:10px; padding:14px 16px;
+  background:#fafbfc; margin-top:8px;
+}
+.import-preview-head {
+  font-size:12.5px; font-weight:700; color:var(--ink-primary); margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.import-preview-list .ip-row {
+  background:#fff; border:1px solid var(--border); border-radius:7px;
+  padding:10px 12px; margin-bottom:6px;
+}
+.import-preview-list .ip-o {
+  font-size:12.5px; font-weight:600; color:var(--ink-primary); margin-bottom:5px;
+  display:flex; align-items:center; gap:8px;
+}
+.import-preview-list .ip-o .ip-num {
+  background:var(--blue); color:#fff; font-size:10px; font-weight:700;
+  padding:2px 7px; border-radius:99px;
+}
+.import-preview-list .ip-kr {
+  font-size:11.5px; color:var(--ink-secondary); padding-left:14px; line-height:1.6;
+}
+.import-preview-list .ip-kr::before { content:"·"; margin-right:6px; color:var(--ink-muted); }
+
 /* Team 下拉 */
 .team-select-wrap {
   margin: 4px 4px 0;
@@ -650,41 +1415,78 @@ body {
 
 /* Drawer & Toast (沿用) */
 .drawer-mask {
-  position:fixed; inset:0; background:rgba(20,25,35,0.4); backdrop-filter:blur(2px);
-  z-index:200; display:none; align-items:center; justify-content:center;
+  position:fixed; inset:0; background:#fff;
+  z-index:200; display:none; align-items:flex-start; justify-content:center;
+  overflow-y:auto;
 }
 .drawer-mask.show { display:flex; }
 .drawer {
-  background:#fff; width:580px; max-width:90vw; max-height:80vh; overflow:auto;
-  border-radius:var(--radius-xl); box-shadow:var(--shadow-lg); padding:24px 26px;
+  background:#fff; width:760px; max-width:96vw; min-height:100vh;
+  padding:28px 36px 40px; box-shadow:none; border-radius:0;
 }
-.drawer h3 { font-size:17px; font-weight:700; margin-bottom:6px; }
-.drawer .drawer-sub { font-size:12.5px; color:var(--ink-muted); margin-bottom:18px; }
-.drawer .field { margin-bottom:14px; }
-.drawer .field-label { font-size:12px; font-weight:600; color:var(--ink-secondary); margin-bottom:6px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.drawer .back-row {
+  display:inline-flex; align-items:center; gap:6px; font-size:13px;
+  color:var(--ink-secondary); cursor:pointer; padding:4px 6px;
+  margin:-4px 0 14px -6px; border-radius:6px; user-select:none;
+}
+.drawer .back-row:hover { background:var(--bg-subtle); color:var(--ink-primary); }
+.drawer h3 { font-size:18px; font-weight:700; margin-bottom:6px; }
+.drawer .drawer-sub { font-size:12.5px; color:var(--ink-muted); margin-bottom:22px; }
+.drawer .field { margin-bottom:18px; }
+.drawer .field-label { font-size:13px; font-weight:700; color:var(--ink-primary); margin-bottom:8px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
 .drawer .field-label .req { color:var(--rose); }
-.drawer .field-label .hint { font-weight:400; color:var(--ink-muted); font-size:11px; }
+.drawer .field-label .hint { font-weight:400; color:var(--ink-muted); font-size:11.5px; }
 .drawer input.text-input, .drawer textarea.text-input {
-  width:100%; border:1px solid var(--border); border-radius:8px; padding:9px 12px;
+  width:100%; border:1px solid var(--border); border-radius:8px; padding:10px 14px;
   font-size:13px; color:var(--ink-primary); font-family:inherit; outline:none; transition:border 0.15s;
+  box-sizing:border-box;
 }
 .drawer input.text-input:focus, .drawer textarea.text-input:focus { border-color:var(--blue); }
-.drawer textarea.text-input { min-height:90px; resize:vertical; line-height:1.7; }
+.drawer textarea.text-input { min-height:140px; resize:vertical; line-height:1.7; }
 .drawer .hashtag-row {
-  display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; padding:8px 10px;
-  border:1px dashed var(--border); border-radius:8px; background:var(--bg-subtle);
+  display:flex; flex-wrap:wrap; gap:6px; padding:0;
 }
 .drawer .hashtag-pill {
-  padding:4px 10px; border-radius:14px; font-size:11.5px; font-weight:600;
-  cursor:pointer; border:1px solid var(--border); background:#fff; color:var(--ink-secondary);
+  padding:5px 14px; border-radius:99px; font-size:12px; font-weight:500;
+  cursor:pointer; border:1px solid var(--border); background:var(--bg-subtle); color:var(--ink-secondary);
 }
-.drawer .hashtag-pill.active { background:var(--blue-light); color:var(--blue); border-color:var(--blue); }
-.drawer .hashtag-required { font-size:10.5px; color:var(--amber); margin-top:5px; display:flex; align-items:center; gap:4px; }
-.drawer .footer-row { display:flex; justify-content:space-between; align-items:center; margin-top:18px; padding-top:14px; border-top:1px solid var(--border-light); }
-.drawer .footer-tip { font-size:11px; color:var(--ink-muted); }
-.drawer .footer-actions { display:flex; gap:8px; }
-.drawer .btn-cancel { background:#fff; border:1px solid var(--border); padding:7px 14px; border-radius:7px; font-size:12.5px; color:var(--ink-secondary); cursor:pointer; }
-.drawer .btn-submit { background:var(--blue); color:#fff; border:none; padding:7px 16px; border-radius:7px; font-size:12.5px; font-weight:600; cursor:pointer; }
+.drawer .hashtag-pill.active { background:var(--blue-light); color:var(--blue); border-color:var(--blue); font-weight:600; }
+.drawer .hashtag-required { font-size:11px; color:#ef4444; margin-top:6px; display:flex; align-items:center; gap:4px; }
+
+/* 上传文件区 */
+.drawer .upload-box {
+  border:2px dashed #c4b5fd; border-radius:10px; padding:36px 20px;
+  background:#faf5ff; text-align:center; color:var(--ink-muted); cursor:pointer;
+}
+.drawer .upload-box:hover { background:#f5f3ff; border-color:#7c3aed; }
+.drawer .upload-icon { font-size:24px; margin-bottom:8px; }
+.drawer .upload-title { font-size:14px; font-weight:700; color:#7c3aed; margin-bottom:10px; }
+.drawer .upload-sub { font-size:11.5px; line-height:1.9; color:var(--ink-muted); }
+
+/* 可见范围 / 共同维护者 select */
+.drawer .select-input {
+  width:100%; border:1px solid var(--border); border-radius:8px; padding:10px 14px;
+  font-size:13px; color:var(--ink-primary); font-family:inherit; outline:none;
+  background:#fff; cursor:pointer; box-sizing:border-box;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.drawer .select-input.placeholder { color:var(--ink-muted); }
+.drawer .select-input:hover { border-color:var(--ink-secondary); }
+
+.drawer .footer-row {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-top:24px; padding-top:18px; border-top:1px solid var(--border-light);
+  gap:12px; flex-wrap:wrap;
+}
+.drawer .footer-row .biz-select {
+  font-size:12.5px; color:var(--ink-secondary); padding:7px 12px;
+  border:1px solid var(--border); border-radius:7px; background:#fff; cursor:pointer;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.drawer .footer-row .biz-select::after { content:"▾"; font-size:10px; color:var(--ink-muted); }
+.drawer .footer-actions { display:flex; gap:10px; margin-left:auto; }
+.drawer .btn-cancel { background:#fff; border:1px solid var(--border); padding:9px 22px; border-radius:8px; font-size:13px; color:var(--ink-secondary); cursor:pointer; }
+.drawer .btn-submit { background:var(--blue); color:#fff; border:none; padding:9px 22px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
 .drawer .btn-submit:disabled { background:var(--ink-faint); cursor:not-allowed; }
 .toast {
   position:fixed; bottom:30px; left:50%; transform:translateX(-50%);
@@ -711,7 +1513,7 @@ body {
   <div class="nav-right">
     <div class="nav-op">⚙ 运营</div>
     <span class="nav-bell">🔔</span>
-    <span class="nav-user-name">Hi, 马巍</span>
+    <span class="nav-user-name">Hi, 马巍<span class="viewer-mgr-badge">管理者</span></span>
     <div class="nav-avatar" title="马巍">马</div>
   </div>
 </nav>
@@ -721,6 +1523,16 @@ body {
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
+  <!-- 视角切换器（员工 / 管理者） -->
+  <div class="viewer-switch" id="viewerSwitch">
+    <div class="vs-btn active" data-mode="staff" onclick="switchViewer('staff')">
+      <span class="vs-icon">👤</span> 员工视角
+    </div>
+    <div class="vs-btn mgr" data-mode="mgr" onclick="switchViewer('mgr')">
+      <span class="vs-icon">⚙</span> 管理者
+    </div>
+  </div>
+
   <div class="sidebar-group">
     <div class="sidebar-group-label">Topics</div>
     <div class="sidebar-item" data-view="all" onclick="switchSidebar(this,'all')">
@@ -774,38 +1586,70 @@ body {
 
 </div>
 
-<!-- 发布 Topic 抽屉 -->
-<div class="drawer-mask" id="drawerMask" onclick="if(event.target.id==='drawerMask') closeDrawer()">
+<!-- 发布 Topic 全屏页 -->
+<div class="drawer-mask" id="drawerMask">
   <div class="drawer">
+    <div class="back-row" onclick="closeDrawer()">← 返回</div>
     <h3>发布 Topic</h3>
     <p class="drawer-sub">在首页或 Team 下发布 Topic 时，请关联（挂 # 号）：① 至少 1 个 Team；② 可选「类型 #」（如 # Q3 目标、# 战略、# 经营）</p>
 
     <div class="field">
-      <div class="field-label">Topic 标题 <span class="req">*</span></div>
-      <input type="text" class="text-input" id="topicTitle" placeholder="一句话说清这条 Topic">
+      <div class="field-label">Topic 名称 <span class="req">*</span></div>
+      <input type="text" class="text-input" id="topicTitle" placeholder="输入 Topic 名称…">
+    </div>
+
+    <!-- 关联 Team 默认按当前实验室自动归属，不再显示选择 -->
+    <div id="teamHashRow" style="display:none;"></div>
+
+    <div class="field">
+      <div class="field-label">上传文件</div>
+      <div class="upload-box" onclick="showToast('上传文件功能演示')">
+        <div class="upload-icon">📎</div>
+        <div class="upload-title">上传文件 ～ 即可 AI 总结</div>
+        <div class="upload-sub">
+          文档：PDF、Word、Excel、PowerPoint、TXT、Markdown、CSV<br>
+          图片：JPG、JPEG、PNG、GIF、WEBP<br>
+          最多上传 5 个文件，单文件须小于 10MB<br>
+          你可将腾讯文档、腾讯会议逐字稿、会议小结等下载本地后上传，也可直接拖拽至此
+        </div>
+      </div>
     </div>
 
     <div class="field">
-      <div class="field-label">正文 <span class="req">*</span></div>
-      <textarea class="text-input" id="topicBody" placeholder="支持 Markdown · 写下进展、思考、决策、风险…"></textarea>
+      <div class="field-label">输入正文 <span class="hint">支持 Markdown</span></div>
+      <textarea class="text-input" id="topicBody" placeholder="直接输入正文…（支持 Markdown）"></textarea>
     </div>
 
     <div class="field">
-      <div class="field-label">关联 Team <span class="req">*</span><span class="hint">必选 1 个以上</span></div>
-      <div class="hashtag-row" id="teamHashRow"></div>
-      <div class="hashtag-required">⚠ 未选择 Team 将无法发布 — 这是为了让你的 Topic 能被对应团队看见</div>
-    </div>
-
-    <div class="field">
-      <div class="field-label">关联类型 <span class="hint">可选 · 用于驱动业务结构（如 Q3 目标、战略、经营）</span></div>
+      <div class="field-label">标签 <span class="hint">可多选，不选默认无标签</span></div>
       <div class="hashtag-row" id="typeHashRow"></div>
     </div>
 
+    <!-- Q3 目标关联 KR：勾选了 # Q3 目标后必填 -->
+    <div class="field" id="krLinkField" style="display:none;">
+      <div class="field-label">关联到 KR <span class="req">*</span><span class="hint">勾选了「# Q3 目标」必须挂到一条具体的 KR · 你的进展才能透传到部门负责人</span></div>
+      <div class="kr-link-box" id="krLinkBox"></div>
+      <div class="hashtag-required">⚠ 未关联 KR 将无法发布 — 部门负责人需要看到你的 Topic 服务于哪个目标</div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">可见范围 <span class="req">*</span></div>
+      <div class="select-input placeholder" onclick="showToast('可见范围选择器演示：选中的组织或个人可见')">
+        <span>选中的组织或个人可见</span>
+        <span style="color:var(--ink-muted);">▾</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">共同维护者</div>
+      <input type="text" class="text-input" placeholder="支持中英文名搜索用户">
+    </div>
+
     <div class="footer-row">
-      <div class="footer-tip">💡 默认可见范围：SSV 全员 · 可在发布后修改</div>
+      <div class="biz-select" onclick="showToast('归属事业部切换演示')">CDG企业发展事业群/可持续社会价值事业部</div>
       <div class="footer-actions">
         <button class="btn-cancel" onclick="closeDrawer()">取消</button>
-        <button class="btn-submit" id="btnSubmit" onclick="submitTopic()">发布</button>
+        <button class="btn-submit" id="btnSubmit" onclick="submitTopic()">发布 Topic</button>
       </div>
     </div>
   </div>
@@ -1260,6 +2104,21 @@ function render(){
              </div>
              <div class="team-select-menu" id="teamSelectMenu"></div>
            </div>
+           <span class="global-okr-entry" onclick="openOKROverview()" title="查看全局 OKR 对齐关系大图">🌳 全局 OKR</span>
+           <span class="ssv-goal-toggle" onclick="toggleSSVGoal()" id="ssvGoalToggle" title="展开/折叠 SSV 大目标">🎯 SSV 大目标 ▾</span>
+         </div>
+         <div class="ssv-goal-box" id="ssvGoalBox">
+           <div class="ssvg-head">
+             <span class="ssvg-badge">SSV 总目标 · Q3-2026</span>
+             <span class="ssvg-owner">jhongchen（菊红 · SSV 总负责人）</span>
+           </div>
+           <div class="ssvg-title">让 SSV 在 AI 时代沉淀可复用的组织资产，把每个团队的实验变成全员可用的能力</div>
+           <div class="ssvg-krs">
+             <div class="ssvg-kr"><span class="ssvg-kr-num">SSV-KR1</span><span>各实验室 Q3 至少沉淀 2 个可复用 skill 进入 SSV 公共底座</span></div>
+             <div class="ssvg-kr"><span class="ssvg-kr-num">SSV-KR2</span><span>Nexus 上线 + 每周 ≥ 60% 的核心进展通过 OKR 透传</span></div>
+             <div class="ssvg-kr"><span class="ssvg-kr-num">SSV-KR3</span><span>下半年正式按 AI native 模式运行，例行会议减少 ≥ 50%</span></div>
+           </div>
+           <div class="ssvg-foot">↗ 各部门负责人 OKR 应对齐到上述 KR · 在「全局 OKR」可看到完整对齐关系</div>
          </div>`
       : `<div class="home-title">${scopeTitle}</div>`;
 
@@ -1279,8 +2138,18 @@ function render(){
             <button class="btn-publish" onclick="openDrawer()">+ 发布 Topic</button>
           </div>
         </div>
+
+        <!-- 管理者视角：OKR 工作台 -->
+        <div id="okrWorkbench"></div>
+
+        <!-- 员工视角：OKR 对齐树（Topic 列表上方简洁展示部门 OKR 结构） -->
+        <div id="okrAlignTree"></div>
+
         ${q3DisplayMode==='A' ? renderQ3ModeA() : renderQ3ModeB()}
       `;
+      // 渲染管理者工作台 / 员工对齐树
+      renderOKRWorkbench();
+      renderOKRAlignTree();
       return;
     }
 
@@ -1700,6 +2569,9 @@ function renderHashPin(pinKind){
         <span class="q3-pin-badge">📌 # Q3 目标</span>
         <span class="q3-pin-pin">实验室管理层目标 Topic</span>
         <button class="q3-pin-edit" onclick="event.stopPropagation();editQ3Pin('${currentTeam}');"><span class="role">管理层</span>✏ 编辑</button>
+        <div class="q3-mgr-actions">
+          <button class="mgr-btn primary" onclick="event.stopPropagation();openOKRWorkbench('${currentTeam}');">✏ OKR 工作台</button>
+        </div>
       </div>
       <div class="q3-pin-title">${pin.title}</div>
       <div class="q3-pin-meta"><span class="author">${pin.owner}</span> · ${pin.stats.updated}</div>
@@ -1738,6 +2610,9 @@ function renderQ3Pin(){
         <span class="q3-pin-badge">📌 # Q3 目标</span>
         <span class="q3-pin-pin">实验室管理层目标 Topic</span>
         <button class="q3-pin-edit" onclick="event.stopPropagation();editQ3Pin('${scopeKey}');"><span class="role">管理层</span>✏ 编辑</button>
+        <div class="q3-mgr-actions">
+          <button class="mgr-btn primary" onclick="event.stopPropagation();openOKRWorkbench('${scopeKey}');">✏ OKR 工作台</button>
+        </div>
       </div>
       <div class="q3-pin-title">${pin.title}</div>
       <div class="q3-pin-meta"><span class="author">${pin.owner}</span> · ${pin.stats.updated}</div>
@@ -1837,6 +2712,7 @@ function pickType(key){
 function pickSort(s){ currentSort = s; render(); }
 
 // ================ Drawer ================
+let drawerSelectedKR = null;   // 当前选中的 KR id
 function buildDrawerHashes(){
   $('#teamHashRow').innerHTML = TEAMS.map(t=>`
     <span class="hashtag-pill" data-tag="${t.key}" data-kind="team" onclick="toggleHash(this)">${t.emoji} #${t.name}</span>
@@ -1844,24 +2720,76 @@ function buildDrawerHashes(){
   $('#typeHashRow').innerHTML = TYPE_TAGS.filter(x=>x.key!=='all').map(tg=>`
     <span class="hashtag-pill" data-tag="${tg.key}" data-kind="type" onclick="toggleHash(this)"># ${tg.label.replace(/^#\s*/,'')}</span>
   `).join('');
+  refreshKRLink();
+}
+function refreshKRLink(){
+  const q3Active = !!document.querySelector('.hashtag-pill[data-kind="type"][data-tag="q3"].active');
+  const field = $('#krLinkField');
+  field.style.display = q3Active ? 'block' : 'none';
+  if(!q3Active){ drawerSelectedKR = null; return; }
+
+  // 收集已勾选的 team；未勾就回退到 currentTeam
+  const teamTags = [...document.querySelectorAll('.hashtag-pill[data-kind="team"].active')].map(p=>p.dataset.tag);
+  const targetTeam = teamTags[0] || currentTeam || 'jishujiagou';
+  const gmList = (OKR_SYSTEM_DATA[targetTeam] || {}).gm || [];
+
+  const box = $('#krLinkBox');
+  if(!gmList.length){
+    box.innerHTML = '<div style="padding:18px;text-align:center;font-size:12px;color:var(--ink-muted);">该实验室部门负责人尚未发布 OKR · 请先联系负责人录入</div>';
+    return;
+  }
+  box.innerHTML = gmList.map(o=>`
+    <div class="kr-link-group">
+      <div class="klg-head">
+        <span class="klg-onum">O</span>
+        <span class="klg-otitle">${o.title}</span>
+        <span class="klg-oowner">${o.ownerName}</span>
+      </div>
+      ${(o.krs||[]).map((k,ki)=>`
+        <div class="kr-link-item ${drawerSelectedKR===k.id?'selected':''}" onclick="pickKRLink('${k.id}')">
+          <span class="klr-radio"></span>
+          <span class="klr-num">KR${ki+1}</span>
+          <span class="klr-title">${k.title}</span>
+          <span class="klr-owner">@${k.owner||'指派'}</span>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+function pickKRLink(krId){
+  drawerSelectedKR = krId;
+  refreshKRLink();
+  validateSubmit();
 }
 function openDrawer(){
+  drawerSelectedKR = null;
   buildDrawerHashes();
   $('#drawerMask').classList.add('show');
-  // 默认带上当前 Team
-  if(currentSidebar==='team'){
-    const pill = document.querySelector('.hashtag-pill[data-kind="team"][data-tag="'+currentTeam+'"]');
+  // 默认归属：当前实验室（hash-q3 / team / 默认 jishujiagou）
+  const defaultTeam = currentTeam || 'jishujiagou';
+  const teamPill = document.querySelector('.hashtag-pill[data-kind="team"][data-tag="'+defaultTeam+'"]');
+  if(teamPill) teamPill.classList.add('active');
+  // 在 # Q3 目标视图下默认勾选 q3 类型
+  if(currentSidebar==='hash-q3'){
+    const pill = document.querySelector('.hashtag-pill[data-kind="type"][data-tag="q3"]');
     if(pill) pill.classList.add('active');
   }
   $('#topicTitle').value=''; $('#topicBody').value='';
+  refreshKRLink();
   validateSubmit();
 }
 function closeDrawer(){ $('#drawerMask').classList.remove('show'); }
-function toggleHash(el){ el.classList.toggle('active'); validateSubmit(); }
+function toggleHash(el){
+  el.classList.toggle('active');
+  refreshKRLink();
+  validateSubmit();
+}
 function validateSubmit(){
   const hasTeam = document.querySelectorAll('.hashtag-pill[data-kind="team"].active').length>0;
+  const q3Active = !!document.querySelector('.hashtag-pill[data-kind="type"][data-tag="q3"].active');
+  const krOk = !q3Active || !!drawerSelectedKR;
   const title = $('#topicTitle').value.trim();
-  $('#btnSubmit').disabled = !(hasTeam && title);
+  $('#btnSubmit').disabled = !(hasTeam && title && krOk);
 }
 document.addEventListener('input', e=>{ if(e.target.id==='topicTitle') validateSubmit(); });
 
@@ -1871,25 +2799,721 @@ function submitTopic(){
   if(!teamTags.length){ showToast('⚠ 请至少关联一个 Team #'); return; }
   const title = $('#topicTitle').value.trim();
   if(!title){ showToast('请输入 Topic 标题'); return; }
+  if(typeTags.includes('q3') && !drawerSelectedKR){
+    showToast('⚠ 选了「# Q3 目标」必须再关联到一条具体的 KR');
+    return;
+  }
   const body = $('#topicBody').value.trim() || '（无正文）';
   TOPICS.unshift({
     id:Date.now(), team:teamTags[0], types:typeTags,
     title, teamHash:'#新发布',
     author:'马巍', date:'今天',
     replyAuthor:null, replyTime:null, replyContent:null,
-    starred:false
+    starred:false, alignKR: drawerSelectedKR
   });
   closeDrawer();
   const teamNames = teamTags.map(k=>'#'+TEAM_MAP[k].name).join('、');
   const typeText = typeTags.length?(' · 已关联 '+typeTags.map(k=>{const t=TYPE_TAGS.find(x=>x.key===k);return '#'+(t?t.label.replace(/^#\s*/,''):k);}).join('、')):'';
-  showToast('✓ Topic 已发布到 ' + teamNames + typeText);
+  const krText = drawerSelectedKR ? ' · 已挂到 ' + drawerSelectedKR : '';
+  showToast('✓ Topic 已发布到 ' + teamNames + typeText + krText);
   render();
 }
 
 // ================ 初始化 ================
+// 视角切换
+let currentViewer = 'staff';   // 'staff' | 'mgr'
+function switchViewer(mode){
+  currentViewer = mode;
+  document.body.classList.toggle('viewer-mgr', mode === 'mgr');
+  document.querySelectorAll('#viewerSwitch .vs-btn').forEach(b=>{
+    b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+  });
+  // 重渲染主区，让工作台 / 对齐树容器及时挂上
+  if(typeof render === 'function') render();
+  showToast(mode === 'mgr' ? '已切换到 · 管理者视角（OKR 工作台）' : '已切换到 · 员工视角');
+}
+
+// ============ OKR 工作台（管理者视角）+ 对齐树（员工视角） ============
+
+// 角色 Tab：部门负责人（原 GM） / 其他管理层
+const OKR_ROLES = [
+  { key:'gm',    label:'部门负责人', desc:'部门一把手 / GM' },
+  { key:'other', label:'其他管理层', desc:'PM / TL / 项目负责人，可对齐到部门负责人的 KR' }
+];
+
+// 当前用户的角色（mock：默认 GM）
+let currentMgrRole = 'gm';
+// 其他管理层模式下的"当前选中人"（默认 me = 马巍/suriwang）
+let currentMgrPerson = 'suriwang';   // 当前用户的 username（mock）
+const ME_USERNAME = 'suriwang';      // mock 当前登录用户
+// 卡片折叠状态：{ oId: true/false }
+let collapsedOCards = {};
+function toggleCollapseO(oid){
+  collapsedOCards[oid] = !collapsedOCards[oid];
+  renderOKRWorkbench();
+}
+function toggleSSVGoal(){
+  const box = document.getElementById('ssvGoalBox');
+  const btn = document.getElementById('ssvGoalToggle');
+  if(!box || !btn) return;
+  const open = box.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  btn.innerHTML = '🎯 SSV 大目标 ' + (open ? '▴' : '▾');
+}
+function switchMgrPerson(username){
+  currentMgrPerson = username;
+  renderOKRWorkbench();
+}
+
+// 系统拉取的 mock OKR 数据（按 scope + 角色组织）
+const OKR_SYSTEM_DATA = {
+  jishujiagou: {
+    gm: [
+      { id:'gm-o1', ownerInitial:'B', ownerName:'brantli', role:'gm',
+        title:'构筑 SSV 通用技术与设计底座，让每个团队都能站在肩膀上',
+        mention:['windlin','tevenxu'], type:'能力', scope:'SSV 全员', published:true,
+        krs:[
+          { id:'gm-o1-kr1', title:'技术侧完成 AI 基建治理与经验 skill 输出复用', owner:'windlin' },
+          { id:'gm-o1-kr2', title:'输出 SSV 内部通用设计方案，提升设计效率和可复用性', owner:'tevenxu' }
+        ]},
+      { id:'gm-o2', ownerInitial:'B', ownerName:'brantli', role:'gm',
+        title:'交付 SSV 自有的 AI 原生产品，验证可复制的"AI Coding 样板"',
+        mention:['suriwang','rayrao'], type:'业务', scope:'SSV 全员', published:true,
+        krs:[
+          { id:'gm-o2-kr1', title:'Nexus 产品打磨与 AI 能力优化交付', owner:'suriwang' },
+          { id:'gm-o2-kr2', title:'野朋友项目持续探索，打造 AI Coding 样板间', owner:'rayrao' }
+        ]}
+    ],
+    // 其他管理层（PM / TL）填的 OKR，alignTo 指向 GM 某条 KR
+    other: [
+      { id:'other-o2', ownerInitial:'R', ownerName:'rayrao', role:'other',
+        title:'打造 SSV 设计 skill 通用规范，先在公益平台跑通',
+        mention:['tevenxu'], type:'协同', scope:'SSV 设计组', published:true,
+        alignTo:'gm-o1-kr2',
+        krs:[
+          { id:'other-o2-kr1', title:'AI 一键生成高保真原型可用率 ≥ 70%', owner:'rayrao' },
+          { id:'other-o2-kr2', title:'公益平台首发 + 至少 3 个团队复用', owner:'rayrao' }
+        ]},
+      { id:'other-o3', ownerInitial:'W', ownerName:'windlin', role:'other',
+        title:'Harness Schema v1.1 协议落地，作为 SSV 通用底座',
+        mention:[], type:'能力', scope:'技术架构部', published:true,
+        alignTo:'gm-o1-kr1',
+        krs:[
+          { id:'other-o3-kr1', title:'8 大能力族 + 7 个 Provider 包覆盖', owner:'windlin' },
+          { id:'other-o3-kr2', title:'observe 族通过智研全量打通', owner:'windlin' }
+        ]}
+    ]
+  }
+};
+
+// 工作台当前正在编辑的草稿（按 scope + role 隔离）
+let okrWBDrafts = {
+  'jishujiagou:other': [
+    { id:'me-o1', ownerInitial:'苏', ownerName:'suriwang', role:'other',
+      title:'让 Nexus AI 总结成为可信赖的"管理者驾驶舱"',
+      mention:['weima'], type:'业务', scope:'Nexus 团队', published:false,
+      alignTo:'gm-o2-kr1',
+      krs:[
+        { title:'AI 总结 5 维度评估指标上线 + 周复盘机制', owner:'suriwang' },
+        { title:'多渠道交叉分析首期上线（含腾讯会议、企微纪要）', owner:'weima' }
+      ]}
+  ]
+};
+function getDraftKey(){ return (currentTeam || 'all') + ':' + currentMgrRole; }
+
+function openOKRWorkbench(scope){
+  // 兼容老入口：切到管理者视角时调用
+  if(currentViewer !== 'mgr'){ switchViewer('mgr'); }
+}
+
+// 渲染管理者工作台
+function renderOKRWorkbench(){
+  const wb = document.getElementById('okrWorkbench');
+  if(!wb) return;
+  const key = getDraftKey();
+  const sysListAll = (OKR_SYSTEM_DATA[currentTeam] || {})[currentMgrRole] || [];
+  const draftListAll = okrWBDrafts[key] || [];
+
+  // "其他管理层"模式下：按人筛选
+  let sysList = sysListAll, draftList = draftListAll;
+  let peopleBar = '';
+  if(currentMgrRole === 'other'){
+    // 收集所有出现过的人（按 ownerName 去重）
+    const allPeople = [];
+    [...sysListAll, ...draftListAll].forEach(o=>{
+      if(!allPeople.find(p=>p.username === o.ownerName)){
+        allPeople.push({ username:o.ownerName, initial:o.ownerInitial, isMe: o.ownerName === ME_USERNAME });
+      }
+    });
+    // 确保"我"自己永远在第一位（即使我还没填）
+    if(!allPeople.find(p=>p.isMe)){
+      allPeople.unshift({ username:ME_USERNAME, initial: ME_USERNAME[0].toUpperCase(), isMe:true });
+    } else {
+      // 把"我"挪到第一
+      const meIdx = allPeople.findIndex(p=>p.isMe);
+      const meItem = allPeople.splice(meIdx,1)[0];
+      allPeople.unshift(meItem);
+    }
+    sysList = sysListAll.filter(o=>o.ownerName === currentMgrPerson);
+    draftList = draftListAll.filter(o=>o.ownerName === currentMgrPerson);
+
+    peopleBar = `
+      <div class="wb-people-bar">
+        <span class="wb-people-label">查看：</span>
+        ${allPeople.map(p=>`
+          <span class="wb-person-pill ${p.isMe?'me':''} ${currentMgrPerson===p.username?'active':''}" onclick="switchMgrPerson('${p.username}')">
+            <span class="pp-avatar">${p.initial}</span>${p.isMe ? '我（' + p.username + '）' : p.username}
+          </span>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  const allList = [...sysList, ...draftList];
+
+  const counts = {};
+  OKR_ROLES.forEach(r=>{
+    const sys = (OKR_SYSTEM_DATA[currentTeam] || {})[r.key] || [];
+    const dft = okrWBDrafts[(currentTeam||'all')+':'+r.key] || [];
+    counts[r.key] = sys.length + dft.length;
+  });
+
+  const teamName = TEAM_MAP[currentTeam]?.name || 'SSV';
+  const isMe = currentMgrPerson === ME_USERNAME;
+  const isViewingOther = currentMgrRole === 'other' && !isMe;
+
+  wb.innerHTML = `
+    <div class="okr-wb-head">
+      <h3><span class="wb-emoji">🎯</span>OKR 工作台 · ${teamName} · Q3-2026</h3>
+      <button class="wb-overview" onclick="openOKROverview()">🌳 全局视图</button>
+      <button class="wb-pull" onclick="pullSystemOKR()">📥 一键拉取系统 OKR</button>
+    </div>
+    <div class="okr-wb-tabs">
+      ${OKR_ROLES.map(r=>`
+        <div class="wb-tab ${currentMgrRole===r.key?'active':''}" onclick="switchMgrRole('${r.key}')">
+          ${r.label}
+          <span class="wb-count">${counts[r.key]}</span>
+        </div>
+      `).join('')}
+    </div>
+    ${peopleBar}
+    <div class="okr-wb-body">
+      ${allList.length === 0
+        ? renderWBEmpty(isMe)
+        : allList.map((o,i)=>renderOCard(o, i, !o.published && (currentMgrRole !== 'other' || isMe))).join('')
+          + (currentMgrRole === 'other' && !isMe ? '' : `<div class="wb-add-o-row" onclick="addBlankObjective()">+ 添加目标 (O)</div>`)
+      }
+      ${isViewingOther ? `<div style="padding:10px 4px;font-size:11.5px;color:var(--ink-muted);">👁 你正在查看 ${currentMgrPerson} 的 OKR · 仅查看模式 · 点上方"我（${ME_USERNAME}）"切回自己的编辑</div>` : ''}
+    </div>
+  `;
+}
+
+function renderWBEmpty(isMe){
+  const role = OKR_ROLES.find(r=>r.key===currentMgrRole);
+  if(currentMgrRole === 'other' && !isMe){
+    return `
+      <div class="okr-wb-empty">
+        <div class="empty-icon">👁</div>
+        <div class="empty-title">${currentMgrPerson} 暂未填写 OKR</div>
+        <div class="empty-sub">该同事在 Q3 周期内尚未发布任何 OKR · 切回上方"我"可填写自己的</div>
+      </div>
+    `;
+  }
+  return `
+    <div class="okr-wb-empty">
+      <div class="empty-icon">🎯</div>
+      <div class="empty-title">${role.label} 暂未填写 OKR</div>
+      <div class="empty-sub">
+        作为 ${role.desc}，请先填写本季度的 O 与 KR<br>
+        填写完成后将作为${currentMgrRole==='gm'?'部门核心目标':'你对齐到部门 OKR 的具体落地项'}，员工的 Topic 在发布时会关联到具体 KR
+      </div>
+      <div class="empty-actions">
+        <button class="empty-btn" onclick="addBlankObjective()">✏ 立即填写</button>
+        <button class="empty-btn ghost" onclick="pullSystemOKR()">📥 一键拉取系统 OKR</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderOCard(o, idx, isDraft){
+  // 在 draft 数组里找到该卡的真实 index（按 owner + title 匹配），让 isDraft 操作精准
+  const draftKey = getDraftKey();
+  const draftArr = okrWBDrafts[draftKey] || [];
+  const draftIdx = draftArr.indexOf(o);   // -1 表示来自系统数据
+  const realIsDraft = isDraft && draftIdx >= 0;
+  const oId = (o.id || `${currentMgrRole}-${o.ownerName}-${idx}`);
+  const isCollapsed = collapsedOCards[oId];
+
+  const roleTagMap = { gm:'部门负责人', other:'其他管理层' };
+  const krs = o.krs || [];
+
+  // 对齐目标查找
+  let alignText = '';
+  if(o.alignTo){
+    const gmList = (OKR_SYSTEM_DATA[currentTeam] || {}).gm || [];
+    for(const gmO of gmList){
+      const kr = (gmO.krs||[]).find(k=>k.id===o.alignTo);
+      if(kr){
+        alignText = `↗ 对齐到：<strong>${gmO.ownerName}</strong> · ${kr.title}`;
+        break;
+      }
+    }
+  }
+
+  const summaryText = (o.title || '（未命名目标）') + ' · ' + krs.length + ' KR';
+
+  return `
+    <div class="wb-o-card ${realIsDraft?'editing':''} ${isCollapsed?'collapsed':''}">
+      <div class="wb-o-head">
+        <span class="wb-o-collapse" onclick="toggleCollapseO('${oId}')" title="${isCollapsed?'展开':'折叠'}">${isCollapsed?'▸':'▾'}</span>
+        <span class="wb-o-num">O${String(idx+1).padStart(2,'0')}</span>
+        <span class="wb-o-owner">
+          <span class="ow-avatar">${o.ownerInitial || '?'}</span>${o.ownerName || '未指定'}
+        </span>
+        <span class="wb-o-role-tag ${o.role || currentMgrRole}">${roleTagMap[o.role || currentMgrRole]}</span>
+        <div class="wb-o-tools">
+          ${realIsDraft ? `<span onclick="removeDraftObjective(${draftIdx})">🗑 删除</span>` : `<span>👁 仅查看</span>`}
+        </div>
+      </div>
+      <div class="wb-o-summary">${summaryText}</div>
+      ${alignText ? `<div class="wb-o-align">${alignText}</div>` : ''}
+      <input class="wb-o-input" placeholder="目标回答的是"我们想做什么"——是定性的、简洁直白的陈述，能鼓舞人"
+             value="${(o.title||'').replace(/"/g,'&quot;')}"
+             ${realIsDraft ? `oninput="updateDraftField(${draftIdx}, 'title', this.value)"` : 'readonly'}>
+      <div class="wb-mention">
+        @ 添加提醒 ${o.mention && o.mention.length ? '· ' + o.mention.map(m=>'@'+m).join(' ') : ''}
+        ${realIsDraft && currentMgrRole==='other' ? `<span class="wb-add-align" onclick="pickAlignKR(${draftIdx})">${o.alignTo?'⟲ 修改对齐':'+ 添加对齐到 KR'}</span>` : ''}
+      </div>
+
+      <div class="wb-kr-list">
+        ${krs.map((k,ki)=>`
+          <div class="wb-kr-row">
+            <span class="wb-kr-num">KR${ki+1}</span>
+            <input class="wb-kr-input" placeholder="例如：产品反馈收集和迭代速度提升20%，每月核心体验优化点达到 5 个以上"
+                   value="${(k.title||'').replace(/"/g,'&quot;')}"
+                   ${realIsDraft ? `oninput="updateDraftKR(${draftIdx}, ${ki}, 'title', this.value)"` : 'readonly'}>
+            <span class="wb-kr-owner">@${k.owner || '指派'}</span>
+            ${realIsDraft ? `<span class="wb-kr-del" onclick="removeDraftKR(${draftIdx}, ${ki})">×</span>` : ''}
+          </div>
+        `).join('')}
+      </div>
+      ${realIsDraft ? `<div class="wb-add-kr" onclick="addDraftKR(${draftIdx})">+ 添加关键结果 (KR)</div>` : ''}
+
+      <div class="wb-o-foot">
+        <span class="wb-o-meta">📌 ${o.type || '业务'}</span>
+        <span class="wb-o-meta">👁 ${o.scope || 'SSV 全员'}</span>
+        <span class="wb-o-publish-status ${o.published?'published':'draft'}">
+          ${o.published ? '● 已发布' : '○ 草稿'}
+        </span>
+        ${realIsDraft ? `
+          <div class="wb-o-actions">
+            <button onclick="saveDraft(${draftIdx})">保存草稿</button>
+            <button class="primary" onclick="publishDraft(${draftIdx})">发布到 Nexus</button>
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function switchMgrRole(role){
+  currentMgrRole = role;
+  renderOKRWorkbench();
+}
+
+function addBlankObjective(){
+  const key = getDraftKey();
+  if(!okrWBDrafts[key]) okrWBDrafts[key] = [];
+  // 默认 owner：部门负责人 Tab → 该部门一把手；其他管理层 Tab → 当前用户（这里 mock 为马巍）
+  const gmList = (OKR_SYSTEM_DATA[currentTeam] || {}).gm || [];
+  const deptHead = gmList[0];
+  const defaultOwner = (currentMgrRole === 'gm' && deptHead)
+    ? { ownerInitial: deptHead.ownerInitial, ownerName: deptHead.ownerName }
+    : { ownerInitial: '马', ownerName: '马巍' };
+  okrWBDrafts[key].push({
+    ownerInitial: defaultOwner.ownerInitial, ownerName: defaultOwner.ownerName,
+    role: currentMgrRole,
+    title:'', mention:[], type:'业务', scope:'SSV 全员', published:false,
+    krs:[{ title:'', owner:'指派' }]
+  });
+  renderOKRWorkbench();
+}
+function updateDraftField(idx, field, value){
+  const list = okrWBDrafts[getDraftKey()] || [];
+  if(list[idx]) list[idx][field] = value;
+}
+function updateDraftKR(idx, krIdx, field, value){
+  const list = okrWBDrafts[getDraftKey()] || [];
+  if(list[idx] && list[idx].krs[krIdx]) list[idx].krs[krIdx][field] = value;
+}
+function addDraftKR(idx){
+  const list = okrWBDrafts[getDraftKey()] || [];
+  if(list[idx]){ list[idx].krs.push({ title:'', owner:'指派' }); renderOKRWorkbench(); }
+}
+function removeDraftKR(idx, krIdx){
+  const list = okrWBDrafts[getDraftKey()] || [];
+  if(list[idx]){ list[idx].krs.splice(krIdx,1); renderOKRWorkbench(); }
+}
+function removeDraftObjective(idx){
+  const key = getDraftKey();
+  if(okrWBDrafts[key]){ okrWBDrafts[key].splice(idx,1); renderOKRWorkbench(); }
+}
+function saveDraft(idx){
+  showToast('已保存草稿（仅本地，未对外发布）');
+}
+function publishDraft(idx){
+  const list = okrWBDrafts[getDraftKey()] || [];
+  if(list[idx]){
+    list[idx].published = true;
+    showToast('✅ 已发布到 Nexus · ' + (list[idx].title || '未命名目标'));
+    renderOKRWorkbench();
+  }
+}
+function pullSystemOKR(){
+  const sysList = (OKR_SYSTEM_DATA[currentTeam] || {})[currentMgrRole] || [];
+  if(sysList.length){
+    showToast('✅ 已从外部 OKR 系统拉取 ' + sysList.length + ' 条 ' + currentMgrRole.toUpperCase() + ' 级目标');
+  } else {
+    // 没有的话往草稿里塞一条预填的
+    const key = getDraftKey();
+    if(!okrWBDrafts[key]) okrWBDrafts[key] = [];
+    okrWBDrafts[key].push({
+      ownerInitial:'B', ownerName:'brantli', role: currentMgrRole,
+      title:'技术侧完成 AI 基建治理与经验 skill 输出复用',
+      mention:['windlin'], type:'业务', scope:'SSV 全员', published:false,
+      krs:[
+        { title:'Harness Schema v1.1 落地', owner:'windlin' },
+        { title:'web 性能与体验 skill 复用', owner:'rayrao' }
+      ]
+    });
+    showToast('✅ 已拉取系统 OKR 模板，请确认后发布');
+  }
+  renderOKRWorkbench();
+}
+
+// 员工视角：OKR 对齐树（融合原 Q3 置顶卡）
+function renderOKRAlignTree(){
+  const tree = document.getElementById('okrAlignTree');
+  if(!tree) return;
+  const teamName = TEAM_MAP[currentTeam]?.name || 'SSV';
+  const gmList = (OKR_SYSTEM_DATA[currentTeam] || {}).gm || [];
+  const pin = Q3_PIN[currentTeam] || {};
+
+  // 优先用 OKR_SYSTEM_DATA.gm（含 KR）；如果该 scope 还没拉取过 OKR，则回退用 Q3_PIN.keys（仅 O 级别）
+  let objectives = gmList.length ? gmList.map(o=>({
+    title:o.title, ownerName:o.ownerName, scope:o.scope, krs:o.krs
+  })) : (pin.keys || []).map(k=>({
+    title:k.title, ownerName:pin.owner || '', scope:'SSV 全员',
+    krs: k.owners ? k.owners.map(ow=>({ title:'', owner:ow })) : []
+  }));
+
+  if(!objectives.length){
+    tree.innerHTML = '';
+    return;
+  }
+
+  tree.innerHTML = `
+    <div class="align-tree">
+      <div class="align-tree-head">
+        <span class="at-badge">📌 # Q3 目标</span>
+        <span class="at-pin">实验室管理层目标 Topic</span>
+        <span class="at-toggle" onclick="showToast('展开为大图视图（建设中）')">⛶ 大图</span>
+      </div>
+      <div class="align-tree-title">${pin.title || (teamName + ' 2026 Q3 目标与重点事项')}</div>
+      <div class="align-tree-meta"><span class="author">${pin.owner || ''}</span>${pin.stats ? ' · ' + pin.stats.updated : ''}</div>
+      ${pin.quote ? `<div class="align-tree-quote">${pin.quote}</div>` : ''}
+
+      ${objectives.map((o, oi)=>`
+        <div class="at-objective">
+          <div class="at-root">
+            <div class="at-root-line">
+              <span class="at-root-num">O${oi+1}</span>
+              <span class="at-root-title">${o.title}</span>
+              <span class="at-root-meta">${o.ownerName || ''} · ${o.scope || 'SSV 全员'} · ${o.krs.length} KR</span>
+            </div>
+          </div>
+          ${o.krs.length ? `
+            <div class="at-children">
+              ${o.krs.map((k,ki)=>`
+                <div class="at-child">
+                  <div class="at-child-head">
+                    <span class="at-child-num">KR${ki+1}</span>
+                    <span class="at-child-title">${k.title || '（待补充 KR 描述）'}</span>
+                    <span class="at-child-owner">@${k.owner || '指派'}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `).join('')}
+
+      ${pin.stats ? `
+        <div class="align-tree-foot">
+          <span class="stat">💬 ${pin.stats.replies}</span>
+          <span class="stat">👁 ${pin.stats.eyes}</span>
+          <span class="stat">↗ 进入 Topic 详情</span>
+          <span class="at-edit" onclick="switchViewer('mgr')"><span class="role">管理层</span>✏ 编辑</span>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function getKRTopicSummary(k){
+  // mock 简化：从 TOPICS 里随机找 1 条相关 Topic
+  const t = (TOPICS || []).find(t=>(t.types||[]).includes('q3'));
+  return t ? `最近 Topic：${t.title}` : '暂无关联 Topic · 等待员工发布';
+}
+function getKRProgressMock(idx){
+  const arr = ['进度 65%','进度 40%','进度 80%','进度 25%'];
+  return arr[idx % arr.length];
+}
+
+// ============ 全局视图（OKR 对齐关系大图） ============
+function openOKROverview(){
+  document.getElementById('okrOverviewMask').classList.add('show');
+  renderOKROverview();
+  // 推一个浏览器历史状态：浏览器后退键 / 滑动手势 / Esc 都能关闭
+  if(history.state?.type !== 'okrOverview'){
+    history.pushState({ type:'okrOverview' }, '', location.href);
+  }
+}
+function closeOKROverview(){
+  const mask = document.getElementById('okrOverviewMask');
+  if(!mask.classList.contains('show')) return;
+  mask.classList.remove('show');
+  // 如果当前历史状态是我们 push 的，则消费掉一个历史项
+  if(history.state?.type === 'okrOverview'){
+    history.back();
+  }
+}
+// 浏览器后退键 / iOS 边缘滑动 → 自动关闭全局视图
+window.addEventListener('popstate', (e)=>{
+  const mask = document.getElementById('okrOverviewMask');
+  if(mask && mask.classList.contains('show')){
+    mask.classList.remove('show');
+  }
+});
+// Esc 键也能关闭
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape'){
+    const mask = document.getElementById('okrOverviewMask');
+    if(mask && mask.classList.contains('show')){
+      closeOKROverview();
+    }
+  }
+});
+function renderOKROverview(){
+  const teamName = TEAM_MAP[currentTeam]?.name || 'SSV';
+  const data = OKR_SYSTEM_DATA[currentTeam] || {};
+  const gmList = data.gm || [];
+  const otherList = (data.other || []).concat(okrWBDrafts[(currentTeam||'all')+':other'] || []);
+  const totalKR = gmList.reduce((s,o)=>s+o.krs.length,0);
+
+  // 中心节点：brantli 的 OKR（取第一条 O 作为主中心，第二条 O 作为副中心放在下方）
+  // 自由画布坐标布局：中心 X≈700，左侧 X≈30，右侧 X≈1340，菊红顶部 X≈700
+  const layout = [];
+  // 顶部：上级（菊红）
+  layout.push({ id:'sup', kind:'sup', x:700, y:30, owner:'菊红', initial:'菊', role:'SSV 总负责人',
+    o:{ num:1, title:'让 SSV 在 AI 时代沉淀可复用的组织资产，把每个团队的实验变成全员可用的能力' },
+    progress:55, color:'#f59e0b' });
+
+  // 中心：brantli 的两条 O
+  gmList.forEach((o, oi)=>{
+    layout.push({ id:'gm-'+oi, kind:'center', x:580, y:280 + oi*340,
+      owner:o.ownerName, initial:o.ownerInitial, role:'部门负责人 · '+(TEAM_MAP[currentTeam]?.name || ''),
+      o:{ num:oi+1, title:o.title }, krs:o.krs, progress: oi===0?65:42 });
+  });
+
+  // 其他管理层节点（按对齐到的 KR 决定 Y 位置；左侧/右侧轮换）
+  const sideMap = {}; // krId -> [other O...]
+  otherList.forEach(o=>{
+    if(!o.alignTo) return;
+    if(!sideMap[o.alignTo]) sideMap[o.alignTo]=[];
+    sideMap[o.alignTo].push(o);
+  });
+  // 给每条 other O 安排一个画布位置：左侧栏（X≈30）按对齐的 KR 顺序从上到下排
+  let leftCursorY = 220;
+  let rightCursorY = 280;
+  Object.keys(sideMap).forEach((krId)=>{
+    sideMap[krId].forEach((ao, ai)=>{
+      const goLeft = (leftCursorY <= rightCursorY);
+      const px = goLeft ? 30 : 1300;
+      const py = goLeft ? leftCursorY : rightCursorY;
+      layout.push({ id:'other-'+ao.id, kind:'other', side: goLeft?'left':'right',
+        x:px, y:py, owner:ao.ownerName, initial:ao.ownerInitial, role:'',
+        alignTo: ao.alignTo,
+        o:{ num:1, title:ao.title }, krs:ao.krs, progress: 50 + ai*5 });
+      if(goLeft) leftCursorY += 270; else rightCursorY += 270;
+    });
+  });
+
+  // 占位：未对齐节点 — 当前不展示
+
+  // 计算连线（中心 → other）
+  const lines = [];
+  // 上级 → 第一条中心 O
+  lines.push({ from:{x:870,y:140}, to:{x:880,y:300}, dashed:false, label:null });
+  // 中心 → 各 other
+  layout.forEach(node=>{
+    if(node.kind!=='other') return;
+    // 找对齐到的 KR 所在的中心节点
+    let centerNode = null, krIndex = 0;
+    layout.forEach(n=>{
+      if(n.kind!=='center') return;
+      (n.krs||[]).forEach((k,ki)=>{
+        if(k.id === node.alignTo){ centerNode = n; krIndex = ki; }
+      });
+    });
+    if(!centerNode) return;
+    const centerX = centerNode.x + 320/2;
+    const centerY = centerNode.y + 130 + krIndex*36;  // 大约 KR 行的 y 偏移
+    const otherX = node.side==='left' ? node.x + 320 : node.x;
+    const otherY = node.y + 60;
+    lines.push({
+      from:{ x:otherX, y:otherY },
+      to:{ x:node.side==='left'? centerNode.x : centerNode.x + 320, y:centerY },
+      dashed:false,
+      label:String(krIndex+1)
+    });
+  });
+
+  // 画线 path 生成（贝塞尔曲线）
+  const linesSvg = lines.map(l=>{
+    const dx = (l.to.x - l.from.x);
+    const cx1 = l.from.x + dx*0.35;
+    const cx2 = l.to.x   - dx*0.35;
+    return `<path d="M ${l.from.x} ${l.from.y} C ${cx1} ${l.from.y}, ${cx2} ${l.to.y}, ${l.to.x} ${l.to.y}"
+      stroke="${l.dashed?'#cbd5e1':'#c4b5fd'}" stroke-width="1.5" fill="none"
+      ${l.dashed?'stroke-dasharray="5,4"':''}
+      marker-end="url(#${l.dashed?'ovArrowGray':'ovArrow'})"/>`;
+  }).join('');
+
+  // 画线上的小数字 badge
+  const badges = lines.filter(l=>l.label).map(l=>{
+    const mx = (l.from.x + l.to.x)/2;
+    const my = (l.from.y + l.to.y)/2;
+    return `<div class="ov-line-badge" style="left:${mx-10}px; top:${my-9}px;">${l.label}</div>`;
+  }).join('');
+
+  // 节点 HTML
+  const nodesHtml = layout.map(n=>{
+    if(n.kind === 'unaligned'){
+      return `
+        <div class="ov-node unaligned-empty" style="left:${n.x}px; top:${n.y}px;">
+          <div class="ovh" style="margin-bottom:0;">
+            <div class="ovh-avatar" style="background:#e9d5ff;color:#6b21a8;">${n.initial}</div>
+            <span class="ovh-name">${n.owner}</span>
+            <span class="ovh-tag">未对齐</span>
+          </div>
+          <div class="empty-text">还没有制定 OKR</div>
+          <button class="empty-btn">提醒他</button>
+        </div>
+      `;
+    }
+    const krsHtml = (n.krs||[]).map((k,ki)=>`
+      <div class="ovkr-row">
+        <span class="ovkr-num">KR${ki+1}</span>
+        <span class="ovkr-title">${k.title || '（待补充）'}${k.owner?` <span class="ovkr-mention">@${k.owner}</span>`:''}</span>
+      </div>
+    `).join('');
+    const cls = n.kind === 'center' ? 'center' : '';
+    const progress = n.progress ?? 0;
+    const progressColor = n.color || (progress>=70?'#10b981':progress>=40?'#ef4444':'#f59e0b');
+    return `
+      <div class="ov-node ${cls}" style="left:${n.x}px; top:${n.y}px;">
+        <div class="ovh">
+          <div class="ovh-avatar">${n.initial}</div>
+          <span class="ovh-name">${n.owner}</span>
+          ${n.role?`<span class="ovh-role">${n.role}</span>`:''}
+        </div>
+        <div class="ovo-row">
+          <span class="ovo-num">O${n.o.num}</span>
+          <span class="ovo-title">${n.o.title}</span>
+        </div>
+        ${krsHtml}
+        <div class="ovp-row">
+          <div class="ovp-bar"><div class="ovp-bar-fill" style="width:${progress}%; background:${progressColor};"></div></div>
+          <span class="ovp-pct">${progress}%</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const wrap = document.getElementById('okrOverview');
+  wrap.innerHTML = `
+    <div class="okr-overview-head">
+      <span class="back-btn" onclick="closeOKROverview()" title="返回">← 返回</span>
+      <h3>🌳 OKR 全局视图<span class="ov-team">${teamName} · Q3-2026</span></h3>
+      <div class="ov-legend">
+        <span class="ov-legend-item"><span class="ov-legend-dot gm"></span>部门负责人 O</span>
+        <span class="ov-legend-item"><span class="ov-legend-dot kr"></span>KR</span>
+        <span class="ov-legend-item"><span class="ov-legend-dot other"></span>其他管理层对齐 OKR</span>
+      </div>
+      <span class="ov-stats">共 ${gmList.length} 个 O · ${totalKR} 个 KR · ${otherList.length} 个对齐 OKR</span>
+      <span class="close" onclick="closeOKROverview()">✕</span>
+    </div>
+    <div class="ov-canvas-wrap">
+      <div class="ov-canvas">
+        <svg class="ov-lines" viewBox="0 0 1700 980" preserveAspectRatio="none">
+          <defs>
+            <marker id="ovArrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+              <polygon points="0 0, 7 3.5, 0 7" fill="#c4b5fd"/>
+            </marker>
+            <marker id="ovArrowGray" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+              <polygon points="0 0, 7 3.5, 0 7" fill="#cbd5e1"/>
+            </marker>
+          </defs>
+          ${linesSvg}
+        </svg>
+        ${badges}
+        ${nodesHtml}
+      </div>
+
+      <div class="ov-zoom">
+        <div class="zb-controls">
+          <span class="zb-btn">⤢</span>
+          <span class="zb-btn">◎</span>
+          <span class="zb-btn">−</span>
+          <span class="zb-pct">100%</span>
+          <span class="zb-btn">+</span>
+        </div>
+        <div class="zb-row">
+          <span>显示未对齐</span>
+          <span class="switch"></span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// 选择对齐到部门负责人的某个 KR（mock：循环切换可选项）
+function pickAlignKR(draftIdx){
+  const list = okrWBDrafts[getDraftKey()] || [];
+  if(!list[draftIdx]) return;
+  const gmList = (OKR_SYSTEM_DATA[currentTeam] || {}).gm || [];
+  // 收集所有可对齐的 KR
+  const allKRs = [];
+  gmList.forEach(o=>{ (o.krs||[]).forEach(k=>allKRs.push({ ...k, oTitle:o.title })); });
+  if(!allKRs.length){ showToast('部门负责人尚未发布 OKR · 请先在 GM Tab 录入'); return; }
+  // 简单循环切换（演示用）
+  const cur = list[draftIdx].alignTo;
+  const idx = allKRs.findIndex(k=>k.id===cur);
+  const next = allKRs[(idx + 1) % allKRs.length];
+  list[draftIdx].alignTo = next.id;
+  showToast('已对齐到：' + next.title.slice(0,18) + '…');
+  renderOKRWorkbench();
+}
+
 render();           // 先渲染主区，让 hash-q3 视图把 teamSelectMenu DOM 挂上
 buildTeamMenu();    // 再填充下拉菜单内容
 </script>
+
+<!-- OKR 全局视图弹窗 -->
+<div class="okr-overview-mask" id="okrOverviewMask" onclick="if(event.target===this)closeOKROverview();">
+  <div class="okr-overview" id="okrOverview"></div>
+</div>
 
 </body>
 </html>
