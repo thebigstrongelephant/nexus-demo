@@ -437,8 +437,17 @@ body:not(.viewer-mgr) .q3-pin-card { display:none !important; }
 .at-children { margin-top:8px; padding-left:24px; border-left:2px dashed #c7d2fe; }
 .at-child {
   background:#fff; border:1px solid var(--border); border-radius:8px;
-  padding:10px 16px; margin-bottom:6px; position:relative;
+  padding:10px 16px; margin-bottom:6px; position:relative; cursor:pointer;
+  transition:all 0.12s;
 }
+.at-child:hover { border-color:var(--blue); background:var(--blue-light); }
+.at-child.selected {
+  background:var(--blue); border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(37,99,235,0.15);
+}
+.at-child.selected .at-child-title,
+.at-child.selected .at-child-owner { color:#fff; }
+.at-child.selected .at-child-num { background:#fff; color:var(--blue); }
 .at-child::before {
   content:""; position:absolute; left:-24px; top:18px; width:22px; height:1px;
   background:#c7d2fe;
@@ -1402,6 +1411,64 @@ body.viewer-mgr .q3-pin-edit { display:none; }  /* 用新 actions 替换旧的"�
 .rail-title { font-size:15px; font-weight:800; }
 .rail-badge { font-size:10px; padding:2px 7px; border-radius:4px; background:var(--violet-light); color:var(--violet); font-weight:700; letter-spacing:0.5px; }
 .rail-section-title { font-size:13.5px; color:var(--blue); font-weight:600; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+
+/* 右侧栏双 Tab */
+.rail-tab-row {
+  display:flex; gap:4px; padding:3px; background:var(--bg-subtle);
+  border-radius:7px; margin-bottom:10px;
+}
+.rail-tab {
+  flex:1; text-align:center; padding:6px 4px; font-size:11.5px; font-weight:600;
+  color:var(--ink-muted); border-radius:5px; cursor:pointer; user-select:none;
+}
+.rail-tab:hover { color:var(--ink-secondary); }
+.rail-tab.active { background:#fff; color:var(--violet); box-shadow:0 1px 2px rgba(15,23,42,0.06); }
+
+/* 进展看板 */
+.rail-progress-list { padding:6px 12px 6px 32px; display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+.rail-progress-row {
+  display:flex; align-items:center; gap:8px;
+}
+.rpr-num {
+  flex-shrink:0; padding:1px 7px; border-radius:99px;
+  background:#dbeafe; color:#1d4ed8; font-size:9.5px; font-weight:700; font-style:italic;
+}
+.rpr-body { flex:1; min-width:0; }
+.rpr-title {
+  font-size:11.5px; color:var(--ink-secondary); line-height:1.5; margin-bottom:4px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.rpr-bar { height:4px; border-radius:2px; background:#e2e8f0; overflow:hidden; }
+.rpr-bar-fill { height:100%; border-radius:2px; }
+.rpr-pct {
+  flex-shrink:0; font-size:11px; color:var(--ink-secondary); font-weight:600;
+  min-width:34px; text-align:right;
+}
+
+/* 时间脉络 */
+.rail-timeline {
+  margin:8px 0 0 12px; padding-left:12px; border-left:2px solid #e0e7ff;
+  display:flex; flex-direction:column; gap:10px;
+}
+.rail-tl-item { position:relative; padding-left:8px; }
+.rtl-dot {
+  position:absolute; left:-19px; top:5px;
+  width:10px; height:10px; border-radius:50%; background:#7c3aed;
+  border:2px solid #fff; box-shadow:0 0 0 1px #c4b5fd;
+}
+.rtl-dot.tag-决策 { background:#7c3aed; box-shadow:0 0 0 1px #c4b5fd; }
+.rtl-dot.tag-里程碑 { background:#10b981; box-shadow:0 0 0 1px #6ee7b7; }
+.rtl-dot.tag-风险 { background:#ef4444; box-shadow:0 0 0 1px #fca5a5; }
+.rtl-body {}
+.rtl-meta { display:flex; gap:6px; align-items:center; margin-bottom:3px; }
+.rtl-date { font-size:11px; color:var(--ink-secondary); font-weight:600; }
+.rtl-tag {
+  font-size:9.5px; padding:1px 6px; border-radius:3px; font-weight:700; letter-spacing:0.3px;
+}
+.rtl-tag.tag-决策 { background:#ede9fe; color:#7c3aed; }
+.rtl-tag.tag-里程碑 { background:#d1fae5; color:#065f46; }
+.rtl-tag.tag-风险 { background:#fee2e2; color:#b91c1c; }
+.rtl-text { font-size:11.5px; color:var(--ink-secondary); line-height:1.6; }
 .rail-card {
   background:var(--bg-subtle); border-radius:var(--radius-md); padding:14px 16px; margin-bottom:14px;
 }
@@ -1766,25 +1833,30 @@ const TOPICS = [
 
   // 技术架构部真实 Q3 Topic
   { id:15, team:'jishujiagou', types:['q3','ai','jishu','share'], starred:false,
+    alignKR:'gm-o1-kr1',
     title:'Harness Schema —— Agent 基建治理',
     teamHash:'#技术', author:'yikazhu(朱奕嘉)', date:'2026-04-28',
     replyAuthor:'reynaldliu(刘敏)', replyTime:'1 天前',
     replyContent:'「v1.1 协议草案已 review，下周开始 7 个 Provider 包并行开发…」' },
   { id:16, team:'jishujiagou', types:['q3','ai','jishu'], starred:true,
+    alignKR:'gm-o2-kr1',
     title:'nexus_ai 能力优化 0506',
     teamHash:'#技术', author:'weima(马巍)', date:'2026-05-06',
     replyAuthor:'masonhyli(李文)', replyTime:'2 天前',
     replyContent:'「移动端适配涉及阅读与交互逻辑拆分，需关注首期上线后的用户操作闭环…」' },
   { id:17, team:'jishujiagou', types:['q3','ai','jishu','share'], starred:false,
+    alignKR:'gm-o1-kr1',
     title:'技术架构部 web 性能与体验优化 skill 专项',
     teamHash:'#技术', author:'quannazhang(张琴)', date:'2026-05-07',
     replyAuthor:null, replyTime:null, replyContent:null },
   { id:18, team:'jishujiagou', types:['q3','ai','xiangmu','share'], starred:false,
+    alignKR:'gm-o1-kr2',
     title:'SSV 产品设计 skill',
     teamHash:'#项目', author:'tevenxu(徐子闻)', date:'2026-04-28',
     replyAuthor:'suriwang(王昕)', replyTime:'3 天前',
     replyContent:'「看看企业微信 bot 的入口接入方案…」' },
   { id:19, team:'jishujiagou', types:['q3','share','ai'], starred:false,
+    alignKR:'gm-o2-kr2',
     title:'野朋友心愿单 · 5 大产品方向 + AI Coding',
     teamHash:'#项目', author:'leoou(欧阳)', date:'2026-04-27',
     replyAuthor:null, replyTime:null, replyContent:null }
@@ -1968,6 +2040,7 @@ const SHARE_PIN = {
 let currentSidebar = 'hash-q3';   // 默认进入 # Q3 目标
 let q3DisplayMode = 'A';          // v2 新增：'A' 智能总结 / 'B' 折叠汇总
 let selectedGoalNum = null;       // v2：双击置顶卡 Event 后选中的目标 num（null 表示全部）
+let selectedAlignKR = null;       // v2：员工对齐树点击 KR 后筛选 Topic 用的 KR id（null 表示全部）
 let currentTeam = 'jishujiagou';  // 默认实验室：技术架构部
 let currentType = 'all';
 let currentSort = 'latest';      // latest | active
@@ -2042,6 +2115,10 @@ function getFilteredTopics(){
   }
   // tag 行 currentType
   if(currentType!=='all') list = list.filter(t=>(t.types||[]).includes(currentType));
+  // 选中了某个 KR：过滤出 alignKR 匹配的 Topic（员工对齐树上点击 KR 触发）
+  if(selectedAlignKR){
+    list = list.filter(t=>t.alignKR === selectedAlignKR);
+  }
   // 排序
   if(currentSort==='latest') list = [...list].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   return list;
@@ -2263,9 +2340,15 @@ function renderQ3ModeA(){
     const goal = (OKR_GOAL_MAPPING[currentTeam]||[]).find(g=>g.num===selectedGoalNum);
     if(goal) topicList = topicList.filter(t=>goal.topicIds.includes(t.id));
   }
-  const filterTip = selectedGoalNum
-    ? `<span style="font-size:11.5px;color:var(--blue);background:var(--blue-light);padding:3px 10px;border-radius:99px;margin-left:8px;cursor:pointer;" onclick="toggleSelectGoal(${selectedGoalNum})">已筛选 · 目标 ${selectedGoalNum} · 点击取消 ✕</span>`
-    : '<span style="font-size:11px;color:var(--ink-muted);margin-left:8px;">提示：双击上方"重点事项"可筛选下方 Topic</span>';
+  // 员工对齐树点击 KR 后筛选：仅展示 alignKR 命中的 Topic
+  if(selectedAlignKR){
+    topicList = topicList.filter(t=>t.alignKR === selectedAlignKR);
+  }
+  const filterTip = selectedAlignKR
+    ? `<span style="font-size:11.5px;color:var(--blue);background:var(--blue-light);padding:3px 10px;border-radius:99px;margin-left:8px;cursor:pointer;" onclick="toggleSelectKR('${selectedAlignKR}')">已筛选 · KR ${selectedAlignKR} · 点击取消 ✕</span>`
+    : (selectedGoalNum
+      ? `<span style="font-size:11.5px;color:var(--blue);background:var(--blue-light);padding:3px 10px;border-radius:99px;margin-left:8px;cursor:pointer;" onclick="toggleSelectGoal(${selectedGoalNum})">已筛选 · 目标 ${selectedGoalNum} · 点击取消 ✕</span>`
+      : '<span style="font-size:11px;color:var(--ink-muted);margin-left:8px;">提示：点击上方某条 KR 可筛选下方 Topic</span>');
   // 主区 HTML
   const mainHTML = `
     <div>${renderHashPin('q3')}</div>
@@ -2296,22 +2379,92 @@ function injectSummaryToRail(){
     const okrs = getCurrentOKR();
     wrap = document.createElement('div');
     wrap.className = 'rail-q3-summary';
-    const titleText = q3DisplayMode === 'B' ? '✦ 进展同步汇总' : '✦ 目标进展智能总结';
+    const tab = window.__railTab || 'progress';
+
+    // 进度 mock：每个 KR 的进度 / 完成情况
+    const progressMock = [
+      { p:78, status:'按期推进', color:'#10b981' },
+      { p:55, status:'阶段性产出', color:'#f59e0b' },
+      { p:48, status:'研发期', color:'#f59e0b' },
+      { p:30, status:'探索中', color:'#ef4444' }
+    ];
+
+    // 时间脉络 mock：每个 OKR 的关键节点
+    const timelineMock = {
+      0: [
+        { date:'4 月初', tag:'决策', text:'Harness Schema v1.0 协议定稿，启动 7 个 Provider 包并行开发' },
+        { date:'4 月底', tag:'里程碑', text:'8 大能力族抽象层 review 通过，进入实施阶段' },
+        { date:'5 月初', tag:'决策', text:'observe 族决定通过智研全量打通，跨团队对齐口径' },
+        { date:'5 月中', tag:'风险', text:'web 性能 skill 跨团队复用速度不及预期，启动 2 个团队试点' }
+      ],
+      1: [
+        { date:'4 月底', tag:'里程碑', text:'AI 总结 5 维度评估指标方案确定' },
+        { date:'5 月初', tag:'决策', text:'AI 总结质量评估上线，引入多 AI 厂商对比 + Judge 分数' },
+        { date:'5 月中', tag:'决策', text:'多渠道交叉分析进入研发期，重点关注首期上线后用户操作闭环' }
+      ]
+    };
+
     wrap.innerHTML = `
-      <div class="rail-section-title" style="color:var(--violet);">${titleText}</div>
+      <div class="rail-section-title" style="color:var(--violet);">✦ Q3 OKR 智能总结</div>
+      <div class="rail-tab-row">
+        <span class="rail-tab ${tab==='progress'?'active':''}" onclick="switchRailTab('progress')">📊 进展看板</span>
+        <span class="rail-tab ${tab==='timeline'?'active':''}" onclick="switchRailTab('timeline')">🕒 时间脉络</span>
+      </div>
       <div class="summary-panel" style="margin-bottom:18px;">
-        ${okrs.map(g=>`
-          <div class="summary-goal">
-            <div class="summary-goal-head">
-              <span class="summary-goal-num">${g.num}</span>
-              <span class="summary-goal-title">${g.title}</span>
-              <span class="summary-goal-count">${g.topicIds.length} Topic</span>
-            </div>
-            <ul class="summary-bullets">
-              ${g.summary.map(s=>`<li><strong>${s.strong}</strong>：${s.detail}</li>`).join('')}
-            </ul>
-          </div>
-        `).join('')}
+        ${tab === 'progress'
+          ? okrs.map((g, gi)=>{
+              const krCount = (g.summary||[]).length || g.topicIds.length;
+              const krProgress = (g.summary||g.topicIds.map(()=>({}))).map((s, ki)=>{
+                const pm = progressMock[(gi*2 + ki) % progressMock.length];
+                return { title: s.strong || ('KR'+(ki+1)), p: pm.p, status: pm.status, color: pm.color };
+              });
+              const overall = Math.round(krProgress.reduce((a,b)=>a+b.p,0) / Math.max(krProgress.length,1));
+              return `
+                <div class="summary-goal">
+                  <div class="summary-goal-head">
+                    <span class="summary-goal-num">${g.num}</span>
+                    <span class="summary-goal-title">${g.title}</span>
+                    <span class="summary-goal-count">${overall}%</span>
+                  </div>
+                  <div class="rail-progress-list">
+                    ${krProgress.map((k, ki)=>`
+                      <div class="rail-progress-row">
+                        <span class="rpr-num">KR${ki+1}</span>
+                        <div class="rpr-body">
+                          <div class="rpr-title">${k.title}</div>
+                          <div class="rpr-bar"><div class="rpr-bar-fill" style="width:${k.p}%; background:${k.color};"></div></div>
+                        </div>
+                        <span class="rpr-pct">${k.p}%</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              `;
+            }).join('')
+          : okrs.map((g, gi)=>{
+              const events = timelineMock[gi] || [];
+              return `
+                <div class="summary-goal">
+                  <div class="summary-goal-head">
+                    <span class="summary-goal-num">${g.num}</span>
+                    <span class="summary-goal-title">${g.title}</span>
+                    <span class="summary-goal-count">${events.length} 节点</span>
+                  </div>
+                  <div class="rail-timeline">
+                    ${events.length ? events.map(e=>`
+                      <div class="rail-tl-item">
+                        <span class="rtl-dot tag-${e.tag}"></span>
+                        <div class="rtl-body">
+                          <div class="rtl-meta"><span class="rtl-date">${e.date}</span><span class="rtl-tag tag-${e.tag}">${e.tag}</span></div>
+                          <div class="rtl-text">${e.text}</div>
+                        </div>
+                      </div>
+                    `).join('') : '<div style="font-size:11px;color:var(--ink-muted);padding:6px 0 0;">暂无关键节点</div>'}
+                  </div>
+                </div>
+              `;
+            }).join('')
+        }
       </div>
     `;
   } else if(currentSidebar === 'hash-ai'){
@@ -2451,6 +2604,22 @@ function toggleSelectGoal(num){
   render();
   if(selectedGoalNum) showToast('已筛选目标 ' + num);
   else showToast('已取消筛选 · 显示全部 Topic');
+}
+function toggleSelectKR(krId){
+  if(!krId){ showToast('该 KR 暂未关联具体内容'); return; }
+  selectedAlignKR = (selectedAlignKR === krId) ? null : krId;
+  render();
+  if(selectedAlignKR){
+    showToast('已筛选与该 KR 关联的 Topic（' + krId + '）');
+  } else {
+    showToast('已取消筛选 · 显示全部 Topic');
+  }
+}
+
+// 右侧栏 Tab：progress / timeline
+function switchRailTab(tab){
+  window.__railTab = tab;
+  injectSummaryToRail();
 }
 function toggleGoalGroup(num){
   const el = document.getElementById('goalGroup-'+num);
@@ -3235,7 +3404,7 @@ function renderOKRAlignTree(){
           ${o.krs.length ? `
             <div class="at-children">
               ${o.krs.map((k,ki)=>`
-                <div class="at-child">
+                <div class="at-child ${selectedAlignKR===k.id?'selected':''}" onclick="toggleSelectKR('${k.id||''}')" title="点击筛选与本 KR 关联的 Topic">
                   <div class="at-child-head">
                     <span class="at-child-num">KR${ki+1}</span>
                     <span class="at-child-title">${k.title || '（待补充 KR 描述）'}</span>
@@ -3433,10 +3602,6 @@ function renderOKROverview(){
           <span class="ovo-title">${n.o.title}</span>
         </div>
         ${krsHtml}
-        <div class="ovp-row">
-          <div class="ovp-bar"><div class="ovp-bar-fill" style="width:${progress}%; background:${progressColor};"></div></div>
-          <span class="ovp-pct">${progress}%</span>
-        </div>
       </div>
     `;
   }).join('');
