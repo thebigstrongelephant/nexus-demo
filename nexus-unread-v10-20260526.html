@@ -1,0 +1,3805 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>SSV Nexus · 消息中心 v10 · 新增「目标」通知 Tab</title>
+<style>
+  :root{
+    --bg:#fafbfc; --card:#ffffff; --line:#eef0f3; --line-2:#e3e6eb;
+    --text:#1a1d24; --text-2:#5a6270; --text-3:#8a92a0;
+    --accent:#2563eb; --accent-bg:#eff4ff;
+    --unread-bg:#f7faff;
+    --at:#e11d48; --at-bg:#fff1f2;
+    --reply:#2563eb; --reply-bg:#eff4ff;
+    --like:#ea580c; --like-bg:#fff7ed;
+    --comment:#7c3aed; --comment-bg:#f3eaff;
+    --shadow:0 1px 2px rgba(20,24,32,.04), 0 4px 12px rgba(20,24,32,.04);
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:"PingFang SC","Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+  .layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+  /* sidebar */
+  .side{border-right:1px solid var(--line);padding:18px 14px;background:#fff;position:sticky;top:0;height:100vh;overflow-y:auto}
+  .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 22px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .brand-logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#1a1d24,#3b3f4a);display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px}
+  .brand-text{font-weight:700;font-size:16px}
+  .brand-sub{font-size:11px;color:var(--text-3);margin-top:1px}
+  .nav-cap{font-size:11px;color:var(--text-3);letter-spacing:.12em;padding:6px 10px;margin-top:14px}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--text-2);cursor:pointer;font-size:13px;margin-bottom:2px}
+  .nav-item:hover{background:#f3f5f7;color:var(--text)}
+  .nav-item.active{background:#1a1d24;color:#fff}
+  .nav-item .ic{width:16px;text-align:center;opacity:.85}
+  .nav-item .badge{margin-left:auto;font-size:10px;background:#ef4444;color:#fff;padding:1px 6px;border-radius:8px;min-width:18px;text-align:center;font-weight:600}
+
+  /* top */
+  .top{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:20}
+  .top-title{color:var(--text-2);font-size:15px}
+  .top-right{display:flex;align-items:center;gap:18px}
+  .bell{position:relative;width:36px;height:36px;border-radius:10px;background:#f3f5f7;display:grid;place-items:center;cursor:pointer;font-size:16px}
+  .bell:hover{background:#e8ebee}
+  .bell.has-unread::after{content:"";position:absolute;top:7px;right:7px;width:8px;height:8px;background:#ef4444;border-radius:50%;border:2px solid #fff;animation:pulse 1.8s ease-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.6)}70%{box-shadow:0 0 0 8px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
+  @keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.25);opacity:.85}}
+  .me{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2)}
+  .me .av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;display:grid;place-items:center;font-weight:600}
+
+  /* main */
+  .main{padding:24px 28px 60px;max-width:920px;margin:0 auto;width:100%}
+  .page-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+  .page-title{font-size:24px;font-weight:700;margin:0 0 4px}
+  .page-sub{color:var(--text-3);font-size:13px}
+
+  /* tabs: 合并后只剩 2 个 */
+  .tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:18px;align-items:center}
+  .tab{padding:10px 14px;font-size:13px;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tab.active{color:var(--text);font-weight:600;border-bottom-color:#1a1d24}
+  .tab .count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;font-size:11px;background:#ef4444;color:#fff;border-radius:9px;margin-left:6px;font-weight:600}
+  .btn-readall{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;font-size:12px;color:var(--text-2);background:#fff;border:1px solid var(--line-2)}
+  .btn-readall:hover{background:#f3f5f7;color:var(--text)}
+
+  /* sec divider */
+  .sec-div{display:flex;align-items:center;gap:12px;margin:10px 0 10px;padding:0 2px}
+  .sec-div-line{flex:1;height:1px;background:var(--line)}
+  .sec-div-label{font-size:12px;color:var(--text-3);letter-spacing:.08em;font-weight:500}
+  .sec-div.unread .sec-div-label{color:#ef4444;font-weight:600}
+  .sec-div.unread .sec-div-line{background:linear-gradient(90deg,transparent,#fecaca,transparent)}
+
+  /* ===== Topic 聚合卡 ===== */
+  .tcard{background:#fff;border:1px solid var(--line);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s,border-color .15s,background .3s;cursor:pointer}
+  .tcard:hover{box-shadow:var(--shadow);border-color:var(--line-2)}
+  .tcard.unread{background:var(--unread-bg);border-color:#dbeafe;position:relative}
+  .tcard.unread::before{content:"";position:absolute;left:-1px;top:16px;bottom:16px;width:3px;background:#2563eb;border-radius:3px}
+
+  .tcard-head{padding:16px 20px;display:flex;align-items:flex-start;gap:14px;cursor:pointer;user-select:none}
+  .t-ico{width:36px;height:36px;border-radius:10px;background:#f3f5f7;display:grid;place-items:center;font-size:16px;flex-shrink:0}
+  .tcard.unread .t-ico{background:#fff;border:1px solid #dbeafe}
+  .t-main{flex:1;min-width:0}
+  .t-title-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+  .t-title{font-size:15px;font-weight:600;color:var(--text);margin:0;flex:1;min-width:0;word-break:break-all}
+  .t-time{font-size:12px;color:var(--text-3);white-space:nowrap;flex-shrink:0}
+  .unread-dot{width:8px;height:8px;background:#ef4444;border-radius:50%;flex-shrink:0}
+
+  .t-meta{font-size:12px;color:var(--text-3);margin-bottom:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .t-meta .sep{width:3px;height:3px;background:#c8ccd3;border-radius:50%}
+  .t-tag{display:inline-block;background:#eff4ff;color:#2563eb;font-size:11px;padding:1px 7px;border-radius:6px;font-weight:500}
+
+  /* 聚合统计行（@3 / 评论4 / 赞8 / 回复2） */
+  .t-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+  .stat-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:500;background:#f3f5f7;color:var(--text-2)}
+  .stat-chip .c{font-weight:700}
+  .stat-chip .plus{font-weight:700;margin-right:1px}
+  .stat-chip .total{color:var(--text-3);font-weight:500;font-size:11px;margin-left:1px;opacity:.85}
+  .stat-chip .slash{color:var(--text-3);font-weight:400;margin:0 1px;opacity:.6}
+  .tcard.unread .stat-chip.at{background:var(--at-bg);color:var(--at)}
+  .tcard.unread .stat-chip.comment{background:var(--comment-bg);color:var(--comment)}
+  .tcard.unread .stat-chip.reply{background:var(--reply-bg);color:var(--reply)}
+  .tcard.unread .stat-chip.like{background:var(--like-bg);color:var(--like)}
+
+  /* 展开箭头 */
+  .t-arrow{display:none !important}
+  .tcard.expanded .t-arrow{transform:rotate(180deg)}
+
+  /* 参与者头像预览 */
+  .t-parts{display:none} /* v7: 根据需求隐藏"等 N 人参与"行 */
+  .t-parts .avs{display:inline-flex}
+  .t-parts .avs .av{width:22px;height:22px;border-radius:50%;color:#fff;font-size:10px;font-weight:600;display:grid;place-items:center;margin-left:-5px;border:1.5px solid #fff}
+  .t-parts .avs .av:first-child{margin-left:0}
+
+  /* 最新一条 event 预览（在卡头显示，让用户不展开也能看到关键信息） */
+  .t-latest{display:none} /* v8: 改为用 .t-newstream 展示主干路新增 */
+
+  /* v8 新增：列表卡主干路新增评论展示 — v9 隐藏 */
+  .t-newstream{display:none}
+
+  /* v9: 标题旁的 NEW 徽标（只在未读卡出现） */
+  .tcard.unread .t-title::after{
+    content:"● NEW";
+    display:inline-block;
+    background:#ef4444;color:#fff;
+    font-size:10px;font-weight:700;
+    padding:2px 7px 2px 6px;border-radius:5px;
+    letter-spacing:.03em;
+    margin-left:8px;
+    vertical-align:3px;
+    animation:glow 2s ease-in-out infinite;
+  }
+
+  /* ===== v9 增强：新增 vs 累计 双维度 ===== */
+  /* Topic 详情页的"讨论总览带" */
+  .td-overview{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:14px;position:relative;overflow:hidden}
+  .td-overview::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#1a1d24,#475569);border-radius:3px 0 0 3px}
+  .td-overview-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .td-overview-head .big{font-size:22px;font-weight:700;letter-spacing:-.5px}
+  .td-overview-head .big .total-n{color:var(--text)}
+  .td-overview-head .label{font-size:13px;color:var(--text-2)}
+  .td-overview-head .delta{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;background:#fef2f2;color:#ef4444;font-size:12px;font-weight:600;border-radius:999px;border:1px solid #fecaca}
+  .td-overview-head .delta::before{content:"●";font-size:8px}
+  .td-overview-head .days{color:var(--text-3);font-size:12px;margin-left:auto}
+  /* 双行 chip（详情页用，上增量下累计） */
+  .td-overview-chips{display:flex;gap:10px;flex-wrap:wrap}
+  .oc{display:inline-flex;align-items:stretch;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#fff;min-width:0}
+  .oc .kind{padding:8px 12px;display:flex;flex-direction:column;justify-content:center;gap:2px;font-size:11px;color:var(--text-3);min-width:66px;background:#fafbfc;border-right:1px solid var(--line)}
+  .oc .kind b{color:var(--text);font-size:13px;font-weight:600}
+  .oc .num{padding:8px 14px;display:flex;flex-direction:column;justify-content:center;gap:1px;text-align:right}
+  .oc .num .new-n{font-size:15px;font-weight:700;line-height:1.1}
+  .oc .num .old-n{font-size:11px;color:var(--text-3);line-height:1.2}
+  .oc.at .new-n{color:var(--at)}
+  .oc.comment .new-n{color:var(--comment)}
+  .oc.reply .new-n{color:var(--reply)}
+  .oc.like .new-n{color:var(--like)}
+
+  /* Event 行头部的"累计讨论数" */
+  .ev-row-head .ev-total{font-size:11px;color:var(--text-3);font-weight:500;white-space:nowrap;flex-shrink:0;margin-right:4px}
+  .ev-row-head .ev-total::before{content:"·";margin:0 6px;color:#c8ccd3}
+  .t-newstream-group{padding:8px 0}
+  .t-newstream-group + .t-newstream-group{border-top:1px dashed #dbeafe}
+  .t-newstream-gh{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:12px;font-weight:600}
+  .t-newstream-gh .badge-new{display:inline-flex;align-items:center;gap:3px;background:#ef4444;color:#fff;font-size:10px;padding:1px 6px 1px 5px;border-radius:5px;font-weight:700;letter-spacing:.02em;animation:glow 2s ease-in-out infinite}
+  .t-newstream-gh .badge-new::before{content:"●";font-size:7px}
+  .t-newstream-gh .kind-at{color:var(--at)}
+  .t-newstream-gh .kind-reply{color:var(--reply)}
+  .t-newstream-gh .kind-comment{color:var(--comment)}
+  .t-newstream-gh .kind-like{color:var(--like)}
+  .t-newstream-gh .cnt{color:var(--text-3);font-weight:500;font-size:11px}
+
+  .t-newstream .line{display:flex;gap:8px;padding:5px 0}
+  .t-newstream .line .lav{width:22px;height:22px;border-radius:50%;color:#fff;font-size:10px;font-weight:600;display:grid;place-items:center;flex-shrink:0;margin-top:2px}
+  .t-newstream .line .lb{flex:1;min-width:0;font-size:12px;line-height:1.55}
+  .t-newstream .line .lh{color:var(--text-3);font-size:11px;margin-bottom:1px}
+  .t-newstream .line .lh b{color:var(--text);font-weight:600;font-size:12px;margin-right:4px}
+  .t-newstream .line .lt{color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .t-newstream .line .lt .mention{color:#2563eb;font-weight:500}
+  .t-newstream .line.thread::before{content:"";width:2px;background:#dbeafe;align-self:stretch;margin-left:10px}
+  /* "仅主干路 · 共 N 条 · 点击进入全部" 提示 */
+  .t-newstream-more{padding:6px 2px 0;font-size:11px;color:var(--text-3);text-align:right}
+  .t-newstream-more:hover{color:#2563eb}
+
+  /* 分组头部（详情页）右侧追加最新摘要 —— v8: 隐藏 */
+  .td-newgroup-h .latest-hint{display:none}
+  .ev-new-box-h .latest-inline{display:none} /* v8: 删除右侧预览 */
+
+  /* v8: 新增符号 ·  替代"最新"的位置，加在类型文字前面 */
+  .new-badge-s{display:inline-flex;align-items:center;gap:3px;background:#ef4444;color:#fff;font-size:10px;padding:1px 7px 1px 6px;border-radius:5px;font-weight:700;letter-spacing:.02em;margin-right:4px;animation:glow 2s ease-in-out infinite}
+  .new-badge-s::before{content:"●";font-size:7px}
+  .av-c1{background:#2563eb}.av-c2{background:#7c3aed}.av-c3{background:#0d9488}
+  .av-c4{background:#d97706}.av-c5{background:#dc2626}.av-c6{background:#475569}
+  .av-c7{background:#0891b2}.av-c8{background:#be185d}
+
+  /* ===== 展开区域：子 events ===== */
+  .tcard-body{max-height:0;overflow:hidden;transition:max-height .35s ease;border-top:0 solid transparent}
+  .tcard.expanded .tcard-body{max-height:2400px;border-top:1px solid var(--line)}
+  .tcard.unread.expanded .tcard-body{border-top-color:#dbeafe}
+
+  /* events list */
+  .ev-group{padding:14px 20px 4px;border-top:1px dashed var(--line);background:rgba(255,255,255,.55)}
+  .ev-group:first-child{border-top:0}
+  .tcard.unread .ev-group{background:rgba(255,255,255,.7)}
+  .ev-group-h{font-size:12px;color:var(--text-3);letter-spacing:.06em;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .ev-group-h .pill{background:#fff;color:var(--text-2);font-size:11px;padding:1px 7px;border-radius:6px;font-weight:500;border:1px solid var(--line)}
+  .ev-group-h.at{color:var(--at)}
+  .ev-group-h.comment{color:var(--comment)}
+  .ev-group-h.reply{color:var(--reply)}
+  .ev-group-h.like{color:var(--like)}
+
+  .ev{display:flex;gap:10px;padding:8px 0;border-top:1px dotted #e8ebee}
+  .ev:first-of-type{border-top:0}
+  .ev .ev-av{width:26px;height:26px;border-radius:50%;color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;flex-shrink:0;margin-top:2px}
+  .ev-body{flex:1;min-width:0}
+  .ev-head{font-size:12px;color:var(--text-3);margin-bottom:2px}
+  .ev-head b{color:var(--text);font-weight:600}
+  .ev-text{font-size:13px;color:var(--text);line-height:1.6}
+  .ev-text .mention{color:#2563eb;font-weight:500}
+  .ev-time{font-size:11px;color:var(--text-3);margin-left:4px}
+
+  /* 点赞组：头像密集展示 */
+  .like-grid{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0 10px}
+  .like-grid .lc{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2);background:#fff;padding:4px 10px 4px 4px;border-radius:999px;border:1px solid var(--line)}
+  .like-grid .lc .av{width:20px;height:20px;border-radius:50%;color:#fff;font-size:10px;font-weight:600;display:grid;place-items:center}
+
+  /* topic 操作按钮 */
+  .ev-actions{padding:12px 20px 16px;display:flex;gap:8px;border-top:1px solid var(--line);background:rgba(255,255,255,.6)}
+  .tcard.unread .ev-actions{background:rgba(255,255,255,.8);border-top-color:#dbeafe}
+  .ev-actions .bt{padding:7px 14px;border-radius:999px;font-size:12px;font-weight:500;background:#1a1d24;color:#fff}
+  .ev-actions .bt.ghost{background:#fff;color:var(--text-2);border:1px solid var(--line-2)}
+  .ev-actions .bt:hover{opacity:.88}
+
+  /* toast */
+  .toast{position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(40px);background:#1a1d24;color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transition:all .25s;z-index:99}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* legend */
+  .legend{background:#fff;border:1px dashed var(--line-2);border-radius:var(--radius);padding:14px 18px;margin-top:24px;font-size:12px;color:var(--text-2);line-height:1.75}
+  .legend b{color:var(--text)}
+  .legend code{background:#f3f5f7;padding:1px 6px;border-radius:4px;font-size:11px;color:var(--text)}
+
+  /* ============ Topic 详情页 ============ */
+  .hidden{display:none!important}
+  .back{display:inline-flex;align-items:center;gap:6px;color:var(--text-2);font-size:12px;margin-bottom:14px;cursor:pointer}
+  .back:hover{color:var(--text)}
+
+  /* 顶部 Topic 头部 */
+  .td-head{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 26px;margin-bottom:14px}
+  .td-tags{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+  .td-tag{display:inline-block;background:#eff4ff;color:#2563eb;font-size:11px;padding:2px 8px;border-radius:6px;font-weight:500}
+  .td-title{font-size:20px;font-weight:700;margin:0 0 6px}
+  .td-meta{font-size:12px;color:var(--text-3);margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap}
+  .td-body{font-size:14px;color:var(--text-2);line-height:1.75;background:#f8fafc;border-left:3px solid #1a1d24;padding:12px 14px;border-radius:6px}
+
+  /* 新动态 summary banner —— 进入 topic 后仍保留 */
+  .new-banner{background:linear-gradient(135deg,#eff4ff 0%,#fff1f2 100%);border:1px solid #dbeafe;border-radius:var(--radius);padding:14px 20px;margin-bottom:14px;display:flex;align-items:center;gap:16px}
+  .new-banner .ic{width:36px;height:36px;border-radius:10px;background:#fff;display:grid;place-items:center;font-size:18px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .new-banner .txt{flex:1;font-size:13px;color:var(--text);line-height:1.6}
+  .new-banner .txt b{color:#2563eb}
+  .new-banner .stats-line{margin-top:4px;display:flex;gap:8px;flex-wrap:wrap}
+  .new-banner .sc{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;background:#fff}
+  .sc.at{color:var(--at)}.sc.comment{color:var(--comment)}.sc.reply{color:var(--reply)}.sc.like{color:var(--like)}
+  .new-banner button.scroll-new{padding:7px 14px;border-radius:999px;font-size:12px;background:#1a1d24;color:#fff;font-weight:500}
+
+  /* 新增事件分组卡（跟列表卡样式一致，但强调"新"） */
+  .td-newgroup{background:#fff;border:1px solid #dbeafe;border-radius:var(--radius);padding:18px 22px;margin-bottom:14px;position:relative}
+  .td-newgroup::before{content:"";position:absolute;left:-1px;top:16px;bottom:16px;width:3px;background:linear-gradient(180deg,#2563eb,#7c3aed);border-radius:3px}
+  .td-newgroup-h{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-weight:600;font-size:14px}
+  .td-newgroup-h .flag{background:#ef4444;color:#fff;font-size:10px;padding:1px 7px;border-radius:6px;letter-spacing:.05em;font-weight:600;animation:glow 2s ease-in-out infinite}
+  @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 4px rgba(239,68,68,0)}}
+
+  /* Topic 完整评论流（历史 + 新） */
+  .td-flow{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 26px}
+  .td-flow-h{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+  .td-flow-h h3{margin:0;font-size:15px;font-weight:600}
+  .td-flow-h .cnt{color:var(--text-3);font-size:12px;margin-left:4px}
+  .td-flow-h .filter{margin-left:auto;display:flex;gap:4px;background:#f3f5f7;padding:3px;border-radius:999px}
+  .td-flow-h .filter .f{padding:4px 12px;border-radius:999px;font-size:12px;color:var(--text-2);cursor:pointer}
+  .td-flow-h .filter .f.active{background:#fff;color:var(--text);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+
+  .td-item{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--line);position:relative}
+  .td-item:first-of-type{border-top:0;padding-top:0}
+  .td-item.new-item{background:linear-gradient(90deg,#eff4ff 0%,transparent 80%);margin:0 -10px;padding-left:14px;padding-right:10px;border-radius:10px;border-top:1px solid transparent}
+  .td-item.new-item::before{content:"NEW";position:absolute;top:14px;right:10px;background:#ef4444;color:#fff;font-size:9px;padding:1px 6px;border-radius:5px;font-weight:700;letter-spacing:.08em}
+  .td-item.old-item{opacity:.72}
+  .td-item.old-item:hover{opacity:1}
+  .td-item.me-item .tdi-b{background:#fffbeb;border-left:2px solid #f59e0b;padding:8px 12px;border-radius:8px}
+  .td-item.me-item .tdi-h b{color:#b45309}
+  .td-item .tdi-av{width:34px;height:34px;border-radius:50%;color:#fff;font-size:12px;font-weight:600;display:grid;place-items:center;flex-shrink:0}
+  .td-item .tdi-b{flex:1;min-width:0}
+  .td-item .tdi-h{display:flex;align-items:center;gap:10px;margin-bottom:3px;font-size:13px}
+  .td-item .tdi-h b{font-weight:600;color:var(--text)}
+  .td-item .tdi-time{font-size:11px;color:var(--text-3)}
+  .td-item .tdi-text{font-size:13px;color:var(--text);line-height:1.65}
+  .td-item .tdi-text .mention{color:#2563eb;font-weight:500}
+  .td-item .tdi-meta{margin-top:6px;font-size:12px;color:var(--text-3);display:flex;gap:12px}
+  .td-item .tdi-meta .like-me{color:var(--like);font-weight:500}
+  .td-item .tdi-meta .reply-me{color:var(--reply);font-weight:500}
+
+  /* 折叠旧评论 */
+  .old-toggle{text-align:center;padding:10px;font-size:12px;color:var(--text-3);cursor:pointer;border-top:1px dashed var(--line);margin-top:6px}
+  .old-toggle:hover{color:var(--text)}
+  .old-list.collapsed{display:none}
+
+  /* 新动态导航点 */
+  .jump-dot{display:inline-block;width:6px;height:6px;background:#ef4444;border-radius:50%;margin-right:4px;vertical-align:2px;animation:pulse 1.8s ease-out infinite}
+
+  /* ====== v5 新增 ====== */
+  /* 一句话 NEW 总览 */
+  .td-newline{font-size:13px;color:var(--text-2);padding:0 4px;margin-bottom:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .td-newline b{color:var(--text);font-weight:700}
+  .td-newline .dot-red{display:inline-block;width:8px;height:8px;background:#ef4444;border-radius:50%;animation:pulse 1.8s ease-out infinite;margin-right:2px}
+  .td-newline .sc{display:inline-flex;align-items:center;gap:3px;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:600;margin-left:2px;background:#fff;border:1px solid var(--line)}
+  .td-newline .sc.at{color:var(--at);border-color:#fecaca}
+  .td-newline .sc.reply{color:var(--reply);border-color:#bfdbfe}
+  .td-newline .sc.comment{color:var(--comment);border-color:#e9d5ff}
+  .td-newline .sc.like{color:var(--like);border-color:#fed7aa}
+
+  /* 底部历史折叠 */
+  .td-history{margin-top:14px}
+  .hist-toggle{width:100%;background:#fff;border:1px dashed var(--line-2);border-radius:var(--radius);padding:12px 16px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);font-weight:500;cursor:pointer;transition:all .15s}
+  .hist-toggle:hover{background:#f3f5f7;color:var(--text);border-color:var(--text-3)}
+  .hist-toggle .ht-icon{transition:transform .25s;display:inline-block}
+  .hist-toggle.open .ht-icon{transform:rotate(180deg)}
+  .hist-list{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;max-height:0;overflow:hidden;transition:max-height .35s ease;opacity:.88}
+  .hist-list.collapsed{max-height:0;padding:0 22px;border:0;margin-top:0;opacity:0}
+  .hist-list:not(.collapsed){max-height:1500px}
+  .hist-item{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+  .hist-item:first-child{border-top:0;padding-top:0}
+  .hist-item .hi-av{width:30px;height:30px;border-radius:50%;color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;flex-shrink:0}
+  .hist-item .hi-b{flex:1;min-width:0}
+  .hist-item .hi-h{font-size:12px;color:var(--text-3);margin-bottom:2px}
+  .hist-item .hi-h b{color:var(--text);font-weight:600;font-size:13px;margin-right:6px}
+  .hist-item .hi-text{font-size:13px;color:var(--text);line-height:1.65}
+  .hist-item.is-me .hi-b{background:#fffbeb;border-left:2px solid #f59e0b;padding:8px 12px;border-radius:8px}
+  .hist-item.is-me .hi-h b{color:#b45309}
+
+  /* ====== v6 新增：Event 折叠时间线 ====== */
+  .td-subscribe{float:right;background:#fff;border:1px solid var(--line-2);border-radius:8px;padding:6px 12px;font-size:12px;color:var(--text-2);cursor:pointer}
+  .td-subscribe:hover{background:#f3f5f7;color:var(--text)}
+
+  .ev-wrap{margin-top:14px}
+  .ev-row{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;transition:border-color .15s,box-shadow .15s}
+  .ev-row:hover{box-shadow:var(--shadow)}
+  .ev-row.has-new{border-color:#2563eb;border-width:2px;box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+  .ev-row-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none}
+  .ev-row-head .caret{font-size:12px;color:var(--text-3);transition:transform .25s;flex-shrink:0;width:12px}
+  .ev-row.open .ev-row-head .caret{transform:rotate(90deg)}
+  .ev-row-head .seq{display:inline-block;padding:2px 9px;background:#f3f5f7;color:var(--text-2);font-size:12px;font-weight:600;border-radius:6px;font-family:'SF Mono',Menlo,monospace;flex-shrink:0}
+  .ev-row.has-new .ev-row-head .seq{background:#eff4ff;color:#2563eb}
+  .ev-row-head .ev-title{font-size:15px;font-weight:600;color:var(--text);flex:1;min-width:0;word-break:break-all}
+  .ev-row-head .ev-time{font-size:12px;color:var(--text-3);white-space:nowrap;flex-shrink:0}
+  .ev-row-head .new-flag{background:#ef4444;color:#fff;font-size:10px;padding:1px 6px;border-radius:5px;font-weight:700;letter-spacing:.05em;animation:glow 2s ease-in-out infinite;flex-shrink:0}
+  .ev-row-head .new-count{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;background:#eff4ff;color:#2563eb;font-size:11px;font-weight:600;flex-shrink:0}
+  .ev-row-head .new-count .mini-dots{display:inline-flex}
+  .ev-row-head .new-count .mini-dots .mav{width:14px;height:14px;border-radius:50%;color:#fff;font-size:8px;font-weight:600;display:grid;place-items:center;margin-left:-3px;border:1px solid #fff}
+  .ev-row-head .new-count .mini-dots .mav:first-child{margin-left:0}
+
+  .ev-row-body{max-height:0;overflow:hidden;transition:max-height .35s ease;border-top:0 solid transparent}
+  .ev-row.open .ev-row-body{max-height:3000px;border-top:1px solid var(--line)}
+  .ev-row.has-new.open .ev-row-body{border-top-color:#dbeafe}
+  .ev-content{padding:16px 22px;background:#fafbfc;font-size:13px;color:var(--text-2);line-height:1.75;border-bottom:1px solid var(--line)}
+  .ev-content h4{margin:0 0 8px;font-size:13px;color:var(--text-3);font-weight:600;letter-spacing:.05em}
+
+  /* 该 Event 下的评论流 */
+  .ev-flow{padding:14px 22px 18px}
+  .ev-flow-h{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text-3)}
+  .ev-flow-h b{color:var(--text);font-weight:600}
+  .ev-flow-h .new-tag{background:#fff1f2;color:#ef4444;font-size:11px;padding:1px 7px;border-radius:6px;font-weight:600;margin-left:4px}
+
+  /* NEW 分组（每个 Event 下方，关注"新增了什么"） —— v9: 弱化视觉，变成普通分组 */
+  .ev-new-box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+  .ev-new-box-h{display:flex;align-items:center;gap:6px;margin-bottom:10px;font-size:12px;font-weight:600}
+  .ev-new-box-h .flag-s{background:#ef4444;color:#fff;font-size:10px;padding:1px 6px;border-radius:4px;font-weight:700;letter-spacing:.05em}
+  .ev-new-box-h .tag-at{color:var(--at)}
+  .ev-new-box-h .tag-reply{color:var(--reply)}
+  .ev-new-box-h .tag-comment{color:var(--comment)}
+  .ev-new-box-h .tag-like{color:var(--like)}
+  .ev-new-box-h .latest-inline{margin-left:auto;color:var(--text-3);font-weight:400;font-size:11px;max-width:55%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ev-new-box-h .latest-inline b{color:var(--text);font-weight:500}
+
+  .ev-new-box .mini{display:flex;gap:10px;padding:6px 0 6px;border-top:1px dotted var(--line-2)}
+  .ev-new-box .mini:first-of-type{border-top:0}
+  .ev-new-box .mini .m-av{width:26px;height:26px;border-radius:50%;color:#fff;font-size:10px;font-weight:600;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
+  .ev-new-box .mini .m-b{flex:1;min-width:0}
+  .ev-new-box .mini .m-h{font-size:12px;color:var(--text-3);margin-bottom:1px}
+  .ev-new-box .mini .m-h b{color:var(--text);font-weight:600;font-size:12px}
+  .ev-new-box .mini .m-t{font-size:13px;color:var(--text);line-height:1.6}
+  .ev-new-box .mini .m-t .mention{color:#2563eb;font-weight:500}
+
+  /* 已读评论（老评论）列表 */
+  .old-line{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--line);opacity:.82}
+  .old-line:first-of-type{border-top:0;padding-top:6px}
+  .old-line:hover{opacity:1}
+  .old-line.is-me{background:#fffbeb;border-left:2px solid #f59e0b;padding-left:10px;margin:6px 0;border-radius:6px;border-top-color:transparent;opacity:1}
+  .old-line .ol-av{width:26px;height:26px;border-radius:50%;color:#fff;font-size:10px;font-weight:600;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
+  .old-line .ol-b{flex:1;min-width:0}
+  .old-line .ol-h{font-size:12px;color:var(--text-3);margin-bottom:2px}
+  .old-line .ol-h b{color:var(--text);font-weight:600;font-size:12px;margin-right:6px}
+  .old-line.is-me .ol-h b{color:#b45309}
+  .old-line .ol-t{font-size:13px;color:var(--text);line-height:1.6}
+
+  /* Topic 总览 summary 线（类似截图) */
+  .td-summary{margin:6px 0 10px;font-size:12px;color:var(--text-2);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .td-summary .dot{width:3px;height:3px;background:#c8ccd3;border-radius:50%;display:inline-block}
+
+  /* ===== v9 增强：权限类通知样式 ===== */
+  .tcard.perm{border-color:#fed7aa;background:#fffaf5;cursor:default}
+  .tcard.perm.danger{border-color:#fecaca;background:#fef7f7}
+  .tcard.perm.warn{border-color:#fed7aa;background:#fffbeb}
+  .tcard.perm.action{border-color:#bfdbfe;background:#f7faff}
+
+  .tcard.perm::before{content:none}
+  .tcard.perm .t-ico{background:#fff;border:1px solid var(--line)}
+  .tcard.perm.danger .t-ico{background:#fef2f2;color:#dc2626;border-color:#fecaca}
+  .tcard.perm.warn .t-ico{background:#fff7ed;color:#ea580c;border-color:#fed7aa}
+  .tcard.perm.action .t-ico{background:#eff4ff;color:#2563eb;border-color:#bfdbfe}
+
+  .tcard.perm .t-title{font-size:15px}
+  .tcard.perm .t-title::after{content:none !important}
+  .tcard.perm .t-meta{margin-bottom:6px}
+
+  /* 权限通知正文（替代 t-stats / t-newstream） */
+  .perm-msg{font-size:13px;color:var(--text-2);line-height:1.65;padding:8px 12px;background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:8px;margin-top:8px}
+  .perm-msg b{color:var(--text)}
+  .perm-msg .by{color:var(--text-3);font-size:12px;margin-top:4px;display:block}
+  .perm-msg .reason{color:var(--text-3);font-size:12px;margin-top:4px;display:block;font-style:italic}
+
+  /* 权限通知操作按钮 */
+  .perm-actions{margin-top:10px;display:flex;gap:8px;align-items:center}
+  .perm-actions .pbtn{padding:7px 16px;border-radius:999px;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
+  .perm-actions .pbtn.primary{background:#1a1d24;color:#fff;border:1px solid #1a1d24}
+  .perm-actions .pbtn.primary:hover{background:#000}
+  .perm-actions .pbtn.ghost{background:#fff;color:var(--text-2);border:1px solid var(--line-2)}
+  .perm-actions .pbtn.ghost:hover{background:#f3f5f7;color:var(--text)}
+  .perm-actions .pbtn.danger{background:#fff;color:#dc2626;border:1px solid #fecaca}
+  .perm-actions .pbtn.danger:hover{background:#fef2f2}
+  .perm-actions .pbtn:disabled{opacity:.5;cursor:not-allowed;background:#f3f5f7;color:var(--text-3);border-color:var(--line)}
+  .perm-actions .pbtn-text{padding:6px 0;color:var(--text-3);font-size:12px}
+
+  /* 处理后的状态展示 */
+  .perm-status{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#fff;border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--text-3);font-weight:500}
+  .perm-status.ok{color:#16a34a;border-color:#a7f3d0;background:#ecfdf5}
+  .perm-status.no{color:#dc2626;border-color:#fecaca;background:#fef2f2}
+
+  /* 顶部 perm 图标 */
+  .perm-flag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:5px;letter-spacing:.03em}
+  .perm-flag.danger{background:#fef2f2;color:#dc2626}
+  .perm-flag.warn{background:#fff7ed;color:#ea580c}
+  .perm-flag.action{background:#eff4ff;color:#2563eb}
+
+  /* ===== v9.3 内嵌权限行（融合到内容 topic 卡内） ===== */
+  .perm-row{margin-top:10px;padding:10px 12px;border-radius:10px;display:flex;align-items:flex-start;gap:10px;font-size:12px;line-height:1.55}
+  .perm-row.action{background:#eff4ff;border:1px solid #bfdbfe}
+  .perm-row.warn{background:#fff7ed;border:1px solid #fed7aa}
+  .perm-row.danger{background:#fef2f2;border:1px solid #fecaca}
+  .perm-row .pi{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;font-size:12px;flex-shrink:0;background:#fff;border:1px solid var(--line)}
+  .perm-row.action .pi{color:#2563eb;border-color:#bfdbfe}
+  .perm-row.warn .pi{color:#ea580c;border-color:#fed7aa}
+  .perm-row.danger .pi{color:#dc2626;border-color:#fecaca}
+  .perm-row .pb{flex:1;min-width:0}
+  .perm-row .ph{font-size:12px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px}
+  .perm-row .ph .ptag{display:inline-block;padding:1px 7px;font-size:10px;font-weight:600;border-radius:4px;letter-spacing:.02em}
+  .perm-row.action .ph .ptag{background:#fff;color:#2563eb;border:1px solid #bfdbfe}
+  .perm-row.warn .ph .ptag{background:#fff;color:#ea580c;border:1px solid #fed7aa}
+  .perm-row.danger .ph .ptag{background:#fff;color:#dc2626;border:1px solid #fecaca}
+  .perm-row .ph .ptime{color:var(--text-3);font-size:11px;margin-left:auto}
+  .perm-row .pdesc{color:var(--text);font-size:12px}
+  .perm-row .pdesc b{color:var(--text);font-weight:600}
+  .perm-row .preason{color:var(--text-3);font-size:11px;margin-top:3px;font-style:italic}
+  .perm-row .pacts{margin-top:8px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .perm-row .pacts button{padding:5px 12px;border-radius:999px;font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;border:1px solid transparent}
+  .perm-row .pacts .yes{background:#1a1d24;color:#fff;border-color:#1a1d24}
+  .perm-row .pacts .yes:hover{background:#000}
+  .perm-row .pacts .no{background:#fff;color:#dc2626;border-color:#fecaca}
+  .perm-row .pacts .no:hover{background:#fef2f2}
+  .perm-row .pacts .ghost{background:#fff;color:var(--text-2);border-color:var(--line-2)}
+  .perm-row .pacts .ghost:hover{background:#fafbfc;color:var(--text)}
+  .perm-row .pacts .pstatus{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;background:#fff;border:1px solid var(--line);color:var(--text-3)}
+  .perm-row .pacts .pstatus.ok{color:#16a34a;border-color:#a7f3d0;background:#ecfdf5}
+  .perm-row .pacts .pstatus.no{color:#dc2626;border-color:#fecaca;background:#fef2f2}
+  .perm-row .pacts .pnote{color:var(--text-3);font-size:11px;margin-left:2px}
+
+  /* 让 perm-row 不响应 topic 卡的整体点击 */
+  .perm-row{cursor:default}
+  /* v9.4: 权限信息已挪到独立 tab，互动 tab 内的内嵌权限行隐藏 */
+  .tab-panel[data-panel="relate"] .perm-row{display:none}
+  /* v10: 但「目标关联被取消」类提示仍要在互动 tab 里展示 */
+  .tab-panel[data-panel="relate"] .perm-row.unlink-notice{display:flex}
+
+  /* v9.4: "内容有更新"红色横幅（Topic 互动卡右上角） */
+  .tcard.unread .update-banner{
+    position:absolute;
+    top:14px;
+    right:14px;
+    background:#ef4444;
+    color:#fff;
+    font-size:10px;
+    font-weight:700;
+    padding:3px 9px 3px 8px;
+    border-radius:5px;
+    letter-spacing:.03em;
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+    animation:glow 2s ease-in-out infinite;
+    z-index:5;
+  }
+  .tcard.unread .update-banner::before{content:"●";font-size:7px}
+  /* tcard 需要 relative 定位才能放横幅 */
+  .tcard{position:relative}
+
+  /* ===== v9.4: Topic 权限 Tab 样式 ===== */
+  .perm-section{margin-bottom:18px}
+  .perm-section-h{display:flex;align-items:center;gap:8px;margin:8px 0 10px;padding:0 4px}
+  .perm-section-h .ph-num{display:inline-block;background:#1a1d24;color:#fff;font-size:11px;font-weight:700;padding:1px 7px;border-radius:5px}
+  .perm-section-h h3{margin:0;font-size:15px;font-weight:600}
+  .perm-section-h .desc{color:var(--text-3);font-size:12px;margin-left:4px}
+
+  /* 权限通知卡（独立 tab 用） */
+  .pncard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px 14px 18px;margin-bottom:10px;display:flex;gap:12px;position:relative;transition:all .15s}
+  .pncard::before{content:"";position:absolute;left:-1px;top:14px;bottom:14px;width:3px;border-radius:3px}
+  .pncard.action{background:#f7faff;border-color:#dbeafe}
+  .pncard.action::before{background:#2563eb}
+  .pncard.applying{background:#fefce8;border-color:#fde68a}
+  .pncard.applying::before{background:#eab308}
+  .pncard.approved{background:#ecfdf5;border-color:#a7f3d0}
+  .pncard.approved::before{background:#16a34a}
+  .pncard.rejected{background:#fef2f2;border-color:#fecaca}
+  .pncard.rejected::before{background:#dc2626}
+  .pncard.removed{background:#fff7ed;border-color:#fed7aa}
+  .pncard.removed::before{background:#ea580c}
+
+  .pn-av{width:36px;height:36px;border-radius:50%;color:#fff;font-size:13px;font-weight:600;display:grid;place-items:center;flex-shrink:0;margin-top:2px}
+  .pn-av.sys{background:linear-gradient(135deg,#475569,#1a1d24);font-size:14px}
+  .pn-body{flex:1;min-width:0}
+  .pn-h{font-size:13px;color:var(--text);line-height:1.6;margin-bottom:6px}
+  .pn-h b{font-weight:600}
+  .pn-h .topic-link{display:inline-flex;align-items:center;gap:4px;color:#2563eb;font-weight:500;background:#eff4ff;padding:2px 8px;border-radius:6px;margin:0 2px;font-size:12px}
+  .pn-h .topic-link::before{content:"📌";font-size:11px;filter:grayscale(0)}
+  .pn-h .topic-id{display:inline-block;color:var(--text-3);font-size:12px;background:#f3f5f7;padding:1px 6px;border-radius:4px;margin-left:4px;font-family:'SF Mono',Menlo,monospace}
+  .pn-h .reason{color:var(--text-3);font-size:12px;margin-top:4px;display:block;font-style:italic}
+  .pn-time{font-size:11px;color:var(--text-3);position:absolute;top:16px;right:20px;white-space:nowrap}
+
+  .pn-actions{margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .pn-btn{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid transparent;transition:all .15s}
+  .pn-btn.primary{background:#2563eb;color:#fff;border-color:#2563eb}
+  .pn-btn.primary:hover{background:#1d4ed8}
+  .pn-btn.dark{background:#1a1d24;color:#fff;border-color:#1a1d24}
+  .pn-btn.dark:hover{background:#000}
+  .pn-btn.no{background:#fff;color:#dc2626;border-color:#fecaca}
+  .pn-btn.no:hover{background:#fef2f2}
+  .pn-btn.ghost{background:#fff;color:var(--text-2);border-color:var(--line-2)}
+  .pn-btn.ghost:hover{background:#fafbfc;color:var(--text)}
+  .pn-status{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:500;background:#fff;border:1px solid var(--line);color:var(--text-3)}
+  .pn-status.applying{color:#a16207;border-color:#fde68a;background:#fefce8}
+  .pn-status.ok{color:#16a34a;border-color:#a7f3d0;background:#ecfdf5}
+  .pn-status.no{color:#dc2626;border-color:#fecaca;background:#fef2f2}
+  .pn-status::before{content:"●";font-size:7px;margin-right:1px}
+
+  .pn-note{color:var(--text-3);font-size:11px;margin-left:2px}
+
+  /* 申请理由输入弹层（极简） */
+  .apply-modal{display:none;position:fixed;inset:0;background:rgba(20,24,32,.4);z-index:99;align-items:center;justify-content:center}
+  .apply-modal.show{display:flex}
+  .apply-modal .am-card{background:#fff;border-radius:14px;padding:22px 24px;width:420px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  .apply-modal h3{margin:0 0 8px;font-size:16px}
+  .apply-modal .am-sub{color:var(--text-3);font-size:12px;margin-bottom:12px}
+  .apply-modal textarea{width:100%;min-height:80px;border:1px solid var(--line-2);border-radius:8px;padding:10px 12px;font-family:inherit;font-size:13px;resize:vertical}
+  .apply-modal .am-foot{margin-top:14px;display:flex;justify-content:flex-end;gap:8px}
+
+  /* ============ v9.5 视觉极简 · 覆盖前面所有强调样式 ============ */
+  /* 1. 去掉 Topic 互动 tab 内所有 t-ico（左侧 emoji 头像） */
+  .tab-panel[data-panel="relate"] .tcard .t-ico{display:none}
+
+  /* 2. 去掉标题旁的 ● NEW 红色徽标 */
+  .tcard.unread .t-title::after{content:none !important}
+
+  /* 3. 去掉右侧"内容有更新"红色横幅 */
+  .tcard.unread .update-banner{display:none !important}
+
+  /* 4. 未读卡：暖橙黄底纹（参考截图）+ 左侧深橙色竖条 */
+  .tab-panel[data-panel="relate"] .tcard.unread{
+    background:#fff7e6 !important;
+    border-color:#fde4b8 !important;
+  }
+  .tab-panel[data-panel="relate"] .tcard.unread::before{
+    display:block !important;
+    content:"";
+    position:absolute;
+    left:-1px;
+    top:14px;
+    bottom:14px;
+    width:5px;
+    background:#ea580c !important;
+    border-radius:3px;
+  }
+  /* 4.1 未读卡右上角红点提醒（v9.9） */
+  .tab-panel[data-panel="relate"] .tcard.unread::after{
+    content:"";
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:9px;
+    height:9px;
+    background:#ef4444;
+    border-radius:50%;
+    box-shadow:0 0 0 2px #fff7e6;
+    z-index:5;
+    animation:pulseDot 1.8s ease-in-out infinite;
+  }
+  /* 4.2 让出右上角空间：t-time 往左挪一点 */
+  .tab-panel[data-panel="relate"] .tcard.unread .t-title-row .t-time{
+    margin-right:14px;
+  }
+
+  /* 已读卡：去掉所有 + 数字增量，只保留累计数 */
+  .tab-panel[data-panel="relate"] .tcard:not(.unread) .stat-chip .plus,
+  .tab-panel[data-panel="relate"] .tcard:not(.unread) .stat-chip .c,
+  .tab-panel[data-panel="relate"] .tcard:not(.unread) .stat-chip .slash{
+    display:none !important;
+  }
+  /* 已读卡的累计数还原为正常字色 */
+  .tab-panel[data-panel="relate"] .tcard:not(.unread) .stat-chip .total{
+    color:var(--text-2) !important;
+    font-weight:600;
+    font-size:12px;
+    opacity:1;
+    margin-left:4px;
+  }
+
+  /* 5. chip 在暖底色卡上：用半透明白底 */
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip{
+    background:rgba(255,255,255,.7) !important;
+    color:var(--text-3) !important;
+    font-weight:500;
+  }
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip .plus,
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip .c{
+    color:#1a1d24 !important;
+    font-weight:700;
+  }
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip .slash,
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip .total{
+    color:var(--text-3) !important;
+    font-weight:400;
+  }
+
+  /* 6. t-tag 在暖底卡上：紧凑小药丸（参考截图样式） */
+  .tab-panel[data-panel="relate"] .tcard .t-tag{
+    background:#eef1f8 !important;
+    color:#5a6270 !important;
+    font-weight:500;
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:5px;
+    margin-left:4px;
+    flex-shrink:0;
+  }
+  .tab-panel[data-panel="relate"] .tcard.unread .t-tag{
+    background:#fdf0d6 !important;
+    color:#9a6710 !important;
+  }
+
+  /* 7. 标题用加粗加深表示未读，已读用普通 */
+  .tab-panel[data-panel="relate"] .tcard.unread .t-title{
+    color:#1a1d24;
+    font-weight:600;
+  }
+  .tab-panel[data-panel="relate"] .tcard:not(.unread) .t-title{
+    color:var(--text-2);
+    font-weight:500;
+  }
+
+  /* 8. 时间用浅灰 */
+  .tab-panel[data-panel="relate"] .tcard .t-time{color:var(--text-3)}
+
+  /* 9. sec-div 标题：未读改成红色 */
+  .tab-panel[data-panel="relate"] .sec-div.unread .sec-div-label{
+    color:#dc2626 !important;
+    font-weight:600;
+  }
+  .tab-panel[data-panel="relate"] .sec-div.unread .sec-div-line{
+    background:linear-gradient(90deg,transparent,#fecaca,transparent) !important;
+  }
+
+  /* 10. 删掉标题旁的红点小色块 */
+  .tab-panel[data-panel="relate"] .unread-dot{display:none !important}
+
+  /* v9.7 删除 legend */
+  .legend{display:none !important}
+
+  /* v9.7 删除右上角 t-tag（业务月报/全员行动等） */
+  .tab-panel[data-panel="relate"] .t-tag{display:none !important}
+
+  /* v9.7 顶部 tab 红点 — 让权限 tab 的红点也用红色 */
+  .tabs .tab .count{background:#dc2626 !important}
+
+  /* v9.7 Topic 权限「待操作」标题用红色，字号与互动 tab 未读 sec-div 一致 */
+  .tab-panel[data-panel="perm"] .perm-section:first-child .perm-section-h h3{
+    color:#dc2626 !important;
+    font-size:13px;
+    font-weight:600;
+  }
+  .tab-panel[data-panel="perm"] .perm-section:first-child .perm-section-h .ph-num{
+    background:#dc2626 !important;
+    color:#fff !important;
+  }
+  .tab-panel[data-panel="perm"] .perm-section:first-child .perm-section-h .desc{
+    color:#dc2626 !important;
+    opacity:.7;
+    font-size:12px;
+  }
+
+  /* v9.7 删除申请理由 / pn-note 等冗余文字 */
+  .tab-panel[data-panel="perm"] .pn-h .reason,
+  .tab-panel[data-panel="perm"] .pn-h .preason,
+  .tab-panel[data-panel="perm"] .pn-note{display:none !important}
+
+  /* ============ v9.5 极简覆盖：Topic 权限 Tab ============ */
+  /* 1. 去掉左侧大头像 */
+  .tab-panel[data-panel="perm"] .pn-av{display:none}
+
+  /* 2. 去掉左侧 3px 彩色色条 */
+  .tab-panel[data-panel="perm"] .pncard::before{display:none !important}
+
+  /* 3. 卡片统一白底，无彩色背景；padding 与互动 tab 的 tcard-head 对齐 */
+  .tab-panel[data-panel="perm"] .pncard{
+    background:#fff !important;
+    border-color:var(--line) !important;
+    padding:16px 20px;
+  }
+  /* 3.1 "待操作"区（action / applying）使用暖橙黄底，与互动 tab 未读卡视觉一致 */
+  .tab-panel[data-panel="perm"] .pncard.action,
+  .tab-panel[data-panel="perm"] .pncard.applying{
+    background:#fff7e6 !important;
+    border-color:#fde4b8 !important;
+  }
+  /* 3.1.1 待操作卡：左侧深橙色竖条 */
+  .tab-panel[data-panel="perm"] .pncard.action::before,
+  .tab-panel[data-panel="perm"] .pncard.applying::before{
+    display:block !important;
+    content:"";
+    position:absolute;
+    left:-1px;
+    top:14px;
+    bottom:14px;
+    width:5px;
+    background:#ea580c !important;
+    border-radius:3px;
+  }
+  /* 3.1.2 待操作卡右上角红点提醒（v9.9） */
+  .tab-panel[data-panel="perm"] .pncard.action::after,
+  .tab-panel[data-panel="perm"] .pncard.applying::after{
+    content:"";
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:9px;
+    height:9px;
+    background:#ef4444;
+    border-radius:50%;
+    box-shadow:0 0 0 2px #fff7e6;
+    z-index:5;
+    animation:pulseDot 1.8s ease-in-out infinite;
+  }
+  /* 3.1.3 待操作卡时间往左挪，给红点让位 */
+  .tab-panel[data-panel="perm"] .pncard.action .pn-time,
+  .tab-panel[data-panel="perm"] .pncard.applying .pn-time{
+    right:32px;
+  }
+  /* 3.2 状态徽标在暖底卡上：用半透明白底 */
+  .tab-panel[data-panel="perm"] .pncard.action .pn-status,
+  .tab-panel[data-panel="perm"] .pncard.applying .pn-status,
+  .tab-panel[data-panel="perm"] .pncard.action .topic-link,
+  .tab-panel[data-panel="perm"] .pncard.applying .topic-link{
+    background:rgba(255,255,255,.75) !important;
+  }
+
+  /* 4. perm-section-h 头部弱化 */
+  .tab-panel[data-panel="perm"] .perm-section-h .ph-num{
+    background:#f3f5f7 !important;
+    color:var(--text-2) !important;
+    font-weight:600;
+  }
+  .tab-panel[data-panel="perm"] .perm-section-h h3{color:#1a1d24}
+  .tab-panel[data-panel="perm"] .perm-section-h .desc{color:var(--text-3)}
+
+  /* 5. topic-link 改为灰底黑字（去掉彩色和图钉） */
+  .tab-panel[data-panel="perm"] .pn-h .topic-link{
+    background:#f3f5f7 !important;
+    color:#1a1d24 !important;
+    font-weight:600;
+  }
+  .tab-panel[data-panel="perm"] .pn-h .topic-link::before{content:"" !important;display:none}
+  .tab-panel[data-panel="perm"] .pn-h .topic-id{display:none !important}
+
+  /* 6. 主体描述：人名加粗加深，其它字保持灰 */
+  .tab-panel[data-panel="perm"] .pn-h{color:var(--text-2)}
+  .tab-panel[data-panel="perm"] .pn-h b{color:#1a1d24;font-weight:600}
+  .tab-panel[data-panel="perm"] .pn-h .reason{color:var(--text-3)}
+
+  /* 6.1 已操作区：同意类（approved）topic-link 可点击，加 hover 反馈 */
+  .tab-panel[data-panel="perm"] .pncard.approved .topic-link.clickable{
+    cursor:pointer;
+    text-decoration:none;
+    transition:all .15s;
+  }
+  .tab-panel[data-panel="perm"] .pncard.approved .topic-link.clickable:hover{
+    background:#1a1d24 !important;
+    color:#fff !important;
+  }
+  /* 6.2 已操作区：拒绝/移除类 topic-link 不可点击，弱化 */
+  .tab-panel[data-panel="perm"] .pncard.rejected .topic-link,
+  .tab-panel[data-panel="perm"] .pncard.removed .topic-link{
+    cursor:default;
+    pointer-events:none;
+    opacity:.7;
+  }
+  /* 6.3 已操作区卡片：去掉左侧竖条、底色统一为浅灰白，弱化处理 */
+  .tab-panel[data-panel="perm"] .pncard.approved,
+  .tab-panel[data-panel="perm"] .pncard.rejected,
+  .tab-panel[data-panel="perm"] .pncard.removed,
+  .tab-panel[data-panel="perm"] .perm-section + .perm-section .pncard.applying{
+    background:#fff !important;
+    border-color:var(--line) !important;
+  }
+  .tab-panel[data-panel="perm"] .pncard.approved::before,
+  .tab-panel[data-panel="perm"] .pncard.rejected::before,
+  .tab-panel[data-panel="perm"] .pncard.removed::before,
+  .tab-panel[data-panel="perm"] .perm-section + .perm-section .pncard.applying::before{
+    display:none !important;
+  }
+  /* 已操作区的 applying：去掉红点 */
+  .tab-panel[data-panel="perm"] .perm-section + .perm-section .pncard.applying::after{
+    display:none !important;
+  }
+  /* 已操作区 applying：topic-link 不可点击（因为还没审批通过） */
+  .tab-panel[data-panel="perm"] .perm-section + .perm-section .pncard.applying .topic-link{
+    background:#f3f5f7 !important;
+    cursor:default;
+    pointer-events:none;
+    opacity:.7;
+  }
+  /* 已操作区 applying：pn-time 还原默认右边距 */
+  .tab-panel[data-panel="perm"] .perm-section + .perm-section .pncard.applying .pn-time{
+    right:20px;
+  }
+
+  /* 7. 状态徽标：去彩色背景，统一灰底 */
+  .tab-panel[data-panel="perm"] .pn-status{
+    background:#f3f5f7 !important;
+    border-color:var(--line) !important;
+    color:var(--text-2) !important;
+    font-weight:600;
+  }
+  .tab-panel[data-panel="perm"] .pn-status::before{display:none}
+
+  /* 8. 按钮：主按钮统一为黑色（去掉蓝色 primary） */
+  .tab-panel[data-panel="perm"] .pn-btn.primary{
+    background:#1a1d24 !important;
+    border-color:#1a1d24 !important;
+    color:#fff !important;
+  }
+  .tab-panel[data-panel="perm"] .pn-btn.primary:hover{background:#000 !important}
+  /* 拒绝按钮：黑字白底（不要红色） */
+  .tab-panel[data-panel="perm"] .pn-btn.no{
+    background:#fff !important;
+    color:var(--text) !important;
+    border-color:var(--line-2) !important;
+  }
+  .tab-panel[data-panel="perm"] .pn-btn.no:hover{background:#fafbfc !important}
+
+  /* 9. 时间用浅灰 */
+  .tab-panel[data-panel="perm"] .pn-time{color:var(--text-3)}
+
+  /* ============ v10：目标通知 Tab ============ */
+  /* 复用 pncard 卡结构，做目标场景特化 */
+  .tab-panel[data-panel="goal"] .perm-section-h .ph-num{
+    background:#f3f5f7 !important;
+    color:var(--text-2) !important;
+    font-weight:600;
+  }
+
+  /* 目标通知卡 */
+  .gncard{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:16px 20px;
+    margin-bottom:10px;
+    position:relative;
+    transition:all .15s;
+    cursor:pointer;
+  }
+  .gncard:hover{
+    box-shadow:var(--shadow);
+    border-color:var(--line-2);
+  }
+  /* 未读：暖橙黄底 + 左侧深橙竖条 + 右上角红点（与互动 tab 风格一致） */
+  .gncard.unread{
+    background:#fff7e6;
+    border-color:#fde4b8;
+  }
+  .gncard.unread::before{
+    content:"";
+    position:absolute;
+    left:-1px;
+    top:14px;
+    bottom:14px;
+    width:5px;
+    background:#ea580c;
+    border-radius:3px;
+  }
+  .gncard.unread::after{
+    content:"";
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:9px;
+    height:9px;
+    background:#ef4444;
+    border-radius:50%;
+    box-shadow:0 0 0 2px #fff7e6;
+    z-index:5;
+    animation:pulseDot 1.8s ease-in-out infinite;
+  }
+
+  /* 卡内 head 行 */
+  .gn-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .gn-head .gn-tag{
+    display:inline-block;
+    background:#eef1f8;
+    color:#5a6270;
+    font-size:11px;
+    font-weight:500;
+    padding:2px 8px;
+    border-radius:5px;
+    flex-shrink:0;
+  }
+  .gncard.unread .gn-head .gn-tag{
+    background:#fdf0d6;
+    color:#9a6710;
+  }
+  .gn-head .gn-title{
+    font-size:15px;
+    font-weight:600;
+    color:var(--text);
+    margin:0;
+    flex:1;
+    min-width:0;
+    word-break:break-all;
+  }
+  .gncard:not(.unread) .gn-head .gn-title{
+    color:var(--text-2);
+    font-weight:500;
+  }
+  .gn-head .gn-time{
+    font-size:12px;
+    color:var(--text-3);
+    white-space:nowrap;
+    flex-shrink:0;
+    margin-right:14px; /* 给红点让位 */
+  }
+  .gncard:not(.unread) .gn-head .gn-time{
+    margin-right:0;
+  }
+
+  /* O / KR 路径：层级感 */
+  .gn-path{
+    font-size:12px;
+    color:var(--text-3);
+    margin-bottom:10px;
+    display:flex;
+    gap:6px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .gn-path .o-tag{
+    display:inline-block;
+    background:#1a1d24;
+    color:#fff;
+    font-size:10px;
+    font-weight:700;
+    padding:1px 7px;
+    border-radius:4px;
+    letter-spacing:.04em;
+  }
+  .gn-path .kr-tag{
+    display:inline-block;
+    background:#f3f5f7;
+    color:var(--text-2);
+    font-size:10px;
+    font-weight:600;
+    padding:1px 7px;
+    border-radius:4px;
+    letter-spacing:.04em;
+  }
+  .gn-path .arrow{color:#c8ccd3;font-weight:400}
+
+  /* 统计 chips：新增 / 取消 */
+  .gn-stats{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:0;
+  }
+  .gn-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:5px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:500;
+    background:#f3f5f7;
+    color:var(--text-2);
+  }
+  .gn-chip .plus{font-weight:700;margin-right:1px}
+  .gn-chip .c{font-weight:700}
+  .gn-chip .total{color:var(--text-3);font-weight:500;font-size:11px;opacity:.85;margin-left:1px}
+  .gn-chip .slash{color:var(--text-3);font-weight:400;margin:0 1px;opacity:.6}
+  /* 未读卡上的 chip 配色 */
+  .gncard.unread .gn-chip.add{
+    background:rgba(255,255,255,.7);
+    color:#16a34a;
+  }
+  .gncard.unread .gn-chip.add .plus,
+  .gncard.unread .gn-chip.add .c{color:#15803d;font-weight:700}
+  .gncard.unread .gn-chip.add .slash,
+  .gncard.unread .gn-chip.add .total{color:var(--text-3);font-weight:400}
+
+  .gncard.unread .gn-chip.remove{
+    background:rgba(255,255,255,.7);
+    color:#dc2626;
+  }
+  .gncard.unread .gn-chip.remove .plus,
+  .gncard.unread .gn-chip.remove .c{color:#b91c1c;font-weight:700}
+  .gncard.unread .gn-chip.remove .slash,
+  .gncard.unread .gn-chip.remove .total{color:var(--text-3);font-weight:400}
+
+  /* 已读卡：去掉 +N 增量，只保留累计数（与互动 tab 一致） */
+  .gncard:not(.unread) .gn-chip .plus,
+  .gncard:not(.unread) .gn-chip .c,
+  .gncard:not(.unread) .gn-chip .slash{
+    display:none !important;
+  }
+  .gncard:not(.unread) .gn-chip .total{
+    color:var(--text-2) !important;
+    font-weight:600;
+    font-size:12px;
+    opacity:1;
+    margin-left:4px;
+  }
+
+  /* 关联的 topic 预览（最多展示 2 条，更多折叠） */
+  .gn-preview{
+    margin-top:10px;
+    padding:8px 12px;
+    background:rgba(255,255,255,.7);
+    border:1px solid var(--line);
+    border-radius:8px;
+    font-size:12px;
+    color:var(--text-2);
+    line-height:1.65;
+  }
+  .gncard:not(.unread) .gn-preview{
+    background:#fafbfc;
+  }
+  .gn-preview-line{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:3px 0;
+  }
+  .gn-preview-line + .gn-preview-line{border-top:1px dotted var(--line)}
+  .gn-preview-line .pl-flag{
+    font-size:10px;
+    font-weight:700;
+    padding:1px 6px;
+    border-radius:4px;
+    flex-shrink:0;
+  }
+  .gn-preview-line .pl-flag.add{background:#ecfdf5;color:#15803d;border:1px solid #a7f3d0}
+  .gn-preview-line .pl-flag.remove{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+  .gn-preview-line .pl-title{
+    color:var(--text);
+    font-weight:500;
+    flex:1;
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .gn-preview-line .pl-by{
+    color:var(--text-3);
+    font-size:11px;
+    flex-shrink:0;
+  }
+  .gn-preview-more{
+    margin-top:6px;
+    font-size:11px;
+    color:var(--text-3);
+    text-align:right;
+  }
+  .gn-preview-more:hover{color:#2563eb}
+
+  /* === v10.1 普通用户视角的目标提醒（@我 / 我的 Topic 被取消） === */
+  .gncard.mention .gn-tag.mention-tag{
+    background:#fff1f2 !important;
+    color:#e11d48 !important;
+    border:1px solid #fecdd3;
+  }
+  .gncard.topic-removed .gn-tag.remove-tag{
+    background:#fff7ed !important;
+    color:#9a3412 !important;
+    border:1px solid #fed7aa;
+  }
+  /* 普通用户卡的 body：引用块样式 */
+  .gn-mention-body{
+    margin-top:4px;
+    padding:10px 12px;
+    background:rgba(255,255,255,.7);
+    border:1px solid var(--line);
+    border-radius:8px;
+    font-size:12.5px;
+    color:var(--text-2);
+    line-height:1.65;
+  }
+  .gncard:not(.unread) .gn-mention-body{ background:#fafbfc; }
+  .gnm-by{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    color:var(--text-3);
+    margin-bottom:6px;
+  }
+  .gnm-by b{color:var(--text);font-weight:600}
+  .gnm-av{
+    width:20px;height:20px;border-radius:50%;
+    color:#fff;font-size:10px;font-weight:600;
+    display:grid;place-items:center;flex-shrink:0;
+  }
+  .gnm-quote{
+    color:var(--text);
+    padding:6px 10px;
+    background:#fff;
+    border-left:3px solid #cbd5e1;
+    border-radius:4px;
+    font-size:13px;
+    line-height:1.65;
+    margin-bottom:6px;
+  }
+  .gnm-quote .mention{color:#2563eb;font-weight:500}
+  .gnm-foot{
+    color:var(--text-3);
+    font-size:11.5px;
+  }
+  .gnm-foot.reason{font-style:italic}
+
+  /* === v10.2 通知矩阵样式 === */
+  /* 顶部介绍 + 筛选 */
+  .gmatrix-intro{
+    margin-bottom:14px;
+    padding:14px 18px;
+    background:linear-gradient(135deg,#f8fafc 0%,#fffbeb 100%);
+    border:1px dashed #cbd5e1;
+    border-radius:12px;
+  }
+  .gmi-title{
+    font-size:14px;
+    font-weight:700;
+    color:var(--text);
+    margin-bottom:4px;
+  }
+  .gmi-sub{
+    font-size:12px;
+    color:var(--text-3);
+    margin-bottom:10px;
+  }
+  .gmi-filter{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+  .gmi-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:5px 12px;
+    background:#fff;
+    border:1px solid var(--line-2);
+    border-radius:999px;
+    font-size:12px;
+    color:var(--text-2);
+    cursor:pointer;
+    transition:all .15s;
+    user-select:none;
+  }
+  .gmi-pill em{
+    font-style:normal;
+    font-size:10.5px;
+    color:var(--text-3);
+    font-weight:600;
+    margin-left:2px;
+  }
+  .gmi-pill:hover{background:#f3f5f7}
+  .gmi-pill.active{
+    background:#1a1d24;
+    color:#fff;
+    border-color:#1a1d24;
+  }
+  .gmi-pill.active em{color:rgba(255,255,255,.65)}
+  .gmi-pill.role-mgr.active{background:#7c3aed;border-color:#7c3aed}
+  .gmi-pill.role-kr.active{background:#0d9488;border-color:#0d9488}
+  .gmi-pill.role-pub.active{background:#d97706;border-color:#d97706}
+
+  /* perm-section 头部色条按角色配色 */
+  .perm-section.gm-section .perm-section-h .ph-num.role-mgr{
+    background:#7c3aed !important;color:#fff !important;
+  }
+  .perm-section.gm-section .perm-section-h .ph-num.role-kr{
+    background:#0d9488 !important;color:#fff !important;
+  }
+  .perm-section.gm-section .perm-section-h .ph-num.role-pub{
+    background:#d97706 !important;color:#fff !important;
+  }
+
+  /* 矩阵卡 */
+  .mtx-card{
+    cursor:default;
+    margin-bottom:8px;
+  }
+  .mtx-card .gn-head{margin-bottom:0}
+  /* 各类 tag 配色（统一在矩阵卡里使用） */
+  .gn-tag.tag-add{background:#ecfdf5 !important;color:#15803d !important;border:1px solid #a7f3d0;font-weight:600}
+  .gn-tag.tag-remove{background:#fef2f2 !important;color:#b91c1c !important;border:1px solid #fecaca;font-weight:600}
+  .gn-tag.tag-delete{background:#f3f4f6 !important;color:#374151 !important;border:1px solid #d1d5db;font-weight:600}
+  .gn-tag.tag-mention{background:#eff6ff !important;color:#1d4ed8 !important;border:1px solid #bfdbfe;font-weight:600}
+  .gn-tag.tag-edit{background:#f5f3ff !important;color:#6d28d9 !important;border:1px solid #ddd6fe;font-weight:600}
+  .gn-tag.tag-warn{background:#fff7ed !important;color:#9a3412 !important;border:1px solid #fed7aa;font-weight:600}
+
+  /* 强警示卡（warn-card）—— 整张卡橙底，区别于一般卡 */
+  .gncard.warn-card{
+    background:#fffaf3 !important;
+    border-color:#fed7aa !important;
+  }
+  .gncard.warn-card.unread::before{background:#d97706 !important}
+  .gncard.warn-card.unread::after{background:#d97706 !important;box-shadow:0 0 0 2px #fffaf3 !important}
+
+  /* 矩阵卡 body */
+  .mtx-body{
+    margin-top:10px;
+    padding:10px 12px;
+    background:rgba(255,255,255,.65);
+    border:1px solid var(--line);
+    border-radius:8px;
+    font-size:12.5px;
+    line-height:1.7;
+    color:var(--text-2);
+  }
+  .gncard:not(.unread) .mtx-body{background:#fafbfc}
+  .mtx-line{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    padding:4px 0;
+  }
+  .mtx-line + .mtx-line{border-top:1px dotted var(--line)}
+  .mtx-line .mtx-k{
+    flex-shrink:0;
+    width:54px;
+    font-size:11px;
+    font-weight:600;
+    color:var(--text-3);
+    letter-spacing:.04em;
+    padding-top:1px;
+  }
+  .mtx-line .mtx-v{
+    flex:1;
+    min-width:0;
+    color:var(--text);
+    font-size:12.5px;
+  }
+  .mtx-line .mtx-v b{font-weight:600;color:var(--text)}
+  .mtx-line .mtx-v u{text-decoration:underline;text-decoration-color:#cbd5e1;text-underline-offset:3px}
+  .mtx-line .mtx-v a.t-link{
+    color:#2563eb;
+    text-decoration:none;
+    border-bottom:1px solid #bfdbfe;
+    cursor:pointer;
+  }
+  .mtx-line .mtx-v a.t-link:hover{color:#1d4ed8;border-bottom-color:#1d4ed8}
+  .mtx-line .mtx-v .t-deleted{
+    color:var(--text-3);
+    text-decoration:line-through;
+    text-decoration-color:#94a3b8;
+  }
+  .mtx-line.vis-row .mtx-v{display:flex;gap:6px;flex-wrap:wrap}
+  .vis-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    padding:3px 9px;
+    border-radius:6px;
+    font-size:11.5px;
+    font-weight:500;
+    border:1px solid var(--line-2);
+  }
+  .vis-pill.on{
+    background:#ecfdf5;
+    color:#15803d;
+    border-color:#a7f3d0;
+  }
+  .vis-pill.on::before{content:"👁 ";font-size:11px;margin-right:1px}
+  .vis-pill.off{
+    background:#fef2f2;
+    color:#b91c1c;
+    border-color:#fecaca;
+  }
+  .vis-pill.off::before{content:"🔒 ";font-size:11px;margin-right:1px}
+
+  /* 实样对照区头部弱化 */
+  .gm-realdemo .perm-section-h{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px dashed var(--line);
+  }
+  .gm-realdemo .perm-section-h h3{color:var(--text-3);font-size:13px}
+  .gm-realdemo .perm-section-h .ph-num{
+    background:transparent !important;
+    color:var(--text-3) !important;
+    border:1px solid var(--line);
+    font-size:10px;
+  }
+
+  /* 筛选状态：隐藏非匹配 section */
+  .tab-panel[data-panel="goal"][data-filter="mgr"] .gm-section[data-role="kr"],
+  .tab-panel[data-panel="goal"][data-filter="mgr"] .gm-section[data-role="pub"],
+  .tab-panel[data-panel="goal"][data-filter="kr"] .gm-section[data-role="mgr"],
+  .tab-panel[data-panel="goal"][data-filter="kr"] .gm-section[data-role="pub"],
+  .tab-panel[data-panel="goal"][data-filter="pub"] .gm-section[data-role="mgr"],
+  .tab-panel[data-panel="goal"][data-filter="pub"] .gm-section[data-role="kr"]{
+    display:none;
+  }
+  .tab-panel[data-panel="goal"][data-filter]:not([data-filter="all"]) .gm-realdemo{display:none}
+
+  /* === v10.3 聚合卡 === */
+  .agg-card{cursor:pointer}
+  .agg-card .agg-detail{
+    margin-top:10px;
+    background:rgba(255,255,255,.65);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:0 12px;
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition:max-height .3s ease, opacity .2s, padding .3s, margin-top .3s;
+  }
+  .agg-card:not(.unread) .agg-detail{background:#fafbfc}
+  .agg-card.expanded .agg-detail{
+    max-height:1200px;
+    opacity:1;
+    padding:8px 12px;
+  }
+  .agg-row{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:7px 0;
+    font-size:12.5px;
+    line-height:1.55;
+  }
+  .agg-row + .agg-row{border-top:1px dotted var(--line)}
+  .agg-flag{
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    font-size:10.5px;
+    font-weight:700;
+    padding:2px 7px;
+    border-radius:4px;
+    height:20px;
+    margin-top:1px;
+    letter-spacing:.02em;
+  }
+  .agg-flag.add{background:#ecfdf5;color:#15803d;border:1px solid #a7f3d0}
+  .agg-flag.remove{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+  .agg-flag.delete{background:#f3f4f6;color:#374151;border:1px solid #d1d5db}
+  .agg-flag.mention{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+  .agg-flag.edit{background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe}
+  .agg-flag.warn{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+  .agg-flag.create{background:#fffbeb;color:#a16207;border:1px solid #fde68a}
+  .agg-text{flex:1;min-width:0;color:var(--text)}
+  .agg-text b{font-weight:600}
+  .agg-text a.t-link{
+    color:#2563eb;
+    text-decoration:none;
+    border-bottom:1px solid #bfdbfe;
+    cursor:pointer;
+  }
+  .agg-text a.t-link:hover{color:#1d4ed8;border-bottom-color:#1d4ed8}
+  .agg-text .t-deleted{
+    color:var(--text-3);
+    text-decoration:line-through;
+    text-decoration-color:#94a3b8;
+  }
+  .agg-text .topic-locked{
+    display:inline-block;
+    background:#fafbfc;
+    color:var(--text-3);
+    border:1px dashed var(--line-2);
+    padding:0 6px;
+    border-radius:4px;
+    font-size:11.5px;
+  }
+  .agg-time{
+    flex-shrink:0;
+    color:var(--text-3);
+    font-size:11px;
+    white-space:nowrap;
+    padding-top:2px;
+  }
+  .agg-foot{
+    margin-top:10px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    padding-top:10px;
+    border-top:1px dashed var(--line);
+  }
+  .agg-toggle{
+    color:var(--text-2);
+    font-size:12px;
+    font-weight:500;
+    cursor:pointer;
+    user-select:none;
+  }
+  .agg-toggle:hover{color:var(--text)}
+  .agg-card.expanded .agg-toggle{font-weight:600}
+  .agg-card:not(.expanded) .agg-toggle::before{content:"▾ "}
+  .agg-card.expanded .agg-toggle::before{content:"▴ "}
+  .agg-cta{
+    margin-left:auto;
+    color:#2563eb;
+    font-size:12px;
+    font-weight:500;
+    cursor:pointer;
+  }
+  .agg-cta:hover{color:#1d4ed8;text-decoration:underline}
+
+  /* 聚合卡里追加的 chip 配色 */
+  .gn-chip.delete{background:#f3f4f6;color:#374151}
+  .gn-chip.mention{background:#eff6ff;color:#1d4ed8}
+  .gn-chip.edit{background:#f5f3ff;color:#6d28d9}
+  .gn-chip.warn-chip{background:#fff7ed;color:#9a3412}
+  .gncard.unread .gn-chip.delete{background:rgba(255,255,255,.7);color:#374151}
+  .gncard.unread .gn-chip.mention{background:rgba(255,255,255,.7);color:#1d4ed8}
+  .gncard.unread .gn-chip.edit{background:rgba(255,255,255,.7);color:#6d28d9}
+  .gncard.unread .gn-chip.warn-chip{background:rgba(255,255,255,.7);color:#9a3412;font-weight:700}
+
+  /* === v10.4 按策略分行汇总（参照截图样式） === */
+  .gnk-summary{
+    margin-top:10px;
+    background:rgba(255,255,255,.65);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:4px 12px;
+  }
+  .gncard:not(.unread) .gnk-summary{background:#fafbfc}
+  .gnk-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 0;
+    font-size:12.5px;
+  }
+  .gnk-row + .gnk-row{border-top:1px dotted var(--line)}
+  .kr-tag-sm{
+    flex-shrink:0;
+    display:inline-block;
+    padding:2px 9px;
+    background:#eff4ff;
+    color:#2563eb;
+    border:1px solid #bfdbfe;
+    border-radius:5px;
+    font-size:11px;
+    font-weight:600;
+  }
+  .gnk-text{
+    flex:1;
+    min-width:0;
+    color:#2563eb;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    border-bottom:1px solid #bfdbfe;
+    padding-bottom:1px;
+  }
+  .gnk-text:hover{
+    color:#1d4ed8;
+    border-bottom-color:#1d4ed8;
+    border-bottom-style:solid;
+  }
+  .gnk-stat{
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+    padding:2px 10px;
+    border-radius:999px;
+    font-size:11.5px;
+    font-weight:500;
+  }
+  .gnk-stat b{font-weight:700;font-size:13px;font-feature-settings:'tnum'}
+  /* v10.7 弱化配色：从饱和绿/红 → 柔和的中性灰底 + 微染色字 */
+  .gnk-stat.add{background:#fafbfc;color:#5a6270;border:1px solid var(--line)}
+  .gnk-stat.add b{color:#15803d}
+  .gnk-stat.remove{background:#fafbfc;color:#5a6270;border:1px solid var(--line)}
+  .gnk-stat.remove b{color:#b91c1c}
+
+  /* === v10.4 ③ Topic 发布人卡（pub-tcard）—— 让 perm-row 在该卡内能正常显示 === */
+  .tab-panel[data-panel="goal"] .pub-tcard{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    margin-bottom:10px;
+    cursor:default;
+    position:relative;
+  }
+  .tab-panel[data-panel="goal"] .pub-tcard.unread{
+    background:#fff7e6;
+    border-color:#fde4b8;
+  }
+  .tab-panel[data-panel="goal"] .pub-tcard.unread::before{
+    display:block;
+    content:"";
+    position:absolute;
+    left:-1px;
+    top:14px;
+    bottom:14px;
+    width:5px;
+    background:#ea580c;
+    border-radius:3px;
+  }
+  .tab-panel[data-panel="goal"] .pub-tcard .tcard-head{
+    padding:14px 18px;
+    cursor:default;
+  }
+  .tab-panel[data-panel="goal"] .pub-tcard .t-main{padding-left:0}
+  .tab-panel[data-panel="goal"] .pub-tcard .t-title{font-size:14px;font-weight:600}
+  .tab-panel[data-panel="goal"] .pub-tcard .t-time{font-size:12px;color:var(--text-3);margin-right:0}
+  .tab-panel[data-panel="goal"] .pub-tcard .t-tag{
+    background:#eef1f8;color:#5a6270;border:0;
+    padding:1px 7px;border-radius:4px;font-size:10.5px;font-weight:500;
+  }
+  /* 让 perm-row 在 pub-tcard 内正常显示（盖掉 v9.4 全局隐藏） */
+  .tab-panel[data-panel="goal"] .pub-tcard .perm-row{display:flex !important;margin-top:10px}
+
+  /* === v10.5 简化版聚合卡（删除 O1 / Owner / 周期，只保留「目标」「关键策略」两行） === */
+  .v105-card .gn-line{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:6px 0;
+  }
+  .v105-card .gn-line + .gn-line{
+    margin-top:8px;
+    padding-top:14px;
+    border-top:1px dashed var(--line);
+  }
+  .v105-card .gl-label{
+    flex-shrink:0;
+    width:60px;
+    padding-top:4px;
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--text-3);
+    letter-spacing:.04em;
+  }
+  .v105-card .gl-text{
+    flex:1;
+    min-width:0;
+    margin:0;
+    font-size:15px;
+    font-weight:600;
+    color:var(--text);
+    line-height:1.5;
+    cursor:pointer;
+    transition:color .15s;
+  }
+  .v105-card .gl-text:hover{color:#2563eb}
+  .v105-card .gn-time{
+    flex-shrink:0;
+    font-size:12px;
+    color:var(--text-3);
+    padding-top:6px;
+    margin-right:14px; /* 给右上角红点让位 */
+  }
+  .v105-card:not(.unread) .gn-time{margin-right:0}
+  /* 关键策略行：让 gnk-summary 占满 */
+  .v105-card .kr-line .gnk-summary{
+    flex:1;
+    margin-top:0;
+    padding:0 12px;
+  }
+
+  /* gnk-row 三状态 */
+  .gnk-row.dim{opacity:.5}
+  .gnk-row.dim .gnk-text{
+    cursor:pointer;
+    color:var(--text-3);
+    border-bottom-color:var(--line-2);
+  }
+  .gnk-row.dim .gnk-text:hover{color:var(--text-2)}
+  .gnk-row.dim:hover{opacity:.85}
+  .gnk-row.dim .kr-tag-sm{
+    background:#f3f5f7 !important;
+    color:var(--text-3) !important;
+    border-color:var(--line-2) !important;
+  }
+  .gnk-text{cursor:pointer}
+
+  /* gnk-stat 第三种状态 create（你被指派）+ none（无变动）—— v10.7 同样弱化 */
+  .gnk-stat.create{
+    background:#fafbfc;
+    color:#5a6270;
+    border:1px solid var(--line);
+  }
+  .gnk-stat.create b{color:#a16207}
+  .gnk-stat.none{
+    background:transparent;
+    color:var(--text-3);
+    border:1px dashed var(--line-2);
+    font-weight:400;
+  }
+  .gnk-row.has-add .gnk-stat,
+  .gnk-row .gnk-stat{flex-shrink:0}
+
+  /* 多个 stat chip 在同一行时间距收紧 */
+  .gnk-row .gnk-stat + .gnk-stat{margin-left:6px}
+
+  /* === ③ pub-tcard-mini：参照 Topic 互动 stat-chip 行的视觉，仅一条信息 === */
+  .tab-panel[data-panel="goal"] .pub-tcard-mini{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    margin-bottom:10px;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:box-shadow .15s, border-color .15s;
+  }
+  .tab-panel[data-panel="goal"] .pub-tcard-mini:hover{
+    box-shadow:var(--shadow);
+    border-color:var(--line-2);
+  }
+  .tab-panel[data-panel="goal"] .pub-tcard-mini.unread{
+    background:#fff7e6;
+    border-color:#fde4b8;
+  }
+  .tab-panel[data-panel="goal"] .pub-tcard-mini.unread::before{
+    display:block;
+    content:"";
+    position:absolute;
+    left:-1px;
+    top:14px;
+    bottom:14px;
+    width:5px;
+    background:#ea580c;
+    border-radius:3px;
+  }
+  .tab-panel[data-panel="goal"] .pub-tcard-mini.unread::after{
+    content:"";
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:9px;
+    height:9px;
+    background:#ef4444;
+    border-radius:50%;
+    box-shadow:0 0 0 2px #fff7e6;
+    z-index:5;
+    animation:pulseDot 1.8s ease-in-out infinite;
+  }
+  .tab-panel[data-panel="goal"] .pub-tcard-mini .tcard-head{
+    padding:14px 18px;
+    cursor:pointer;
+  }
+  .tab-panel[data-panel="goal"] .pub-tcard-mini .t-main{padding-left:0}
+  .tab-panel[data-panel="goal"] .pub-tcard-mini .t-title{font-size:14.5px;font-weight:600}
+  .tab-panel[data-panel="goal"] .pub-tcard-mini .t-time{font-size:12px;color:var(--text-3);margin-right:14px}
+  .tab-panel[data-panel="goal"] .pub-tcard-mini .t-tag{
+    background:#eef1f8;color:#5a6270;border:0;
+    padding:1px 7px;border-radius:4px;font-size:10.5px;font-weight:500;
+  }
+  .tab-panel[data-panel="goal"] .pub-tcard-mini.unread .t-tag{
+    background:#fdf0d6;color:#9a6710;
+  }
+  /* unlink 提示行：参照 Topic 互动的 stat-chip 行，但只放一条信息 */
+  .t-unlink-line{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+    padding:6px 12px;
+    background:rgba(255,255,255,.7);
+    border:1px solid var(--line);
+    border-radius:999px;
+    font-size:12.5px;
+    color:var(--text);
+    line-height:1.5;
+  }
+  .pub-tcard-mini:not(.unread) .t-unlink-line{background:#fafbfc}
+  .ul-flag{
+    display:inline-flex;
+    align-items:center;
+    padding:2px 8px;
+    background:#fef2f2;
+    color:#b91c1c;
+    border:1px solid #fecaca;
+    border-radius:5px;
+    font-size:11px;
+    font-weight:700;
+    flex-shrink:0;
+  }
+  .ul-text{color:var(--text-2)}
+  .ul-text b{color:var(--text);font-weight:600}
+
+  /* ul-link：解除信息里的策略 / Topic 名（蓝色下划线，可跳） */
+  .ul-link{
+    color:#2563eb;
+    border-bottom:1px solid #bfdbfe;
+    cursor:pointer;
+    padding-bottom:1px;
+    font-weight:500;
+  }
+  .ul-link:hover{color:#1d4ed8;border-bottom-color:#1d4ed8}
+  .ul-link.strikethrough{
+    color:var(--text-3);
+    text-decoration:line-through;
+    text-decoration-color:#94a3b8;
+    cursor:not-allowed;
+    border-bottom:0;
+    pointer-events:none;
+  }
+
+  /* ul-reason：解除原因副行（灰色，淡描述） */
+  .ul-reason{
+    margin-top:6px;
+    padding:6px 12px;
+    font-size:12px;
+    color:var(--text-3);
+    line-height:1.55;
+    background:transparent;
+  }
+  .ul-reason b{color:var(--text-2);font-weight:500}
+  .ul-action{
+    color:#2563eb;
+    cursor:pointer;
+    font-weight:500;
+  }
+  .ul-action:hover{color:#1d4ed8;text-decoration:underline}
+
+  /* === v10.9 新增 === */
+  /* gnk-stat.link：已存在的关联总数（中性灰底，数字加深） */
+  .gnk-stat.link{
+    background:#fafbfc;
+    color:#5a6270;
+    border:1px solid var(--line);
+  }
+  .gnk-stat.link b{color:#1a1d24}
+
+  /* gnk-row.locked：无查看权限策略行 */
+  .gnk-row.locked{opacity:.9}
+  .gnk-row.locked .kr-tag-sm{
+    background:#fef3c7 !important;
+    color:#a16207 !important;
+    border-color:#fde68a !important;
+  }
+  .gnk-text-locked{
+    flex:1;
+    min-width:0;
+    color:var(--text-3);
+    font-style:italic;
+    font-size:12.5px;
+  }
+  .gnk-stat.locked-stat{
+    background:#fffbeb;
+    color:#a16207;
+    border:1px solid #fde68a;
+    font-weight:600;
+  }
+  .gnk-stat-action{
+    flex-shrink:0;
+    color:#2563eb;
+    font-size:11.5px;
+    font-weight:500;
+    cursor:pointer;
+    margin-left:6px;
+    padding:2px 6px;
+    border-radius:4px;
+    transition:background .15s;
+  }
+  .gnk-stat-action:hover{background:#eff4ff;text-decoration:underline}
+
+  /* 内容有更新 banner */
+  .kr-update-banner{
+    margin-top:10px;
+    padding:8px 14px;
+    background:#f5f3ff;
+    border:1px solid #ddd6fe;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:12.5px;
+    line-height:1.5;
+    flex-wrap:wrap;
+  }
+  .kub-flag{
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    padding:2px 8px;
+    background:#fff;
+    color:#6d28d9;
+    border:1px solid #ddd6fe;
+    border-radius:5px;
+    font-size:11px;
+    font-weight:700;
+  }
+  .kub-text{flex:1;min-width:0;color:var(--text-2)}
+  .kub-text b{color:var(--text);font-weight:600}
+  .kub-link{
+    color:#7c3aed;
+    cursor:pointer;
+    font-weight:500;
+  }
+  .kub-link:hover{color:#6d28d9;text-decoration:underline}
+
+  /* agg-flag.locked-flag */
+  .agg-flag.locked-flag{
+    background:#fffbeb;
+    color:#a16207;
+    border:1px solid #fde68a;
+  }
+
+  /* === v10.11/v10.12 策略行 NEW 小标签（淡蓝） === */
+  .kr-update-tag{
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    gap:2px;
+    padding:1px 7px;
+    background:#e7eefb;
+    color:#2563eb;
+    border:1px solid #bfdbfe;
+    border-radius:4px;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.04em;
+    cursor:help;
+    line-height:1.5;
+    text-transform:uppercase;
+  }
+  .kr-update-tag:hover{background:#dbe6fa}
+
+  /* v10.12 整卡可点击 + 简化卡底 + 已读 mini 卡 */
+  .click-jump{cursor:pointer}
+  .click-jump:hover{box-shadow:var(--shadow);border-color:var(--line-2)}
+
+  .agg-foot.single-cta{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed var(--line);
+    display:flex;
+    justify-content:flex-end;
+  }
+  .agg-cta-full{
+    color:#2563eb;
+    font-size:12px;
+    font-weight:500;
+    cursor:pointer;
+  }
+  .agg-cta-full:hover{color:#1d4ed8;text-decoration:underline}
+
+  .read-mini .gn-line{padding:0;align-items:center}
+  .read-mini .gl-text{font-size:14px !important;font-weight:500 !important}
+  .read-mini .gn-time-mini{
+    flex-shrink:0;
+    font-size:12px;
+    color:var(--text-3);
+    margin-left:auto;
+  }
+  .read-mini .gl-text:hover{color:#2563eb}
+
+  /* v10.13 不可见通知行（你被移除/可见范围调整 → 策略对你不可见） */
+  .gnk-row.invisible{
+    opacity:.9;
+    background:#fafbfc;
+  }
+  .gnk-row.invisible .kr-tag-sm.invisible-tag{
+    background:#f3f5f7 !important;
+    color:var(--text-3) !important;
+    border-color:var(--line-2) !important;
+  }
+  .gnk-text-invisible{
+    flex:1;
+    min-width:0;
+    color:var(--text-3);
+    font-size:12.5px;
+    font-style:italic;
+  }
+  .gnk-stat.invisible-stat{
+    background:#f3f5f7;
+    color:var(--text-2);
+    border:1px solid var(--line);
+    font-weight:600;
+    font-size:11px;
+  }
+
+  /* === v10.10 全灰化：右上「关联关系被移除 / 内容有更新」文字样式 === */
+  .unlink-corner,
+  .update-corner{
+    flex-shrink:0;
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+    margin-left:auto;
+    padding:2px 9px;
+    background:#f3f5f7;
+    color:var(--text-2);
+    border:1px solid var(--line);
+    border-radius:5px;
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:.02em;
+    cursor:help;
+    white-space:nowrap;
+    line-height:1.4;
+  }
+
+  /* v10.14 stat-chip 行的「关联关系被移除 / 内容有更新」—— 与其他 chip 视觉一致 */
+  .tab-panel[data-panel="relate"] .stat-chip.unlink-chip,
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip.unlink-chip{
+    color:#b91c1c !important;
+    cursor:help;
+  }
+  .tab-panel[data-panel="relate"] .stat-chip.update-chip,
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip.update-chip{
+    color:#2563eb !important;
+    cursor:help;
+  }
+  .update-corner{
+    background:#e7eefb;
+    color:#2563eb;
+    border-color:#bfdbfe;
+  }
+  .update-corner::before{
+    content:"📌";
+    font-size:10px;
+    margin-right:1px;
+  }
+  /* 让 .t-time 不再 margin-left:auto，让 corner 占据右端 */
+  .t-title-row:has(.unlink-corner) .t-time,
+  .t-title-row:has(.update-corner) .t-time{margin-left:0}
+  /* 在标题行 wrap 时换到下一行也好看 */
+  .tcard.has-unlink .t-title-row,
+  .tcard.has-update .t-title-row{flex-wrap:wrap;gap:8px}
+
+  /* === v10.10 关键全灰化：Topic 互动 tab 内所有 chip / tag 强制中性灰 === */
+  /* 未读卡：所有 stat-chip 一律半透明白底 + 灰字，不再分类型染色 */
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip,
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip.at,
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip.comment,
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip.reply,
+  .tab-panel[data-panel="relate"] .tcard.unread .stat-chip.like{
+    background:rgba(255,255,255,.75) !important;
+    color:var(--text-2) !important;
+    border:1px solid rgba(0,0,0,.04);
+  }
+  /* 已读卡：所有 stat-chip 一律浅灰底 + 灰字 */
+  .tab-panel[data-panel="relate"] .tcard:not(.unread) .stat-chip,
+  .tab-panel[data-panel="relate"] .tcard:not(.unread) .stat-chip.at,
+  .tab-panel[data-panel="relate"] .tcard:not(.unread) .stat-chip.comment,
+  .tab-panel[data-panel="relate"] .tcard:not(.unread) .stat-chip.reply,
+  .tab-panel[data-panel="relate"] .tcard:not(.unread) .stat-chip.like{
+    background:#f3f5f7 !important;
+    color:var(--text-2) !important;
+    border:1px solid var(--line);
+  }
+  /* tcard 顶部图标 (t-ico) 弱化为透明，统一视觉 */
+  .tab-panel[data-panel="relate"] .tcard .t-ico{display:none}
+  .tab-panel[data-panel="relate"] .tcard .t-main{padding-left:0}
+  /* t-tag 全灰 */
+  .tab-panel[data-panel="relate"] .tcard .t-tag,
+  .tab-panel[data-panel="relate"] .tcard.unread .t-tag{
+    background:#f3f5f7 !important;
+    color:var(--text-2) !important;
+    border:0 !important;
+  }
+  /* 未读小红点保留（截图里也有） */
+  /* perm-row 在 relate tab 仍然隐藏 */
+
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <div class="brand">
+      <div class="brand-logo">N</div>
+      <div>
+        <div class="brand-text">SSV Nexus</div>
+        <div class="brand-sub">透明即上下文</div>
+      </div>
+    </div>
+    <div class="nav-cap">TOPICS</div>
+    <div class="nav-item active"><span class="ic">≡</span>ALL</div>
+    <div class="nav-item"><span class="ic">👤</span>MY</div>
+    <div class="nav-cap">TOOLS</div>
+    <div class="nav-item"><span class="ic">⚡</span>技能</div>
+    <div class="nav-item"><span class="ic">🔌</span>插件</div>
+    <div class="nav-cap">ADMIN</div>
+    <div class="nav-item"><span class="ic">📍</span>定位</div>
+    <div class="nav-item"><span class="ic">📜</span>宪章</div>
+    <div class="nav-item"><span class="ic">⚙️</span>设置</div>
+  </aside>
+
+  <!-- CONTENT -->
+  <div>
+    <div class="top">
+      <div class="top-title">透明即上下文，上下文即生产力</div>
+      <div class="top-right">
+        <div class="bell has-unread" id="bell">🔔</div>
+        <div class="me"><div class="av">W</div><span>Hi, weima</span></div>
+      </div>
+    </div>
+
+    <main class="main">
+      <section id="view-list">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">消息中心</h1>
+          <div class="page-sub">按 Topic 聚合 · 点击展开查看所有新 @、评论、回复、点赞</div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab" data-tab="perm">Topic 权限 <span class="count" id="cntPerm">5</span></div>
+        <div class="tab active" data-tab="relate">Topic 互动 <span class="count" id="cntRelate">5</span></div>
+        <div class="tab" data-tab="goal">目标 <span class="count" id="cntGoal">2</span></div>
+        <div class="tab" data-tab="system">系统</div>
+        <div style="flex:1"></div>
+        <button class="btn-readall" id="btnReadAll">✓ 全部已读</button>
+      </div>
+
+      <!-- ===================================== -->
+      <!-- 与我相关：按 Topic 聚合 -->
+      <!-- ===================================== -->
+      <div class="tab-panel" data-panel="relate">
+
+        <div class="sec-div unread">
+          <div class="sec-div-label">● 未读 · <span id="unreadCnt">5</span> 条 Topics 有互动</div>
+          <div class="sec-div-line"></div>
+        </div>
+
+        <!-- ============ CARD 1 ============ -->
+        <div class="tcard unread" data-topic="t-biz" data-unread="1">
+          <div class="tcard-head" onclick="toggleCard(this)">
+            <div class="t-ico">💝</div>
+            <div class="t-main">
+              <div class="t-title-row">
+                <h3 class="t-title">一元起捐对总善款规模的长期影响怎么估？</h3>
+                <span class="t-tag">业务月报</span>
+                <span class="unread-dot"></span>
+                <span class="t-time">最新：2 小时前</span>
+              </div>
+              <div class="t-meta">
+                <span>weima(马巍) · 公益平台部</span>
+              </div>
+              <div class="t-stats">
+                <span class="stat-chip at">@ 我 <span class="plus">+</span><span class="c">3</span><span class="slash">/</span><span class="total">8</span></span>
+                <span class="stat-chip comment">评论 <span class="plus">+</span><span class="c">5</span><span class="slash">/</span><span class="total">24</span></span>
+                <span class="stat-chip reply">回复我 <span class="plus">+</span><span class="c">2</span><span class="slash">/</span><span class="total">12</span></span>
+                <span class="stat-chip like">表情互动 <span class="plus">+</span><span class="c">12</span><span class="slash">/</span><span class="total">58</span></span>
+              </div>
+              <!-- v8: 主干路新增评论展示（折叠态也能看到） -->
+              <div class="t-newstream">
+                <div class="t-newstream-group">
+                  <div class="t-newstream-gh">
+                    <span class="badge-new">新增</span>
+                    <span class="kind-at">@ 我</span>
+                    <span class="cnt">· 3 条</span>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c1">r</div>
+                    <div class="lb">
+                      <div class="lh"><b>ringowei</b> 在评论中 @ 了你 · 2 小时前</div>
+                      <div class="lt"><span class="mention">@weima</span> 这块我们从数据中台组视角看，低门槛反而会让捐赠频次上升...</div>
+                    </div>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c3">h</div>
+                    <div class="lb">
+                      <div class="lh"><b>hunterguo</b> 在评论中 @ 了你 · 1 小时前</div>
+                      <div class="lt"><span class="mention">@weima</span> 品牌方视角，晨光刚反馈"一元门槛"让他们更愿意接入瓶身码...</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="t-newstream-group">
+                  <div class="t-newstream-gh">
+                    <span class="badge-new">新增</span>
+                    <span class="kind-reply">回复我</span>
+                    <span class="cnt">· 2 条</span>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c4">S</div>
+                    <div class="lb">
+                      <div class="lh"><b>suriwang</b> 回复了你 · 3 小时前</div>
+                      <div class="lt">同意你说的"低门槛 ≠ 低总善款"，但建议把客单价的长期走势也拉出来看。</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="t-newstream-group">
+                  <div class="t-newstream-gh">
+                    <span class="badge-new">新增</span>
+                    <span class="kind-comment">评论</span>
+                    <span class="cnt">· 5 条</span>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c8">p</div>
+                    <div class="lb">
+                      <div class="lh"><b>patricksong</b> 评论 · 5 小时前</div>
+                      <div class="lt">数据口径这一块要不要写进"铁律"？</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="t-newstream-more">仅展示主干路 · 点击进入查看全部 22 条新动态 →</div>
+              </div>
+              <div class="t-parts">
+                <span class="avs">
+                  <span class="av av-c1">r</span>
+                  <span class="av av-c2">c</span>
+                  <span class="av av-c3">h</span>
+                  <span class="av av-c4">S</span>
+                  <span class="av av-c5">n</span>
+                </span>
+                <span>ringowei、coffeezhong、hunterguo 等 5 人参与</span>
+              </div>
+            </div>
+            <div class="t-arrow">▾</div>
+          </div>
+
+          <div class="tcard-body">
+            <!-- @我 组 -->
+            <div class="ev-group">
+              <div class="ev-group-h at">@ 我 <span class="pill">3 条</span></div>
+              <div class="ev">
+                <div class="ev-av av-c1">r</div>
+                <div class="ev-body">
+                  <div class="ev-head"><b>ringowei</b> 在评论中 @了你 <span class="ev-time">· 2 小时前</span></div>
+                  <div class="ev-text"><span class="mention">@weima</span> 这块我们从数据中台组视角看，低门槛反而会让捐赠频次上升，需要你从产品角度再对齐 LTV 测算口径。</div>
+                </div>
+              </div>
+              <div class="ev">
+                <div class="ev-av av-c2">c</div>
+                <div class="ev-body">
+                  <div class="ev-head"><b>coffeezhong</b> 在评论中 @了你 <span class="ev-time">· 2 小时前</span></div>
+                  <div class="ev-text"><span class="mention">@weima</span> 补充：低门槛用户 30 天二次捐赠率 34%，远高于高门槛组 18%。从总善款看是正的。</div>
+                </div>
+              </div>
+              <div class="ev">
+                <div class="ev-av av-c3">h</div>
+                <div class="ev-body">
+                  <div class="ev-head"><b>hunterguo</b> 在评论中 @了你 <span class="ev-time">· 1 小时前</span></div>
+                  <div class="ev-text"><span class="mention">@weima</span> 品牌方视角，晨光刚反馈"一元门槛"让他们更愿意接入瓶身码，ROI 讲得通。</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 回复我 组 -->
+            <div class="ev-group">
+              <div class="ev-group-h reply">回复了我的评论 <span class="pill">2 条</span></div>
+              <div class="ev">
+                <div class="ev-av av-c4">S</div>
+                <div class="ev-body">
+                  <div class="ev-head"><b>suriwang</b> 回复了你 <span class="ev-time">· 3 小时前</span></div>
+                  <div class="ev-text">同意你说的"低门槛 ≠ 低总善款"，但建议把客单价的长期走势也拉出来看。</div>
+                </div>
+              </div>
+              <div class="ev">
+                <div class="ev-av av-c5">n</div>
+                <div class="ev-body">
+                  <div class="ev-head"><b>namixiao</b> 回复了你 <span class="ev-time">· 3 小时前</span></div>
+                  <div class="ev-text">能否配合设计侧测一下"一元起捐"入口的视觉权重？</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 评论（非回复我的） -->
+            <div class="ev-group">
+              <div class="ev-group-h comment">Topic 新评论 <span class="pill">5 条</span></div>
+              <div class="ev">
+                <div class="ev-av av-c6">d</div>
+                <div class="ev-body">
+                  <div class="ev-head"><b>dorisbhwang</b> 评论 <span class="ev-time">· 4 小时前</span></div>
+                  <div class="ev-text">直达乡村场景里"一元起捐"特别适合村支书转发，推一下。</div>
+                </div>
+              </div>
+              <div class="ev">
+                <div class="ev-av av-c7">t</div>
+                <div class="ev-body">
+                  <div class="ev-head"><b>tianyudeng</b> 评论 <span class="ev-time">· 5 小时前</span></div>
+                  <div class="ev-text">支持放量，但冲刺月结束后要看回落曲线。</div>
+                </div>
+              </div>
+              <div class="ev">
+                <div class="ev-av av-c8">p</div>
+                <div class="ev-body">
+                  <div class="ev-head"><b>patricksong</b> 评论 <span class="ev-time">· 5 小时前</span></div>
+                  <div class="ev-text">数据口径这一块要不要写进"铁律"？</div>
+                </div>
+              </div>
+              <div class="ev">
+                <div class="ev-av av-c1">z</div>
+                <div class="ev-body">
+                  <div class="ev-head"><b>zerozhao</b> 评论 <span class="ev-time">· 6 小时前</span></div>
+                  <div class="ev-text">可持续手作也能搭一元起捐的顺风车。</div>
+                </div>
+              </div>
+              <div class="ev">
+                <div class="ev-av av-c2">e</div>
+                <div class="ev-body">
+                  <div class="ev-head"><b>ewellzhao</b> 评论 <span class="ev-time">· 6 小时前</span></div>
+                  <div class="ev-text">赞成放量，但希望下月月报里能看到"用户长期捐赠意愿"的定性研究。</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 点赞 -->
+            <div class="ev-group">
+              <div class="ev-group-h like">点赞了你的发言 <span class="pill">12 赞</span></div>
+              <div class="like-grid">
+                <div class="lc"><span class="av av-c1">r</span>ringowei</div>
+                <div class="lc"><span class="av av-c2">c</span>coffeezhong</div>
+                <div class="lc"><span class="av av-c3">h</span>hunterguo</div>
+                <div class="lc"><span class="av av-c4">S</span>suriwang</div>
+                <div class="lc"><span class="av av-c5">n</span>namixiao</div>
+                <div class="lc"><span class="av av-c6">d</span>dorisbhwang</div>
+                <div class="lc"><span class="av av-c7">t</span>tianyudeng</div>
+                <div class="lc"><span class="av av-c8">p</span>patricksong</div>
+                <div class="lc"><span class="av av-c1">z</span>zerozhao</div>
+                <div class="lc"><span class="av av-c2">e</span>ewellzhao</div>
+                <div class="lc"><span class="av av-c3">w</span>windealli</div>
+                <div class="lc"><span class="av av-c4">j</span>joyhhe</div>
+              </div>
+            </div>
+
+            <div class="ev-actions">
+              <button class="bt">进入 Topic 查看</button>
+              <button class="bt ghost">标记为已读</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ CARD 2 ============ -->
+        <div class="tcard unread" data-topic="t-ai" data-unread="1">
+          <div class="tcard-head" onclick="toggleCard(this)">
+            <div class="t-ico">🤖</div>
+            <div class="t-main">
+              <div class="t-title-row">
+                <h3 class="t-title">Nexus AI 正式上线 🎉 邀你体验 &amp; 反馈</h3>
+                <span class="t-tag">全员行动</span>
+                <span class="unread-dot"></span>
+                <span class="t-time">最新：1 小时前</span>
+              </div>
+              <div class="t-meta">
+                <span>suriwang(王昕) · 数据中台组</span>
+              </div>
+              <div class="t-stats">
+                <span class="stat-chip at">@ 我 <span class="plus">+</span><span class="c">1</span><span class="slash">/</span><span class="total">3</span></span>
+                <span class="stat-chip comment">评论 <span class="plus">+</span><span class="c">4</span><span class="slash">/</span><span class="total">32</span></span>
+                <span class="stat-chip like">表情互动 <span class="plus">+</span><span class="c">6</span><span class="slash">/</span><span class="total">45</span></span>
+              </div>
+              <!-- v9.3 内嵌权限行：可见权限被移除（针对相关联的内部 topic） -->
+              <div class="perm-row warn" onclick="event.stopPropagation()">
+                <div class="pi">⚠</div>
+                <div class="pb">
+                  <div class="ph">
+                    <span class="ptag">⚠ 权限变更</span>
+                    <span>· 关联 topic「Nexus AI 内部排期」可见权限已被移除</span>
+                    <span class="ptime">昨天 11:30</span>
+                  </div>
+                  <div class="pdesc"><b>suriwang</b>（topic 维护人）调整了「Nexus AI 内部排期」的可见范围，移除了你的查看权限
+                    <div class="preason">该 topic 链接已失效，但本 topic（Nexus AI 上线公告）仍可正常查看</div>
+                  </div>
+                  <div class="pacts">
+                    <span class="pstatus">链接已失效</span>
+                    <button class="ghost" onclick="permDismiss(this)">知道了</button>
+                    <button class="ghost" onclick="permDismiss(this)">申请重新加入</button>
+                  </div>
+                </div>
+              </div>
+              <div class="t-newstream">
+                <div class="t-newstream-group">
+                  <div class="t-newstream-gh">
+                    <span class="badge-new">新增</span>
+                    <span class="kind-at">@ 我</span>
+                    <span class="cnt">· 1 条</span>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c4">S</div>
+                    <div class="lb">
+                      <div class="lh"><b>suriwang</b> @ 了你 · 昨天 19:42</div>
+                      <div class="lt"><span class="mention">@weima</span> 文化实验室要不要做第一批试用？5-8 号可以开始对接。</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="t-newstream-group">
+                  <div class="t-newstream-gh">
+                    <span class="badge-new">新增</span>
+                    <span class="kind-comment">评论</span>
+                    <span class="cnt">· 4 条</span>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c5">e</div>
+                    <div class="lb">
+                      <div class="lh"><b>ewellzhao</b> 评论 · 20 分钟前</div>
+                      <div class="lt">期待下一步把"待你回应"做成企微卡片推送。</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="t-newstream-more">仅展示主干路 · 点击进入查看全部 11 条新动态 →</div>
+              </div>
+              <div class="t-parts">
+                <span class="avs">
+                  <span class="av av-c4">S</span>
+                  <span class="av av-c1">z</span>
+                  <span class="av av-c3">w</span>
+                  <span class="av av-c2">h</span>
+                </span>
+                <span>suriwang、zerozhao 等 4 人参与</span>
+              </div>
+            </div>
+            <div class="t-arrow">▾</div>
+          </div>
+          <div class="tcard-body">
+            <div class="ev-group">
+              <div class="ev-group-h at">@ 我 <span class="pill">1 条</span></div>
+              <div class="ev">
+                <div class="ev-av av-c4">S</div>
+                <div class="ev-body">
+                  <div class="ev-head"><b>suriwang</b> @了你 <span class="ev-time">· 昨天 19:42</span></div>
+                  <div class="ev-text"><span class="mention">@weima</span> 文化实验室要不要做第一批试用？5-8 号可以开始对接。</div>
+                </div>
+              </div>
+            </div>
+            <div class="ev-group">
+              <div class="ev-group-h comment">Topic 新评论 <span class="pill">4 条</span></div>
+              <div class="ev"><div class="ev-av av-c1">z</div><div class="ev-body"><div class="ev-head"><b>zerozhao</b> 评论 <span class="ev-time">· 1 小时前</span></div><div class="ev-text">摘要很准，但月报的"意外发现"字段抽出来偶尔会丢上下文。</div></div></div>
+              <div class="ev"><div class="ev-av av-c3">w</div><div class="ev-body"><div class="ev-head"><b>windealli</b> 评论 <span class="ev-time">· 1 小时前</span></div><div class="ev-text">强烈建议加"本周我最关心 topic"的个人推送。</div></div></div>
+              <div class="ev"><div class="ev-av av-c2">h</div><div class="ev-body"><div class="ev-head"><b>hunterguo</b> 评论 <span class="ev-time">· 30 分钟前</span></div><div class="ev-text">跨期对比很实用 👍</div></div></div>
+              <div class="ev"><div class="ev-av av-c5">e</div><div class="ev-body"><div class="ev-head"><b>ewellzhao</b> 评论 <span class="ev-time">· 20 分钟前</span></div><div class="ev-text">期待下一步把"待你回应"做成企微卡片推送。</div></div></div>
+            </div>
+            <div class="ev-group">
+              <div class="ev-group-h like">点赞 <span class="pill">6 赞</span></div>
+              <div class="like-grid">
+                <div class="lc"><span class="av av-c1">r</span>ringowei</div>
+                <div class="lc"><span class="av av-c2">c</span>coffeezhong</div>
+                <div class="lc"><span class="av av-c3">w</span>windealli</div>
+                <div class="lc"><span class="av av-c4">S</span>suriwang</div>
+                <div class="lc"><span class="av av-c5">e</span>ewellzhao</div>
+                <div class="lc"><span class="av av-c6">d</span>dorisbhwang</div>
+              </div>
+            </div>
+            <div class="ev-actions">
+              <button class="bt">进入 Topic 查看</button>
+              <button class="bt ghost">标记为已读</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ CARD 3 ============ -->
+        <div class="tcard unread has-unlink" data-topic="t-bounce" data-unread="1">
+          <div class="tcard-head" onclick="toggleCard(this)">
+            <div class="t-ico">⚠️</div>
+            <div class="t-main">
+              <div class="t-title-row">
+                <h3 class="t-title">捐后 30s 跳出率联合专项招募</h3>
+                <span class="t-tag">求助</span>
+                <span class="unread-dot"></span>
+                <span class="t-time">最新：昨天 11:08</span>
+              </div>
+              <div class="t-meta">
+                <span>weima(马巍) · 公益平台部</span>
+              </div>
+              <div class="t-stats">
+                <span class="stat-chip at">@ 我 <span class="plus">+</span><span class="c">2</span><span class="slash">/</span><span class="total">4</span></span>
+                <span class="stat-chip reply">回复我 <span class="plus">+</span><span class="c">1</span><span class="slash">/</span><span class="total">3</span></span>
+                <span class="stat-chip unlink-chip" title="该 Topic 已从 O1 › KR2 中移除">－ 关联关系被移除</span>
+              </div>
+              <div class="t-newstream">
+                <div class="t-newstream-group">
+                  <div class="t-newstream-gh">
+                    <span class="badge-new">新增</span>
+                    <span class="kind-at">@ 我</span>
+                    <span class="cnt">· 2 条</span>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c3">n</div>
+                    <div class="lb">
+                      <div class="lh"><b>namixiao</b> @ 了你 · 昨天</div>
+                      <div class="lt"><span class="mention">@weima</span> 设计侧建议先做 5 个用户访谈再定方案，避免"拍脑袋改"。</div>
+                    </div>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c4">b</div>
+                    <div class="lb">
+                      <div class="lh"><b>brandteam</b> @ 了你 · 昨天</div>
+                      <div class="lt"><span class="mention">@weima</span> 这个需要小程序组牵头，建议 4-29 开一次跨组对齐会。</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="t-newstream-group">
+                  <div class="t-newstream-gh">
+                    <span class="badge-new">新增</span>
+                    <span class="kind-reply">回复我</span>
+                    <span class="cnt">· 1 条</span>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c5">u</div>
+                    <div class="lb">
+                      <div class="lh"><b>用户研究组 (uxlab)</b> 回复了你 · 昨天</div>
+                      <div class="lt">我们这周可以出 5 位目标用户的深访人选，排期本周三。</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="t-parts">
+                <span class="avs">
+                  <span class="av av-c3">n</span>
+                  <span class="av av-c4">b</span>
+                  <span class="av av-c5">u</span>
+                </span>
+                <span>namixiao、brandteam、用户研究组 参与</span>
+              </div>
+            </div>
+            <div class="t-arrow">▾</div>
+          </div>
+          <div class="tcard-body">
+            <div class="ev-group">
+              <div class="ev-group-h at">@ 我 <span class="pill">2 条</span></div>
+              <div class="ev"><div class="ev-av av-c3">n</div><div class="ev-body"><div class="ev-head"><b>namixiao</b> @了你 <span class="ev-time">· 昨天</span></div><div class="ev-text"><span class="mention">@weima</span> 设计侧建议先做 5 个用户访谈再定方案，避免"拍脑袋改"。</div></div></div>
+              <div class="ev"><div class="ev-av av-c4">b</div><div class="ev-body"><div class="ev-head"><b>brandteam</b> @了你 <span class="ev-time">· 昨天</span></div><div class="ev-text"><span class="mention">@weima</span> 这个需要小程序组牵头，建议 4-29 开一次跨组对齐会。</div></div></div>
+            </div>
+            <div class="ev-group">
+              <div class="ev-group-h reply">回复了我的评论 <span class="pill">1 条</span></div>
+              <div class="ev"><div class="ev-av av-c5">u</div><div class="ev-body"><div class="ev-head"><b>用户研究组 (uxlab)</b> 回复了你 <span class="ev-time">· 昨天</span></div><div class="ev-text">我们这周可以出 5 位目标用户的深访人选，排期本周三。</div></div></div>
+            </div>
+            <div class="ev-actions">
+              <button class="bt">进入 Topic 查看</button>
+              <button class="bt ghost">标记为已读</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ CARD 4 ============ -->
+        <div class="tcard unread" data-topic="t-ssv" data-unread="1">
+          <div class="tcard-head" onclick="toggleCard(this)">
+            <div class="t-ico">✨</div>
+            <div class="t-main">
+              <div class="t-title-row">
+                <h3 class="t-title">探讨：你心目中的 SSV 理念是什么？</h3>
+                <span class="t-tag">文化</span>
+                <span class="unread-dot"></span>
+                <span class="t-time">最新：昨天 16:22</span>
+              </div>
+              <div class="t-meta">
+                <span>ewellzhao(赵国臣) · SSV 战略组</span>
+              </div>
+              <div class="t-stats">
+                <span class="stat-chip reply">回复我 <span class="plus">+</span><span class="c">2</span><span class="slash">/</span><span class="total">5</span></span>
+                <span class="stat-chip like">表情互动 <span class="plus">+</span><span class="c">8</span><span class="slash">/</span><span class="total">36</span></span>
+              </div>
+              <!-- v9.3 内嵌权限行：申请被拒绝（针对相关联的另一个 topic） -->
+              <div class="perm-row danger" onclick="event.stopPropagation()">
+                <div class="pi">🚫</div>
+                <div class="pb">
+                  <div class="ph">
+                    <span class="ptag">✗ 已拒绝</span>
+                    <span>· 你曾申请加入相关 topic「五周年文化共创」</span>
+                    <span class="ptime">昨天 14:08</span>
+                  </div>
+                  <div class="pdesc"><b>ewellzhao</b>（topic 维护人）拒绝了你的查看申请
+                    <div class="preason">拒绝理由：本期共创仅限文化策划组成员参与</div>
+                  </div>
+                  <div class="pacts">
+                    <span class="pstatus no">✗ 已拒绝</span>
+                    <button class="ghost" onclick="permDismiss(this)">知道了</button>
+                    <button class="ghost" onclick="permDismiss(this)">联系审批人</button>
+                  </div>
+                </div>
+              </div>
+              <div class="t-newstream">
+                <div class="t-newstream-group">
+                  <div class="t-newstream-gh">
+                    <span class="badge-new">新增</span>
+                    <span class="kind-reply">回复我</span>
+                    <span class="cnt">· 2 条</span>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c1">e</div>
+                    <div class="lb">
+                      <div class="lh"><b>ewellzhao</b> 回复了你 · 昨天</div>
+                      <div class="lt">"透明即上下文" 说得太对了，这句能不能作为月会开场语。</div>
+                    </div>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c4">S</div>
+                    <div class="lb">
+                      <div class="lh"><b>suriwang</b> 回复了你 · 昨天</div>
+                      <div class="lt">我想把它放进 Nexus 的 slogan。</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="t-newstream-group">
+                  <div class="t-newstream-gh">
+                    <span class="badge-new">新增</span>
+                    <span class="kind-like">表情互动</span>
+                    <span class="cnt">· 8 人对你的发言表达了喜爱</span>
+                  </div>
+                </div>
+              </div>
+              <div class="t-parts">
+                <span class="avs">
+                  <span class="av av-c1">e</span>
+                  <span class="av av-c4">S</span>
+                  <span class="av av-c3">p</span>
+                  <span class="av av-c2">h</span>
+                  <span class="av av-c5">n</span>
+                </span>
+                <span>ewellzhao、suriwang 等 10 人参与</span>
+              </div>
+            </div>
+            <div class="t-arrow">▾</div>
+          </div>
+          <div class="tcard-body">
+            <div class="ev-group">
+              <div class="ev-group-h reply">回复了我的发言 <span class="pill">2 条</span></div>
+              <div class="ev"><div class="ev-av av-c1">e</div><div class="ev-body"><div class="ev-head"><b>ewellzhao</b> 回复了你 <span class="ev-time">· 昨天</span></div><div class="ev-text">"透明即上下文" 说得太对了，这句能不能作为月会开场语。</div></div></div>
+              <div class="ev"><div class="ev-av av-c4">S</div><div class="ev-body"><div class="ev-head"><b>suriwang</b> 回复了你 <span class="ev-time">· 昨天</span></div><div class="ev-text">我想把它放进 Nexus 的 slogan。</div></div></div>
+            </div>
+            <div class="ev-group">
+              <div class="ev-group-h like">点赞了你的发言 <span class="pill">8 赞</span></div>
+              <div class="like-grid">
+                <div class="lc"><span class="av av-c1">e</span>ewellzhao</div>
+                <div class="lc"><span class="av av-c4">S</span>suriwang</div>
+                <div class="lc"><span class="av av-c3">p</span>patricksong</div>
+                <div class="lc"><span class="av av-c2">h</span>hunterguo</div>
+                <div class="lc"><span class="av av-c5">n</span>namixiao</div>
+                <div class="lc"><span class="av av-c6">d</span>dorisbhwang</div>
+                <div class="lc"><span class="av av-c7">t</span>tianyudeng</div>
+                <div class="lc"><span class="av av-c8">r</span>ringowei</div>
+              </div>
+            </div>
+            <div class="ev-actions">
+              <button class="bt">进入 Topic 查看</button>
+              <button class="bt ghost">标记为已读</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ CARD 5 ============ -->
+        <div class="tcard unread has-update" data-topic="t-craft" data-unread="1">
+          <div class="tcard-head" onclick="toggleCard(this)">
+            <div class="t-ico">🎨</div>
+            <div class="t-main">
+              <div class="t-title-row">
+                <h3 class="t-title">可持续手作计划</h3>
+                <span class="t-tag">项目</span>
+                <span class="unread-dot"></span>
+                <span class="t-time">最新：3 小时前</span>
+              </div>
+              <div class="t-meta">
+                <span>zerozhao(赵力强) · 公益生态部</span>
+              </div>
+              <div class="t-stats">
+                <span class="stat-chip reply">回复我 <span class="plus">+</span><span class="c">2</span><span class="slash">/</span><span class="total">4</span></span>
+                <span class="stat-chip comment">评论 <span class="plus">+</span><span class="c">3</span><span class="slash">/</span><span class="total">14</span></span>
+                <span class="stat-chip update-chip" title="该 Topic 所挂的目标 / 策略的描述发生了变化">📌 内容有更新</span>
+              </div>
+              <!-- v9.3 内嵌权限行：待审批 -->
+              <div class="perm-row action" onclick="event.stopPropagation()">
+                <div class="pi">🔑</div>
+                <div class="pb">
+                  <div class="ph">
+                    <span class="ptag">⚙ 待你审批</span>
+                    <span>· 你是该 topic 的共同维护人</span>
+                    <span class="ptime">2 小时前</span>
+                  </div>
+                  <div class="pdesc"><b>weima</b> 申请加入「可持续手作计划」查看
+                    <div class="preason">申请理由：负责对接 5 月手作活动品牌方资源</div>
+                  </div>
+                  <div class="pacts">
+                    <button class="yes" onclick="permApprove(this, true)">✓ 同意</button>
+                    <button class="no" onclick="permApprove(this, false)">✗ 拒绝</button>
+                    <span class="pnote">· 同意后用户立即可见</span>
+                  </div>
+                </div>
+              </div>
+              <div class="t-newstream">
+                <div class="t-newstream-group">
+                  <div class="t-newstream-gh">
+                    <span class="badge-new">新增</span>
+                    <span class="kind-reply">回复我</span>
+                    <span class="cnt">· 2 条</span>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c2">c</div>
+                    <div class="lb">
+                      <div class="lh"><b>coffeezhong</b> 回复了你 · 3 小时前</div>
+                      <div class="lt">捐赠端能不能在活动日加个"手作体验"入口？</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="t-newstream-group">
+                  <div class="t-newstream-gh">
+                    <span class="badge-new">新增</span>
+                    <span class="kind-comment">评论</span>
+                    <span class="cnt">· 3 条</span>
+                  </div>
+                  <div class="line">
+                    <div class="lav av-c6">l</div>
+                    <div class="lb">
+                      <div class="lh"><b>lycheeyli</b> 评论 · 5 小时前</div>
+                      <div class="lt">第三期活动已加入运营日历。</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="t-parts">
+                <span class="avs">
+                  <span class="av av-c1">z</span>
+                  <span class="av av-c2">c</span>
+                  <span class="av av-c6">l</span>
+                </span>
+                <span>zerozhao、coffeezhong 等 3 人参与</span>
+              </div>
+            </div>
+            <div class="t-arrow">▾</div>
+          </div>
+          <div class="tcard-body">
+            <div class="ev-group">
+              <div class="ev-group-h reply">回复了我的评论 <span class="pill">2 条</span></div>
+              <div class="ev"><div class="ev-av av-c1">z</div><div class="ev-body"><div class="ev-head"><b>zerozhao</b> 回复了你 <span class="ev-time">· 3 小时前</span></div><div class="ev-text">场地已确认，报名链接已发 OA，请大家转发。</div></div></div>
+              <div class="ev"><div class="ev-av av-c2">c</div><div class="ev-body"><div class="ev-head"><b>coffeezhong</b> 回复了你 <span class="ev-time">· 3 小时前</span></div><div class="ev-text">捐赠端能不能在活动日加个"手作体验"入口？</div></div></div>
+            </div>
+            <div class="ev-group">
+              <div class="ev-group-h comment">Topic 新评论 <span class="pill">3 条</span></div>
+              <div class="ev"><div class="ev-av av-c6">l</div><div class="ev-body"><div class="ev-head"><b>lycheeyli</b> 评论 <span class="ev-time">· 5 小时前</span></div><div class="ev-text">第三期活动已加入运营日历。</div></div></div>
+              <div class="ev"><div class="ev-av av-c5">n</div><div class="ev-body"><div class="ev-head"><b>namixiao</b> 评论 <span class="ev-time">· 6 小时前</span></div><div class="ev-text">设计可以提供活动物料。</div></div></div>
+              <div class="ev"><div class="ev-av av-c7">d</div><div class="ev-body"><div class="ev-head"><b>dorisbhwang</b> 评论 <span class="ev-time">· 昨天</span></div><div class="ev-text">乡村场可以同步做一场。</div></div></div>
+            </div>
+            <div class="ev-actions">
+              <button class="bt">进入 Topic 查看</button>
+              <button class="bt ghost">标记为已读</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 已读分区 -->
+        <div class="sec-div"><div class="sec-div-label">已读 · 最近 7 天</div><div class="sec-div-line"></div></div>
+
+        <div class="tcard">
+          <div class="tcard-head" onclick="toggleCard(this)">
+            <div class="t-ico">🛠</div>
+            <div class="t-main">
+              <div class="t-title-row">
+                <h3 class="t-title">AI Workflow 探索落地</h3>
+                <span class="t-tag">项目</span>
+                <span class="t-time">3 天前</span>
+              </div>
+              <div class="t-meta">
+                <span>hunterguo(郭晓波) · 数据中台组</span>
+              </div>
+              <div class="t-stats">
+                <span class="stat-chip comment">评论 2</span>
+                <span class="stat-chip like">表情互动 4</span>
+              </div>
+            </div>
+            <div class="t-arrow">▾</div>
+          </div>
+          <div class="tcard-body">
+            <div class="ev-group">
+              <div class="ev-group-h comment">Topic 评论 <span class="pill">2 条</span></div>
+              <div class="ev"><div class="ev-av av-c2">h</div><div class="ev-body"><div class="ev-head"><b>hunterguo</b> 评论 <span class="ev-time">· 3 天前</span></div><div class="ev-text">本周落地了 2 个实验，详情见文档。</div></div></div>
+              <div class="ev"><div class="ev-av av-c3">c</div><div class="ev-body"><div class="ev-head"><b>coffeezhong</b> 评论 <span class="ev-time">· 3 天前</span></div><div class="ev-text">帮把接口文档贴一下。</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tcard">
+          <div class="tcard-head" onclick="toggleCard(this)">
+            <div class="t-ico">🎙</div>
+            <div class="t-main">
+              <div class="t-title-row">
+                <h3 class="t-title">捐声计划 - 守护家乡话</h3>
+                <span class="t-tag">项目</span>
+                <span class="t-time">4 天前</span>
+              </div>
+              <div class="t-meta">
+                <span>ringowei(魏传昊) · 公益生态部</span>
+              </div>
+              <div class="t-stats">
+                <span class="stat-chip reply">回复我 1</span>
+              </div>
+            </div>
+            <div class="t-arrow">▾</div>
+          </div>
+          <div class="tcard-body">
+            <div class="ev-group">
+              <div class="ev-group-h reply">回复了我 <span class="pill">1 条</span></div>
+              <div class="ev"><div class="ev-av av-c5">r</div><div class="ev-body"><div class="ev-head"><b>ringowei</b> 回复了你 <span class="ev-time">· 4 天前</span></div><div class="ev-text">MVP 已上线，欢迎体验。</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================== -->
+      <!-- Topic 权限 tab：待操作 / 已操作 -->
+      <!-- ===================================== -->
+      <div class="tab-panel" data-panel="perm" style="display:none">
+
+        <!-- 待操作 -->
+        <div class="perm-section">
+          <div class="perm-section-h">
+            <span class="ph-num">●</span>
+            <h3>待操作</h3>
+            <span class="desc">· 包含你需要申请的权限、需要你审批的申请</span>
+          </div>
+
+          <!-- 待申请 1：被 @ 但无权限 -->
+          <div class="pncard action">
+            <div class="pn-av av-c2">w</div>
+            <div class="pn-body">
+              <div class="pn-h">
+                用户 <b>windlin</b> 在一个你暂无查看权限的 Topic
+                <span class="topic-link">测试评论区@ - 不同部门</span>
+                <span class="topic-id">#7617</span>
+                中 @了你
+              </div>
+              <div class="pn-actions">
+                <button class="pn-btn primary" onclick="applyForPermission(this)">申请查看权限</button>
+                <button class="pn-btn ghost" onclick="pnDismiss(this)">忽略</button>
+              </div>
+            </div>
+            <span class="pn-time">16 分钟前</span>
+          </div>
+
+          <!-- 待申请 2 -->
+          <div class="pncard action">
+            <div class="pn-av av-c4">S</div>
+            <div class="pn-body">
+              <div class="pn-h">
+                用户 <b>suriwang</b> 在一个你暂无查看权限的 Topic
+                <span class="topic-link">数据中台 · Q2 OKR 草案</span>
+                <span class="topic-id">#3912</span>
+                中 @了你
+              </div>
+              <div class="pn-actions">
+                <button class="pn-btn primary" onclick="applyForPermission(this)">申请查看权限</button>
+                <button class="pn-btn ghost" onclick="pnDismiss(this)">忽略</button>
+              </div>
+            </div>
+            <span class="pn-time">1 小时前</span>
+          </div>
+
+          <!-- 待审批 1（你是维护人，他人申请） -->
+          <div class="pncard action">
+            <div class="pn-av av-c1">w</div>
+            <div class="pn-body">
+              <div class="pn-h">
+                <b>weima</b> 申请加入你维护的 Topic
+                <span class="topic-link">可持续手作计划</span>
+                <span class="topic-id">#8842</span>
+                查看
+                <span class="reason">申请理由：负责对接 5 月手作活动品牌方资源</span>
+              </div>
+              <div class="pn-actions">
+                <button class="pn-btn dark" onclick="pnApprove(this, true)">✓ 同意</button>
+                <button class="pn-btn no" onclick="pnApprove(this, false)">✗ 拒绝</button>
+                <span class="pn-note">· 同意后用户立即可见该 topic</span>
+              </div>
+            </div>
+            <span class="pn-time">2 小时前</span>
+          </div>
+
+          <!-- 待审批 2 -->
+          <div class="pncard action">
+            <div class="pn-av av-c3">h</div>
+            <div class="pn-body">
+              <div class="pn-h">
+                <b>hunterguo</b> 申请加入你维护的 Topic
+                <span class="topic-link">2026 战略 OKR 草案</span>
+                <span class="topic-id">#1024</span>
+                查看
+                <span class="reason">申请理由：参与 Q2 战略对齐讨论</span>
+              </div>
+              <div class="pn-actions">
+                <button class="pn-btn dark" onclick="pnApprove(this, true)">✓ 同意</button>
+                <button class="pn-btn no" onclick="pnApprove(this, false)">✗ 拒绝</button>
+                <span class="pn-note">· 同意后用户立即可见该 topic</span>
+              </div>
+            </div>
+            <span class="pn-time">3 小时前</span>
+          </div>
+
+        </div><!-- /待操作 -->
+
+        <!-- 已操作 -->
+        <div class="perm-section">
+          <div class="perm-section-h">
+            <span class="ph-num">✓</span>
+            <h3>已操作</h3>
+            <span class="desc">· 申请进行中、历史申请结果、已审批记录、权限变更通知</span>
+          </div>
+
+          <!-- 申请进行中（你已提交，等待对方审批） -->
+          <div class="pncard applying">
+            <div class="pn-av av-c5">D</div>
+            <div class="pn-body">
+              <div class="pn-h">
+                你已申请查看
+                <span class="topic-link">评论区可见性申请测试</span>
+                · 等待 <b>danilhuang</b> 审批
+              </div>
+            </div>
+            <span class="pn-time">33 分钟前</span>
+          </div>
+
+          <!-- 申请被拒 -->
+          <div class="pncard rejected">
+            <div class="pn-av av-c6">d</div>
+            <div class="pn-body">
+              <div class="pn-h">
+                你的查看申请被
+                <b>dorisbhwang</b>（维护人）拒绝
+                <span class="topic-link">年终绩效讨论</span>
+              </div>
+            </div>
+            <span class="pn-time">昨天 14:08</span>
+          </div>
+
+          <!-- 申请被通过 -->
+          <div class="pncard approved">
+            <div class="pn-av av-c4">S</div>
+            <div class="pn-body">
+              <div class="pn-h">
+                你的查看申请已被
+                <b>suriwang</b>（维护人）<b>同意</b>
+                <a class="topic-link clickable" href="javascript:void(0)" onclick="showToast('打开 Topic：RAG 知识库 v1 试用名单')">RAG 知识库 v1 试用名单</a>
+              </div>
+            </div>
+            <span class="pn-time">昨天 16:30</span>
+          </div>
+
+          <!-- 你审批通过的回执 -->
+          <div class="pncard approved">
+            <div class="pn-av av-c5">n</div>
+            <div class="pn-body">
+              <div class="pn-h">
+                你已<b>同意</b>
+                <b>namixiao</b> 加入
+                <a class="topic-link clickable" href="javascript:void(0)" onclick="showToast('打开 Topic：公益小程序设计语言 v2')">公益小程序设计语言 v2</a>
+                的申请
+              </div>
+            </div>
+            <span class="pn-time">昨天 10:12</span>
+          </div>
+
+          <!-- 权限被移除 -->
+          <div class="pncard removed">
+            <div class="pn-av av-c4">S</div>
+            <div class="pn-body">
+              <div class="pn-h">
+                <b>suriwang</b>(维护人)移除了你对
+                <span class="topic-link">数据中台 · 内部排期</span>
+                的查看权限
+              </div>
+            </div>
+            <span class="pn-time">昨天 11:30</span>
+          </div>
+
+        </div><!-- /已操作 -->
+
+      </div><!-- /tab-panel perm -->
+
+      <!-- ===================================== -->
+      <!-- 目标 tab：管理者关联数变化 + 普通用户 @我 / Topic 被取消 -->
+      <!-- ===================================== -->
+      <div class="tab-panel" data-panel="goal" style="display:none">
+
+        <!-- ============ v10.9 重构 ============
+             ① 目标管理者：关联 / 关联加 / 关联减 三种状态
+             ② 策略关联人：你被指派 / 关联策略加 / 关联策略减 / 无查看权限 四种 + "内容有更新"
+             ③ Topic 发布人卡：移走 → 融合到 Topic 互动 tab（卡右侧"关联关系被移除"小块）
+             ============================================================ -->
+
+        <div class="gmatrix-intro">
+          <div class="gmi-title">📋 目标通知 · 按对象聚合</div>
+          <div class="gmi-sub">点击卡片 → 跳转到目标管理页查看完整动态明细</div>
+          <div class="gmi-filter">
+            <span class="gmi-pill active" data-role="all" onclick="gmFilter(this,'all')">全部</span>
+            <span class="gmi-pill role-mgr" data-role="mgr" onclick="gmFilter(this,'mgr')">① 目标管理者</span>
+            <span class="gmi-pill role-kr" data-role="kr" onclick="gmFilter(this,'kr')">② 策略关联人</span>
+          </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- ① 目标管理者：关联 / 关联加 / 关联减 -->
+        <!-- ============================================================ -->
+        <div class="perm-section gm-section" data-role="mgr">
+          <div class="perm-section-h">
+            <span class="ph-num role-mgr">①</span>
+            <h3>你管理的目标 · 目标层变化</h3>
+            <span class="desc">· 两种状态：新增 topic / 取消关联</span>
+          </div>
+
+          <!-- 未读卡：整卡可点击跳转目标管理页 -->
+          <div class="gncard unread agg-card v105-card click-jump" data-role="mgr" onclick="jumpToGoalPage('goal-1')">
+            <!-- 行 1：目标（目标本身有变化时也带 NEW 标签） -->
+            <div class="gn-line goal-line">
+              <span class="gl-label">目标</span>
+              <h3 class="gl-text" onclick="event.stopPropagation();jumpToGoalPage('goal-1')">夯实捐款，丰富好事产品，转型"做好事"平台</h3>
+              <span class="kr-update-tag" title="目标描述有变化">NEW</span>
+              <span class="gn-time">最新：2 小时前</span>
+            </div>
+
+            <!-- 行 2：关键策略 -->
+            <div class="gn-line kr-line">
+              <span class="gl-label">关键策略</span>
+              <div class="gnk-summary">
+                <div class="gnk-row">
+                  <span class="kr-tag-sm">关键策略 1</span>
+                  <span class="gnk-text" onclick="event.stopPropagation();jumpToGoalPage('kr-1')">丰富好事产品 · 捐款稳中有升</span>
+                  <span class="kr-update-tag" title="该策略描述有变化">NEW</span>
+                  <span class="gnk-stat add">新增 topic <b>3</b></span>
+                  <span class="gnk-stat remove">取消关联 <b>1</b></span>
+                </div>
+                <div class="gnk-row">
+                  <span class="kr-tag-sm">关键策略 2</span>
+                  <span class="gnk-text" onclick="event.stopPropagation();jumpToGoalPage('kr-2')">用户荣誉和激励 · 小红花爱心花园</span>
+                  <span class="gnk-stat add">新增 topic <b>1</b></span>
+                </div>
+                <div class="gnk-row">
+                  <span class="kr-tag-sm">关键策略 3</span>
+                  <span class="gnk-text" onclick="event.stopPropagation();jumpToGoalPage('kr-3')">激活机构动力 · 小红花码运营</span>
+                  <span class="gnk-stat add">新增 topic <b>2</b></span>
+                  <span class="gnk-stat remove">取消关联 <b>1</b></span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 已读卡：仅保留目标 + 最近总动态数 -->
+          <div class="gncard agg-card v105-card read-mini click-jump" data-role="mgr" onclick="jumpToGoalPage('goal-2')">
+            <div class="gn-line goal-line">
+              <span class="gl-label">目标</span>
+              <h3 class="gl-text">激活社会公益生态，让 SSV 影响力辐射司外</h3>
+              <span class="gn-time-mini">最近 7 天 · 共 12 条动态</span>
+            </div>
+          </div>
+          <div class="gncard agg-card v105-card read-mini click-jump" data-role="mgr" onclick="jumpToGoalPage('goal-3')">
+            <div class="gn-line goal-line">
+              <span class="gl-label">目标</span>
+              <h3 class="gl-text">小红花生态运营提质，转化率提升 20%</h3>
+              <span class="gn-time-mini">最近 7 天 · 共 5 条动态</span>
+            </div>
+          </div>
+          </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- ② 策略关联人：四种状态 + 内容有更新 -->
+        <!-- ============================================================ -->
+        <div class="perm-section gm-section" data-role="kr">
+          <div class="perm-section-h">
+            <span class="ph-num role-kr">②</span>
+            <h3>你协同的策略 · 关联与权限变动</h3>
+            <span class="desc">· 三种状态：@ 你 / 新增 topic / 取消关联</span>
+          </div>
+
+          <!-- 未读卡：整卡可点击跳转目标管理页 -->
+          <div class="gncard unread agg-card v105-card click-jump" data-role="kr" onclick="jumpToGoalPage('goal-1')">
+            <div class="gn-line goal-line">
+              <span class="gl-label">目标</span>
+              <h3 class="gl-text" onclick="event.stopPropagation();jumpToGoalPage('goal-1')">夯实捐款，丰富好事产品，转型"做好事"平台</h3>
+              <span class="gn-time">最新：1 天前</span>
+            </div>
+
+            <div class="gn-line kr-line">
+              <span class="gl-label">关键策略</span>
+              <div class="gnk-summary">
+                <div class="gnk-row">
+                  <span class="kr-tag-sm">关键策略 2</span>
+                  <span class="gnk-text" onclick="event.stopPropagation();jumpToGoalPage('kr-2')">用户荣誉和激励 · 小红花爱心花园</span>
+                  <span class="kr-update-tag" title="该策略的描述 / 协同人组成有调整">NEW</span>
+                  <span class="gnk-stat create">@ 你</span>
+                  <span class="gnk-stat add">新增 topic <b>2</b></span>
+                  <span class="gnk-stat remove">取消关联 <b>1</b></span>
+                </div>
+                <div class="gnk-row">
+                  <span class="kr-tag-sm">关键策略 4</span>
+                  <span class="gnk-text" onclick="event.stopPropagation();jumpToGoalPage('kr-4')">提升机构能力 · B 端服务工具</span>
+                  <span class="gnk-stat create">@ 你</span>
+                </div>
+                <!-- 不可见通知：你曾被指派为该策略协同人，现在已被移除/可见范围调整 → 策略对你不可见 -->
+                <div class="gnk-row invisible">
+                  <span class="kr-tag-sm invisible-tag">关键策略 5</span>
+                  <span class="gnk-text-invisible">🔒 该策略已对你不可见</span>
+                  <span class="gnk-stat invisible-stat">关联你被移除</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 已读卡：仅保留目标 + 最近总动态数 -->
+          <div class="gncard agg-card v105-card read-mini click-jump" data-role="kr" onclick="jumpToGoalPage('goal-2')">
+            <div class="gn-line goal-line">
+              <span class="gl-label">目标</span>
+              <h3 class="gl-text">激活社会公益生态，让 SSV 影响力辐射司外</h3>
+              <span class="gn-time-mini">最近 7 天 · 共 6 条动态</span>
+            </div>
+          </div>
+        </div>
+      </div><!-- /tab-panel goal -->
+
+      <!-- 系统 tab -->
+      <div class="tab-panel" data-panel="system" style="display:none">
+        <div class="sec-div"><div class="sec-div-label">系统通知</div><div class="sec-div-line"></div></div>
+        <div class="tcard">
+          <div class="tcard-head">
+            <div class="t-ico">⚙️</div>
+            <div class="t-main">
+              <div class="t-title-row"><h3 class="t-title">Nexus AI v1.2 已上线，新增"月报跨期对比"功能</h3><span class="t-time">2 天前</span></div>
+              <div class="t-meta"><span class="t-tag">系统</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <b>🎯 v9.4 · 三 Tab 结构</b><br>
+        ① <b>Topic 权限 [3]</b>：单独 tab 集中处理权限事项，分两段：<br>
+        &nbsp;&nbsp;&nbsp;<b>(a) 待申请权限</b>—— 你被 @ 但暂无权限的 topic（蓝色 [申请查看权限]）；申请中（黄色"等待审批"）；申请通过（绿色 [立即查看]）；申请被拒（红色）；权限被移除（橙色）<br>
+        &nbsp;&nbsp;&nbsp;<b>(b) 需要我审批的权限</b>—— 你是 topic 维护人，他人的加入申请（[✓ 同意] [✗ 拒绝]）；已处理的会保留为绿色"已通过"卡<br>
+        ② <b>Topic 互动 [5]</b>：保持现样式，每张未读卡右上角加红色"●内容有更新"横幅；权限信息已挪到独立 tab，不再嵌入卡内；<br>
+        ③ <b>系统</b>：系统级通知（产品更新、维护公告）。
+      </div>
+
+      </section><!-- /view-list -->
+
+      <!-- ==================== Topic 详情视图 v6：Event 折叠时间线 ==================== -->
+      <section id="view-detail" class="hidden">
+        <div class="back" onclick="backToList()">← 返回</div>
+
+        <!-- Topic 头部（参考"捐声计划"样式） -->
+        <div class="td-head" style="background:transparent;border:0;padding:8px 4px 4px">
+          <button class="td-subscribe">☆ 订阅</button>
+          <h1 class="td-title" id="dTitle" style="font-size:22px;margin-bottom:4px">Topic 标题</h1>
+          <div class="td-summary" id="dSummary">
+            <span id="dMeta">ringowei · 2026-04-23 15:13</span>
+            <span class="dot"></span>
+            <span>可见范围：SSV 全体员工</span>
+          </div>
+        </div>
+
+        <!-- Event 折叠时间线 -->
+        <div class="ev-wrap" id="dEvents"></div>
+
+      </section><!-- /view-detail -->
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* Tab switching */
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const name = tab.dataset.tab;
+    document.querySelectorAll('.tab-panel').forEach(p=>{
+      p.style.display = p.dataset.panel === name ? '' : 'none';
+    });
+  });
+});
+
+/* ============================================================
+   点击卡头 → 进入 Topic 详情（而非只是展开）
+   ============================================================ */
+function toggleCard(headEl){
+  const card = headEl.closest('.tcard');
+  const topicId = card.dataset.topic;
+  if(!topicId){
+    // 已读卡片无 data-topic，退回到展开交互
+    card.classList.toggle('expanded');
+    return;
+  }
+  enterTopic(card, topicId);
+}
+
+/* v9.10: 整张 tcard（互动 tab）任何位置可点击跳转 Topic */
+document.addEventListener('click', function(e){
+  const card = e.target.closest('.tab-panel[data-panel="relate"] .tcard');
+  if(!card) return;
+  // 排除真正的可交互元素（按钮、链接等），它们各自处理
+  if(e.target.closest('button, a, input, textarea, .pn-btn, .ev-actions, .bt')) return;
+  const topicId = card.dataset.topic;
+  if(topicId) enterTopic(card, topicId);
+  else card.classList.toggle('expanded');
+});
+
+/* ============================================================
+   v6 数据结构：每个 topic 含多个 events（就像"捐声计划"里 #1 MVP上线 / #2 4.20迭代 / #3 4.24迭代）
+   每个 event 有自己的评论流 + 本轮新增(newItems)
+   ============================================================ */
+const topicData = {
+  't-biz':{
+    title:'一元起捐对总善款规模的长期影响怎么估？',
+    author:'weima',
+    meta:'weima(马巍) · 2026-04-15 10:20 · 可见范围：SSV 全体员工',
+    newStats:[{k:'at',n:3},{k:'reply',n:2},{k:'comment',n:5},{k:'like',n:12}],
+    totalStats:[{k:'at',n:8},{k:'reply',n:12},{k:'comment',n:24},{k:'like',n:58}],
+    sinceDays:5,
+    events:[
+      {
+        seq:1, title:'议题发起：一元起捐放量观察', time:'2026-04-15 10:20',
+        content:'<h4>背景</h4>月度捐赠主流程"一元起捐"本月启动放量灰度，需要长期跟踪总善款规模、客单价、二次捐赠率等指标。',
+        newItems:[], // 无新增
+        oldItems:[
+          {isMe:true,av:'W',c:1,name:'你（weima）',time:'4 月 15 日',text:'先把议题立起来，后面每周在这条下更新观察进展。'},
+        ],
+      },
+      {
+        seq:2, title:'4.20 灰度数据初步观察', time:'2026-04-20 16:40',
+        isNew:true,
+        content:'<h4>核心数据</h4>灰度完成率：11.3% → 16.6%（+5.3pt）；客单价：¥18.4 → ¥12.7；30 天二次捐赠率：34% vs 18%（对照）。',
+        newGroups:[
+          {type:'reply', title:'回复了我的评论', count:2, latest:'ringowei · 客单价下降需要和品牌方对齐', items:[
+            {av:'r',c:1,name:'ringowei',time:'1 天前',text:'你说的对比方法没问题，但我们发现客单价曲线比预期更陡，需要追踪第 45 天的回落情况。'},
+            {av:'c',c:2,name:'coffeezhong',time:'1 天前',text:'建议把"低门槛 + 推荐高金额"作为一个组合实验也跑一下。'},
+          ]},
+          {type:'comment', title:'新评论', count:2, latest:'patricksong · 口径要不要统一...', items:[
+            {av:'p',c:8,name:'patricksong',time:'1 天前',text:'客单价的口径（含手续费 vs 不含）要不要统一下？我看 DWD 里两个值都有。'},
+            {av:'t',c:7,name:'tianyudeng',time:'1 天前',text:'灰度组的二次捐赠率是按 30 天滚动算的吗？是否受节日因素影响？'},
+          ]},
+        ],
+        oldItems:[
+          {av:'r',c:1,name:'ringowei',time:'4 月 20 日',text:'完成率拉动很明显，但客单价下降需要和品牌方对齐。'},
+          {av:'c',c:2,name:'coffeezhong',time:'4 月 18 日',text:'放量前建议先做一次定性研究。'},
+          {isMe:true,av:'W',c:1,name:'你（weima）',time:'4 月 22 日',text:'把一元起捐的 30 天二次捐赠率和高门槛组作对比，如果差距 >1.5 倍就值得放量。'},
+        ],
+      },
+      {
+        seq:3, title:'4.27 放量后首周数据 & 开放讨论：长期影响怎么估？', time:'2026-04-27 09:12',
+        isNew:true, // 最新 event，默认展开 + 高亮
+        content:'<h4>首周数据</h4>总善款 +12%（30 天回看）· 客单价延续下降趋势 -31% · 品牌合作接入意愿显著上升。<h4>开放问题</h4>低门槛是否会改变捐赠者的"心理账户"？希望数据中台组和品牌方视角。',
+        // 本轮新增（进入 topic 前的"新"）
+        newGroups:[
+          {type:'at', title:'@ 我', count:3, latest:'hunterguo · 品牌方视角，晨光刚反馈...', items:[
+            {av:'r',c:1,name:'ringowei',time:'2 小时前',text:'<span class="mention">@weima</span> 这块我们从数据中台组视角看，低门槛反而会让捐赠频次上升，需要你从产品角度再对齐 LTV 测算口径。'},
+            {av:'c',c:2,name:'coffeezhong',time:'2 小时前',text:'<span class="mention">@weima</span> 补充：低门槛用户 30 天二次捐赠率 34%，远高于高门槛组 18%。'},
+            {av:'h',c:3,name:'hunterguo',time:'1 小时前',text:'<span class="mention">@weima</span> 品牌方视角，晨光刚反馈"一元门槛"让他们更愿意接入瓶身码，ROI 讲得通。'},
+          ]},
+          {type:'reply', title:'回复了我的评论', count:2, latest:'suriwang · 同意你说的"低门槛 ≠ 低总善款"...', items:[
+            {av:'S',c:4,name:'suriwang',time:'3 小时前',text:'同意你说的"低门槛 ≠ 低总善款"，但建议把客单价的长期走势也拉出来看。'},
+            {av:'n',c:5,name:'namixiao',time:'3 小时前',text:'能否配合设计侧测一下"一元起捐"入口的视觉权重？'},
+          ]},
+          {type:'comment', title:'其他新评论', count:5, latest:'ewellzhao · 赞成放量，但希望定性研究...', items:[
+            {av:'d',c:6,name:'dorisbhwang',time:'4 小时前',text:'直达乡村场景里"一元起捐"特别适合村支书转发，推一下。'},
+            {av:'t',c:7,name:'tianyudeng',time:'5 小时前',text:'支持放量，但冲刺月结束后要看回落曲线。'},
+            {av:'p',c:8,name:'patricksong',time:'5 小时前',text:'数据口径这一块要不要写进"铁律"？'},
+            {av:'z',c:1,name:'zerozhao',time:'6 小时前',text:'可持续手作也能搭一元起捐的顺风车。'},
+            {av:'e',c:2,name:'ewellzhao',time:'6 小时前',text:'赞成放量，但希望下月月报里能看到"用户长期捐赠意愿"的定性研究。'},
+          ]},
+          {type:'like', title:'点赞了你的发言', count:12, latest:'ringowei、coffeezhong 等 12 人', items:[
+            {av:'r',c:1,name:'ringowei 等 12 人',time:'3 小时内',text:'为你 4 月 22 日的发言点赞 👍'},
+          ]},
+        ],
+        oldItems:[
+          {isMe:true,av:'W',c:1,name:'你（weima）',time:'今日 09:12',text:'首周数据出炉，指标整体偏正向，但想听听各组对"长期影响"的判断。'},
+        ],
+      },
+    ],
+  },
+  't-ai':{
+    title:'Nexus AI 正式上线 🎉 邀你体验 & 反馈',
+    author:'suriwang',
+    meta:'suriwang(王昕) · 2026-04-23 11:30 · 可见范围：SSV 全体员工',
+    newStats:[{k:'at',n:1},{k:'comment',n:4},{k:'like',n:6}],
+    totalStats:[{k:'at',n:3},{k:'reply',n:0},{k:'comment',n:32},{k:'like',n:45}],
+    sinceDays:3,
+    events:[
+      {
+        seq:1, title:'内测招募', time:'2026-04-10 14:00',
+        content:'<h4>内测阶段</h4>3 位种子用户内测，打磨核心能力：自动摘要、月报跨期对比。',
+        newItems:[],
+        oldItems:[
+          {av:'S',c:4,name:'suriwang',time:'4 月 10 日',text:'内测名单已定：weima、patricksong、hunterguo。'},
+        ],
+      },
+      {
+        seq:2, title:'v1 正式发布', time:'2026-04-23 11:30',
+        content:'<h4>v1 核心能力</h4>• 月报自动摘要 · 跨期对比<br>• "待你回应"智能提醒<br>• 跨 Topic 关联发现',
+        newItems:[],
+        oldItems:[
+          {isMe:true,av:'W',c:1,name:'你（weima）',time:'昨天 上午',text:'体验了一下，摘要能力比预期好，特别是月报的跨期对比。'},
+          {av:'S',c:4,name:'suriwang',time:'昨天 上午',text:'Nexus AI v1 正式发布！核心能力详见 PRD。'},
+        ],
+      },
+      {
+        seq:3, title:'一周后用户反馈汇总 & 开放招募', time:'2026-04-26 18:42',
+        isNew:true,
+        content:'<h4>一周使用数据</h4>DAU 218 · 日均查询次数 4.2 · 正向反馈率 76%。<h4>下一步</h4>对 5 个业务团队开放 RAG 试用名额。',
+        newGroups:[
+          {type:'at', title:'@ 我', count:1, latest:'suriwang · 文化实验室要不要做第一批试用？', items:[
+            {av:'S',c:4,name:'suriwang',time:'昨天 19:42',text:'<span class="mention">@weima</span> 文化实验室要不要做第一批试用？5-8 号可以开始对接。'},
+          ]},
+          {type:'comment', title:'新评论', count:4, latest:'ewellzhao · 期待"待你回应"做成企微卡片', items:[
+            {av:'z',c:1,name:'zerozhao',time:'1 小时前',text:'摘要很准，但月报的"意外发现"字段抽出来偶尔会丢上下文。'},
+            {av:'w',c:3,name:'windealli',time:'1 小时前',text:'强烈建议加"本周我最关心 topic"的个人推送。'},
+            {av:'h',c:2,name:'hunterguo',time:'30 分钟前',text:'跨期对比很实用 👍'},
+            {av:'e',c:5,name:'ewellzhao',time:'20 分钟前',text:'期待下一步把"待你回应"做成企微卡片推送。'},
+          ]},
+          {type:'like', title:'点赞', count:6, latest:'6 人赞了 v1 发布', items:[
+            {av:'r',c:1,name:'ringowei 等 6 人',time:'今天内',text:'为 v1 发布点赞'},
+          ]},
+        ],
+        oldItems:[],
+      },
+    ],
+  },
+  't-bounce':{
+    title:'捐后 30s 跳出率联合专项招募',
+    author:'weima',
+    meta:'weima · 2026-04-23 15:05 · 可见范围：SSV 全体员工',
+    newStats:[{k:'at',n:2},{k:'reply',n:1}],
+    totalStats:[{k:'at',n:4},{k:'reply',n:3},{k:'comment',n:9},{k:'like',n:11}],
+    sinceDays:2,
+    events:[
+      {
+        seq:1, title:'专项立项', time:'2026-04-23 15:05',
+        content:'<h4>背景</h4>连续三个月围绕跳出率做了 7 次实验，效果不显著。希望联合用研、品牌、设计、数据组开一次专项。',
+        newItems:[],
+        oldItems:[
+          {isMe:true,av:'W',c:1,name:'你（weima）',time:'4 月 23 日',text:'本月专项启动，欢迎用研、品牌、设计、数据组加入。'},
+          {av:'S',c:4,name:'suriwang',time:'4 月 23 日',text:'数据中台组可以出 2 名同学。'},
+        ],
+      },
+      {
+        seq:2, title:'跨组对齐会纪要（待写）', time:'2026-04-26 17:08',
+        isNew:true,
+        content:'<h4>议程</h4>· 用户访谈方案确认<br>· 设计侧介入节奏<br>· 品牌方素材支持',
+        newGroups:[
+          {type:'at', title:'@ 我', count:2, latest:'brandteam · 建议 4-29 开跨组对齐会', items:[
+            {av:'n',c:3,name:'namixiao',time:'昨天',text:'<span class="mention">@weima</span> 设计侧建议先做 5 个用户访谈再定方案，避免"拍脑袋改"。'},
+            {av:'b',c:4,name:'brandteam',time:'昨天',text:'<span class="mention">@weima</span> 这个需要小程序组牵头，建议 4-29 开一次跨组对齐会。'},
+          ]},
+          {type:'reply', title:'回复了我的评论', count:1, latest:'用户研究组 · 本周三可出深访人选', items:[
+            {av:'u',c:5,name:'用户研究组 (uxlab)',time:'昨天',text:'我们这周可以出 5 位目标用户的深访人选，排期本周三。'},
+          ]},
+        ],
+        oldItems:[],
+      },
+    ],
+  },
+  't-ssv':{
+    title:'探讨：你心目中的 SSV 理念是什么？',
+    author:'ewellzhao',
+    meta:'ewellzhao · 2026-04-18 10:00 · 可见范围：SSV 全体员工',
+    newStats:[{k:'reply',n:2},{k:'like',n:8}],
+    totalStats:[{k:'at',n:0},{k:'reply',n:5},{k:'comment',n:58},{k:'like',n:36}],
+    sinceDays:7,
+    events:[
+      {
+        seq:1, title:'五周年话题发起', time:'2026-04-18 10:00',
+        content:'<h4>话题</h4>公司五周年之际发起"SSV 理念"定义讨论，欢迎大家用一句话说出心里的 SSV。',
+        newItems:[],
+        oldItems:[
+          {av:'e',c:1,name:'ewellzhao',time:'4 月 18 日',text:'五周年了，来用一句话定义你心里的 SSV。'},
+          {isMe:true,av:'W',c:1,name:'你（weima）',time:'4 月 20 日',text:'"透明即上下文，上下文即生产力"——真正让组织生产力提升的不是更多工具，而是让信息流动起来。'},
+        ],
+      },
+      {
+        seq:2, title:'精选回答汇总', time:'2026-04-26 14:00',
+        isNew:true,
+        content:'<h4>编辑部精选</h4>从 58 条回答中精选 8 条最能代表 SSV 的理念。',
+        newGroups:[
+          {type:'reply', title:'回复了我的发言', count:2, latest:'suriwang · 我想把它放进 Nexus 的 slogan', items:[
+            {av:'e',c:1,name:'ewellzhao',time:'昨天',text:'"透明即上下文" 说得太对了，这句能不能作为月会开场语。'},
+            {av:'S',c:4,name:'suriwang',time:'昨天',text:'我想把它放进 Nexus 的 slogan。'},
+          ]},
+          {type:'like', title:'点赞了你的发言', count:8, latest:'8 人点赞"透明即上下文"', items:[
+            {av:'e',c:1,name:'ewellzhao、suriwang 等 8 人',time:'昨天',text:'为你 4 月 20 日的发言点赞 👍'},
+          ]},
+        ],
+        oldItems:[],
+      },
+    ],
+  },
+  't-craft':{
+    title:'可持续手作计划',
+    author:'zerozhao',
+    meta:'zerozhao · 2026-04-22 11:00 · 可见范围：SSV 全体员工',
+    newStats:[{k:'reply',n:2},{k:'comment',n:3}],
+    totalStats:[{k:'at',n:0},{k:'reply',n:4},{k:'comment',n:14},{k:'like',n:9}],
+    sinceDays:4,
+    events:[
+      {
+        seq:1, title:'第二期回顾 & 第三期立项', time:'2026-04-22 11:00',
+        content:'<h4>第二期数据</h4>参与 120 人 · 成品转化为义卖 48 件 · 善款 ¥3,840。<h4>第三期</h4>5 月 8 日麦秆剪贴活动，已启动场地协调。',
+        newItems:[],
+        oldItems:[
+          {isMe:true,av:'W',c:1,name:'你（weima）',time:'4 月 24 日',text:'去年第二期的反馈很好，今年是否可以尝试跨村联动？'},
+          {av:'z',c:1,name:'zerozhao',time:'4 月 22 日',text:'手作计划第三期场地还在协调。'},
+        ],
+      },
+      {
+        seq:2, title:'第三期开放报名', time:'2026-04-27 15:20',
+        isNew:true,
+        content:'<h4>报名开放</h4>场地已确认为乙社区活动中心，可容纳 150 人。报名截止 5-6，详见 OA 链接。',
+        newGroups:[
+          {type:'reply', title:'回复了我的评论', count:2, latest:'coffeezhong · 活动日加"手作体验"入口？', items:[
+            {av:'z',c:1,name:'zerozhao',time:'3 小时前',text:'场地已确认，报名链接已发 OA，请大家转发。'},
+            {av:'c',c:2,name:'coffeezhong',time:'3 小时前',text:'捐赠端能不能在活动日加个"手作体验"入口？'},
+          ]},
+          {type:'comment', title:'新评论', count:3, latest:'lycheeyli · 已加入运营日历', items:[
+            {av:'l',c:6,name:'lycheeyli',time:'5 小时前',text:'第三期活动已加入运营日历。'},
+            {av:'n',c:5,name:'namixiao',time:'6 小时前',text:'设计可以提供活动物料。'},
+            {av:'d',c:7,name:'dorisbhwang',time:'昨天',text:'乡村场可以同步做一场。'},
+          ]},
+        ],
+        oldItems:[],
+      },
+    ],
+  },
+};
+
+/* ============================================================
+   工具
+   ============================================================ */
+function plainText(html){
+  const d = document.createElement('div');
+  d.innerHTML = html;
+  return (d.textContent || d.innerText || '').trim();
+}
+const typeColor = {at:'at',reply:'reply',comment:'comment',like:'like'};
+const typeIcon = {at:'@',reply:'↩',comment:'💬',like:'👍'};
+
+/* ============================================================
+   进入 Topic 详情
+   ============================================================ */
+function enterTopic(card, topicId){
+  const t = topicData[topicId];
+  if(!t) return;
+  // 头部
+  document.getElementById('dTitle').textContent = t.title;
+  document.getElementById('dMeta').textContent = t.meta;
+
+  // 讨论总览带已移除（v9.8）
+  // renderOverview(t);
+
+  // Event 时间线渲染
+  const wrap = document.getElementById('dEvents');
+  wrap.innerHTML = (t.events||[]).map(ev => renderEvent(ev, t)).join('');
+
+  // 切换视图
+  document.getElementById('view-list').classList.add('hidden');
+  document.getElementById('view-detail').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  // v9.8：默认全部 Event 折叠，需要点击 Event 行头展开
+
+  // 标记已读
+  setTimeout(()=>markRead(card), 250);
+}
+
+function renderOverview(t){
+  const totalNew = (t.newStats||[]).reduce((s,x)=>s+x.n,0);
+  const totalAll = (t.totalStats||[]).reduce((s,x)=>s+x.n,0);
+  const sinceDays = t.sinceDays || 7;
+  const eventCount = (t.events||[]).length;
+  // 把 totalStats 与 newStats 按 k 对齐
+  const mapNew = Object.fromEntries((t.newStats||[]).map(x=>[x.k,x.n]));
+  const labels = {at:'@ 我',reply:'回复我',comment:'评论',like:'点赞'};
+  const order = ['at','reply','comment','like'];
+  const chips = order.map(k=>{
+    const total = ((t.totalStats||[]).find(x=>x.k===k)||{}).n || 0;
+    if(total===0 && !mapNew[k]) return '';
+    const inc = mapNew[k] || 0;
+    return `
+      <div class="oc ${k}">
+        <div class="kind"><b>${labels[k]}</b><span>累计</span></div>
+        <div class="num">
+          <span class="new-n">+${inc}</span>
+          <span class="old-n">/ 共 ${total}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('dOverview').innerHTML = `
+    <div class="td-overview-head">
+      <div class="big">共 <span class="total-n">${totalAll}</span> 条互动</div>
+      <span class="label">分布在 ${eventCount} 个 Event 中</span>
+      ${totalNew>0 ? `<span class="delta">本次新增 ${totalNew}</span>` : ''}
+      <span class="days">距上次查看 ${sinceDays} 天</span>
+    </div>
+    <div class="td-overview-chips">${chips}</div>
+  `;
+}
+
+function renderEvent(ev, t){
+  const hasNewGroups = ev.newGroups && ev.newGroups.length > 0;
+  const newCount = hasNewGroups ? ev.newGroups.reduce((s,g)=>s+g.count,0) : 0;
+  const newAvs = hasNewGroups
+    ? ev.newGroups.flatMap(g=>g.items.slice(0,1)).slice(0,3)
+    : [];
+
+  // 该 Event 累计讨论数（新增 + 历史）
+  const evTotal = newCount + (ev.oldItems||[]).length;
+
+  // 头部的 NEW 标（v9.8: 仅保留 NEW，去掉头像图标和"+N 新动态"文字）
+  const headerNew = hasNewGroups ? `
+    <span class="new-flag">NEW</span>
+  ` : '';
+  // v9: 累计讨论数（弱化灰字）
+  const headerTotal = evTotal>0 ? `<span class="ev-total">共 ${evTotal} 条讨论</span>` : '';
+
+  // 新动态分组块（v9: 去掉"●新增"徽标，只保留类型名作为分组标题）
+  const newBoxes = hasNewGroups ? ev.newGroups.map(g=>`
+    <div class="ev-new-box">
+      <div class="ev-new-box-h">
+        <span class="tag-${g.type}">${typeIcon[g.type]} ${g.title}</span>
+        <span style="color:var(--text-3);font-weight:500">· ${g.count} 条</span>
+      </div>
+      ${g.items.map(it=>`
+        <div class="mini">
+          <div class="m-av av-c${it.c}">${it.av}</div>
+          <div class="m-b">
+            <div class="m-h"><b>${it.name}</b> · ${it.time}</div>
+            <div class="m-t">${it.text}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('') : '';
+
+  // 老评论
+  const oldList = (ev.oldItems||[]).length ? `
+    <div class="ev-flow-h">
+      <b>讨论 ${(ev.oldItems||[]).length} 条</b>
+      ${hasNewGroups ? '<span style="color:var(--text-3)">· 以下为历史讨论</span>' : ''}
+    </div>
+    ${ev.oldItems.map(it=>`
+      <div class="old-line${it.isMe?' is-me':''}">
+        <div class="ol-av av-c${it.c}">${it.av}</div>
+        <div class="ol-b">
+          <div class="ol-h"><b>${it.name}</b>· ${it.time}</div>
+          <div class="ol-t">${it.text}</div>
+        </div>
+      </div>
+    `).join('')}
+  ` : '';
+
+  return `
+    <div class="ev-row${ev.isNew?' has-new':''}">
+      <div class="ev-row-head" onclick="toggleEvRow(this)">
+        <span class="caret">▸</span>
+        <span class="seq">#${ev.seq}</span>
+        <span class="ev-title">${ev.title}</span>
+        ${headerNew}
+        ${headerTotal}
+        <span class="ev-time">${ev.time}</span>
+      </div>
+      <div class="ev-row-body">
+        ${ev.content ? `<div class="ev-content">${ev.content}</div>` : ''}
+        <div class="ev-flow">
+          ${newBoxes}
+          ${oldList}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function toggleEvRow(headEl){
+  const row = headEl.closest('.ev-row');
+  row.classList.toggle('open');
+}
+
+function backToList(){
+  document.getElementById('view-detail').classList.add('hidden');
+  document.getElementById('view-list').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* Mark read button */
+document.querySelectorAll('.ev-actions').forEach(bar=>{
+  const btns = bar.querySelectorAll('.bt');
+  const [primary, ghost] = btns;
+  if(primary){
+    primary.addEventListener('click', e=>{
+      e.stopPropagation();
+      const card = bar.closest('.tcard');
+      const topicId = card.dataset.topic;
+      if(topicId) enterTopic(card, topicId);
+    });
+  }
+  if(ghost){
+    ghost.addEventListener('click', e=>{
+      e.stopPropagation();
+      const card = bar.closest('.tcard');
+      markRead(card);
+      showToast('✓ 已标记为已读');
+    });
+  }
+});
+
+function markRead(card){
+  if(!card.classList.contains('unread')) return;
+  card.classList.remove('unread');
+  const dot = card.querySelector('.unread-dot');
+  if(dot) dot.remove();
+  // 移到已读区
+  const readDiv = card.parentNode.querySelector('.sec-div:not(.unread)');
+  if(readDiv && readDiv.nextSibling){
+    card.parentNode.insertBefore(card, readDiv.nextSibling);
+  }
+  updateCounts();
+}
+
+function updateCounts(){
+  const unread = document.querySelectorAll('.tcard.unread').length;
+  document.getElementById('unreadCnt').textContent = unread;
+  const cntRelate = document.getElementById('cntRelate');
+  const navBadge = document.getElementById('navBadge'); // 已移除，可能为 null
+  if(unread === 0){
+    cntRelate.style.display = 'none';
+    if(navBadge) navBadge.style.display = 'none';
+    document.getElementById('bell').classList.remove('has-unread');
+    const uSec = document.querySelector('.sec-div.unread');
+    if(uSec) uSec.style.display = 'none';
+  }else{
+    cntRelate.textContent = unread;
+    if(navBadge) navBadge.textContent = unread;
+  }
+}
+
+/* 全部已读 */
+document.getElementById('btnReadAll').addEventListener('click', ()=>{
+  const cards = document.querySelectorAll('.tcard.unread');
+  const goalCards = document.querySelectorAll('.tab-panel[data-panel="goal"] .gncard.unread');
+  const total = cards.length + goalCards.length;
+  if(total === 0){ showToast('已经全部已读啦 ✨'); return; }
+  cards.forEach(c => markRead(c));
+  goalCards.forEach(c => markGoalRead(c));
+  showToast(`✓ 已将 ${total} 条通知标记为已读`);
+});
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ============================================================
+   v9.3 内嵌权限行交互
+   ============================================================ */
+function permApprove(btn, agree){
+  const acts = btn.closest('.pacts');
+  if(agree){
+    acts.innerHTML = `<span class="pstatus ok">✓ 已同意</span><span class="pnote">· 申请人已通过企微收到通知</span>`;
+    showToast('✓ 已批准申请');
+  }else{
+    acts.innerHTML = `<span class="pstatus no">✗ 已拒绝</span><span class="pnote">· 已通知申请人</span>`;
+    showToast('✗ 已拒绝申请');
+  }
+  // 弱化整个权限行
+  const row = btn.closest('.perm-row');
+  row.style.opacity = '.7';
+}
+
+function permDismiss(btn){
+  const row = btn.closest('.perm-row');
+  row.style.transition = 'all .35s ease';
+  row.style.opacity = '0';
+  row.style.maxHeight = row.offsetHeight + 'px';
+  setTimeout(()=>{
+    row.style.maxHeight = '0';
+    row.style.padding = '0';
+    row.style.margin = '0';
+    row.style.border = '0';
+    row.style.overflow = 'hidden';
+  }, 200);
+  setTimeout(()=>row.remove(), 600);
+  showToast('已收起权限提示');
+}
+
+/* ============================================================
+   v9.4 互动 tab: 给每个未读卡加"内容有更新"红色横幅 —— v9.7 已移除
+   ============================================================ */
+
+/* ============================================================
+   v9.7 权限申请：点击直接申请，无弹窗、无理由
+   v9.10：申请后卡片从"待操作"迁移到"已操作"区顶部
+   ============================================================ */
+function applyForPermission(btn){
+  const card = btn.closest('.pncard');
+  if(!card) return;
+  // 提取必要信息
+  const topicLink = card.querySelector('.topic-link')?.textContent || '该 Topic';
+  const userName = card.querySelector('.pn-h b')?.textContent || '维护人';
+  const avHtml = card.querySelector('.pn-av')?.outerHTML || '';
+  // 构造已操作区的 applying 卡（精简单行）
+  const newCard = document.createElement('div');
+  newCard.className = 'pncard applying';
+  newCard.innerHTML = `
+    ${avHtml}
+    <div class="pn-body">
+      <div class="pn-h">
+        你已申请查看
+        <span class="topic-link">${topicLink}</span>
+        · 等待 <b>${userName}</b> 审批
+      </div>
+    </div>
+    <span class="pn-time">刚刚</span>
+  `;
+  // 移除原卡，插入到已操作区顶部
+  const sections = document.querySelectorAll('.tab-panel[data-panel="perm"] .perm-section');
+  const doneSection = sections[sections.length - 1]; // 最后一个 perm-section = 已操作
+  const doneFirstCard = doneSection.querySelector('.pncard');
+  card.remove();
+  if(doneFirstCard){
+    doneSection.insertBefore(newCard, doneFirstCard);
+  }else{
+    doneSection.appendChild(newCard);
+  }
+  showToast('✓ 申请已提交，等待审批');
+}
+/* 兼容旧函数（可能还有引用） */
+function submitApply(){}
+function closeApply(){}
+
+function pnApprove(btn, agree){
+  const card = btn.closest('.pncard');
+  const actions = card.querySelector('.pn-actions');
+  if(agree){
+    card.className = card.className.replace(/(action|applying)/,'approved');
+    actions.innerHTML = `<span class="pn-status ok">✓ 已同意</span><span class="pn-note">· 申请人已通过企微收到通知</span>`;
+    showToast('✓ 已批准申请');
+  } else {
+    card.className = card.className.replace(/(action|applying)/,'rejected');
+    actions.innerHTML = `<span class="pn-status no">✗ 已拒绝</span><span class="pn-note">· 已通知申请人</span>`;
+    showToast('✗ 已拒绝申请');
+  }
+}
+
+function pnDismiss(btn){
+  const card = btn.closest('.pncard');
+  card.style.transition = 'all .35s ease';
+  card.style.opacity = '0';
+  card.style.maxHeight = card.offsetHeight + 'px';
+  setTimeout(()=>{
+    card.style.maxHeight = '0';
+    card.style.padding = '0';
+    card.style.margin = '0';
+    card.style.border = '0';
+    card.style.overflow = 'hidden';
+  }, 200);
+  setTimeout(()=>card.remove(), 600);
+  showToast('已收起');
+}
+
+/* ============================================================
+   v10 目标通知交互
+   - 点击卡片 = 跳转到该目标的详情页（这里用 toast 模拟，实际由
+     另一个研发小组负责的「目标管理」页面接管）
+   - 跳转后将该卡标记为已读，并迁移到「已读」区
+   ============================================================ */
+/* 真实跳转到目标管理页（带 hash 锚点）—— v10.6 打通体验
+   anchor 支持：goal-1/2/3 · kr-1/2/3/4 · feed (打开后展开动态板) */
+const GOAL_PAGE_URL = '../参考材料/nexus3.0-package(1)-suri.html';
+function jumpToGoalPage(anchor){
+  const url = GOAL_PAGE_URL + (anchor ? '#' + anchor : '');
+  // 在新标签打开，保留通知中心
+  window.open(url, '_blank');
+}
+
+function enterGoal(card){
+  const goalId = card.dataset.goal || 'unknown';
+  // 默认带"feed"锚点 → 目标页打开后自动展开动态板
+  jumpToGoalPage('feed');
+  if(card.classList.contains('unread')){
+    setTimeout(()=>markGoalRead(card), 250);
+  }
+}
+
+/* 普通用户：我的 Topic 被取消关联 → 点击查看 Topic 详情；若已删除则告警 */
+function alertTopicRemoved(ev, card){
+  ev.stopPropagation();
+  const topicId = card.dataset.topic || '';
+  // demo：mock 一份"已删除"判断
+  const deletedSet = new Set(['t-removed-deleted']);
+  if(deletedSet.has(topicId)){
+    alert('该 Topic 已被删除，无法打开。');
+  } else {
+    showToast('打开 Topic：公益激励心理学调研（取消关联前的版本仍可查看）');
+  }
+  if(card.classList.contains('unread')){
+    setTimeout(()=>markGoalRead(card), 250);
+  }
+}
+
+/* v10.2 通知矩阵：按对象筛选 */
+function gmFilter(el, role){
+  const panel = document.querySelector('.tab-panel[data-panel="goal"]');
+  if(!panel) return;
+  // 切换 active pill
+  panel.querySelectorAll('.gmi-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  // 设置 data-filter
+  if(role === 'all'){
+    panel.removeAttribute('data-filter');
+  } else {
+    panel.setAttribute('data-filter', role);
+  }
+}
+
+/* v10.3 聚合卡展开/折叠 */
+function toggleAgg(card, ev){
+  if(ev) ev.stopPropagation();
+  // 排除点击 a-link / agg-cta 等内部交互元素
+  if(ev && ev.target && ev.target.closest('a, .agg-cta')) return;
+  if(!card || !card.classList) return;
+  card.classList.toggle('expanded');
+  // 展开时，更新 toggle 文案：折叠态显示"展开 N 条"，展开态显示"收起"
+  const toggle = card.querySelector('.agg-toggle');
+  if(toggle){
+    const cnt = card.querySelectorAll('.agg-row').length;
+    toggle.textContent = card.classList.contains('expanded')
+      ? '收起'
+      : '展开 ' + cnt + ' 条明细';
+  }
+}
+
+function markGoalRead(card){
+  if(!card.classList.contains('unread')) return;
+  card.classList.remove('unread');
+  // 移到已读区（goal tab 的最后一个 perm-section）
+  const panel = card.closest('.tab-panel[data-panel="goal"]');
+  const sections = panel.querySelectorAll('.perm-section');
+  const doneSection = sections[sections.length - 1];
+  if(doneSection){
+    // 插到已读区的第一张卡之前
+    const firstCard = doneSection.querySelector('.gncard');
+    if(firstCard){
+      doneSection.insertBefore(card, firstCard);
+    }else{
+      doneSection.appendChild(card);
+    }
+  }
+  updateGoalCount();
+}
+
+function updateGoalCount(){
+  const unread = document.querySelectorAll('.tab-panel[data-panel="goal"] .gncard.unread').length;
+  const cnt = document.getElementById('cntGoal');
+  if(!cnt) return;
+  if(unread === 0){
+    cnt.style.display = 'none';
+  }else{
+    cnt.textContent = unread;
+    cnt.style.display = '';
+  }
+}
+</script>
+</body>
+</html>
