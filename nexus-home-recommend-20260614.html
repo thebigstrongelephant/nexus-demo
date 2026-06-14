@@ -79,25 +79,20 @@
   .top-card .meta{color:var(--text-3);font-size:11px}
   .top-card .cancel{color:var(--c-coral);font-size:11px;margin-top:6px;cursor:pointer}
 
-  /* 热门话题水平条 */
-  .hot-bar{background:#FAEEDA;border:1px solid rgba(133,79,11,.25);border-radius:10px;padding:12px 14px;margin-bottom:10px}
-  .hot-bar-head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
-  .hot-bar-title{font-size:13px;font-weight:500;color:#854F0B}
-  .hot-bar-sub{font-size:11px;color:var(--text-3)}
-  .hot-bar-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
-  .hot-tag{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid rgba(133,79,11,.25);border-radius:14px;padding:4px 11px;font-size:12px;color:var(--text);cursor:pointer;transition:.15s}
-  .hot-tag:hover{background:#854F0B;color:#fff;border-color:#854F0B}
-  .hot-tag em{font-style:normal;color:#993C1D;font-size:11px}
-  .hot-tag:hover em{color:#FAC775}
-  .hot-tag.more-tag{background:transparent;border-color:transparent;color:#854F0B}
-  .hot-tag.more-tag:hover{background:transparent;color:#1d1f23;border-color:transparent;text-decoration:underline}
-  .hot-bar-extra{display:flex;align-items:center;justify-content:space-between;border-top:1px dashed rgba(133,79,11,.2);padding-top:8px;font-size:12px;color:var(--text-3)}
-  .hot-bar-extra details{cursor:pointer}
-  .hot-bar-extra summary{list-style:none;cursor:pointer;color:var(--text-2)}
-  .hot-bar-extra summary::-webkit-details-marker{display:none}
-  .filters-inner{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-  .chip{font-size:12px;padding:3px 9px;border-radius:14px;color:var(--text-2);cursor:pointer;background:#fff;border:1px solid rgba(133,79,11,.15)}
-  .chip.on{background:#1d1f23;color:#fff;border-color:#1d1f23}
+  /* 话题分类条（中性样式） */
+  .topic-bar{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+  .topic-bar-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+  .topic-bar-title{font-size:13px;font-weight:500;color:var(--text)}
+  .topic-bar-sub{font-size:11px;color:var(--text-3)}
+  .topic-bar-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .topic-tag{display:inline-flex;align-items:center;font-size:12.5px;color:var(--text-2);cursor:pointer;padding:4px 12px;border-radius:14px;transition:.15s}
+  .topic-tag:hover{background:#f1f2f5;color:var(--text)}
+  .topic-tag.on{background:#1d1f23;color:#fff}
+  .topic-bar-extra{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;font-size:12px;color:var(--text-3);gap:14px}
+  .filter-by-dept{display:flex;align-items:center;gap:8px}
+  .fbd-label{color:var(--text-3);font-size:12px}
+  .fbd-select{font:400 12px inherit;padding:4px 24px 4px 10px;border:1px solid var(--line);border-radius:6px;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' fill='none' stroke='%238b9099' stroke-width='1.2'/></svg>") right 6px center/10px no-repeat;color:var(--text);cursor:pointer;appearance:none}
+  .fbd-select:hover{border-color:var(--line-strong)}
   .sort{display:flex;gap:14px}
   .sort span{cursor:pointer}
   .sort span.on{color:var(--text);font-weight:500}
@@ -107,62 +102,46 @@
   .topic-row .ttl{font-size:14px;font-weight:500;margin-bottom:6px}
   .topic-row .meta{color:var(--text-3);font-size:12px}
 
-  /* === 右栏 Nexus AI 模块 === */
-  .right-col{display:flex;flex-direction:column;gap:14px;position:sticky;top:14px}
-  .ai-head{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--c-purple);padding:0 4px}
-  .ai-head .badge{font-size:10px;background:var(--c-purple);color:#fff;padding:1px 5px;border-radius:3px;font-weight:400}
-  .ai-card{background:#fff;border-radius:10px;padding:14px;font-size:12px}
-  .ai-card h3{font-size:13px;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-  .ai-card .more{color:var(--text-3);font-size:11px;margin-top:8px;cursor:pointer;display:inline-block}
+  /* === 右栏 Nexus AI 模块（统一中性风格） === */
+  .right-col{display:flex;flex-direction:column;gap:12px;position:sticky;top:14px}
+  .ai-head{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--text-2);padding:0 4px;letter-spacing:0.3px}
+  .ai-head .badge{font-size:10px;background:#1d1f23;color:#fff;padding:1px 5px;border-radius:3px;font-weight:400}
+
+  .ai-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;font-size:12px}
+  .ai-card h3{font-size:13px;font-weight:500;margin-bottom:10px;color:var(--text);display:flex;align-items:center;justify-content:space-between}
+  .ai-card h3 .h3-meta{font-size:11px;color:var(--text-3);font-weight:400}
+  .ai-card .more{color:var(--text-3);font-size:11px;margin-top:10px;cursor:pointer;display:inline-block}
   .ai-card .more:hover{color:var(--text)}
 
-  /* SSV 简报 */
-  .card-brief{background:var(--c-purple-bg);border:1px solid rgba(83,74,183,.25)}
-  .card-brief h3{color:var(--c-purple)}
+  /* 简报 */
   .card-brief p{color:var(--text-2);line-height:1.6;font-size:12px}
 
-  /* 热门内容 */
-  .card-hot{background:var(--c-amber-bg);border:1px solid rgba(133,79,11,.25)}
-  .card-hot h3{color:var(--c-amber)}
-  .hot-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:12px;cursor:pointer;border-bottom:1px dashed rgba(133,79,11,.15)}
-  .hot-row:last-of-type{border-bottom:none}
-  .hot-row:hover .hot-tag{text-decoration:underline}
-  .hot-rank{display:inline-block;width:14px;color:var(--c-coral);font-weight:500;font-size:11px}
-  .hot-tag{font-weight:500}
-  .hot-stat{color:var(--text-3);font-size:11px}
+  /* 通用列表项：rank + title + meta */
+  .item-row{display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer;border-bottom:1px solid var(--line)}
+  .item-row:last-of-type{border-bottom:none}
+  .item-row:hover .item-title{color:#1d1f23;text-decoration:underline}
+  .item-rank{flex:0 0 16px;font-size:11px;color:var(--text-3);text-align:center}
+  .item-row.top .item-rank{color:var(--text);font-weight:500}
+  .item-body{flex:1;min-width:0}
+  .item-title{font-size:12.5px;font-weight:500;color:var(--text);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .item-meta{font-size:11px;color:var(--text-3);margin-top:2px;line-height:1.4}
+  .item-meta .lk{color:var(--text-2);cursor:pointer}
+  .item-meta .lk:hover{color:#1d1f23;text-decoration:underline}
+  .new-dot{flex:0 0 6px;width:6px;height:6px;border-radius:50%;background:#1d1f23}
 
-  /* 热门部门事项 */
-  .card-dept{background:var(--c-teal-bg);border:1px solid rgba(15,110,86,.25)}
-  .card-dept h3{color:var(--c-teal)}
-  .dept-item{padding:8px 0;border-bottom:1px dashed rgba(15,110,86,.15)}
-  .dept-item:last-of-type{border-bottom:none}
-  .dept-item .ttl{font-size:12.5px;font-weight:500;cursor:pointer}
-  .dept-item .ttl:hover{text-decoration:underline}
-  .dept-item .meta{color:var(--text-3);font-size:11px;margin-top:3px}
-  .dept-item .meta .lk{color:var(--c-teal);cursor:pointer}
-  .dept-item .meta .lk:hover{text-decoration:underline}
-
-  /* Ta 在说什么 */
-  .card-ppl{background:var(--c-blue-bg);border:1px solid rgba(24,95,165,.25)}
-  .card-ppl h3{color:var(--c-blue)}
-  .ppl-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed rgba(24,95,165,.15)}
+  /* 部门事项（去色） */
+  /* Ta 在说什么（去色） */
+  .ppl-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);align-items:flex-start}
   .ppl-item:last-of-type{border-bottom:none}
-  .ppl-item .av{flex:0 0 28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+  .ppl-item .av{flex:0 0 26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;background:#f1f2f5;color:var(--text-2);font-weight:500}
+  .ppl-item:hover .av{background:#1d1f23;color:#fff}
   .ppl-item .body{flex:1;min-width:0}
   .ppl-item .name{font-weight:500;font-size:12.5px;cursor:pointer}
   .ppl-item .name:hover{text-decoration:underline}
   .ppl-item .said{font-size:12px;color:var(--text-2);line-height:1.5;margin-top:2px;cursor:pointer}
-  .ppl-item .said:hover{color:var(--text)}
+  .ppl-item .said:hover{color:#1d1f23}
   .ppl-item .ref{display:inline;font-size:11px;color:var(--text-3)}
-  .quote{display:block;border-left:2px solid rgba(24,95,165,.3);padding-left:8px;margin-top:4px;color:var(--text-3);font-size:11.5px;line-height:1.5}
-
-  /* 平台公告 */
-  .card-anno{background:#fff;border:1px solid var(--line)}
-  .card-anno h3{color:var(--text)}
-  .anno-item{padding:6px 0;font-size:12.5px;cursor:pointer;border-bottom:1px dashed var(--line)}
-  .anno-item:last-of-type{border-bottom:none}
-  .anno-item:hover{color:var(--c-purple)}
-  .anno-item .meta{color:var(--text-3);font-size:11px;margin-top:2px}
+  .quote{display:block;border-left:2px solid var(--line-strong);padding-left:8px;margin-top:4px;color:var(--text-3);font-size:11.5px;line-height:1.5}
 
   /* 跳转 toast */
   .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1d1f23;color:#fff;padding:10px 18px;border-radius:8px;font-size:12.5px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
@@ -260,35 +239,39 @@
             <div class="top-card" data-jump="/topics/2005"><span class="tag">　　</span><span style="color:var(--text-3);font-size:10px">2026-…</span><div class="ttl">关联事项 steven12123</div><div class="meta">stevenliu（刘毅）</div><div class="cancel">取消上墙</div></div>
           </div>
 
-          <div class="hot-bar">
-            <div class="hot-bar-head">
-              <span class="hot-bar-title">热门话题</span>
-              <span class="hot-bar-sub">最近 7 天上升最快</span>
+          <div class="topic-bar">
+            <div class="topic-bar-head">
+              <span class="topic-bar-title">话题</span>
+              <span class="topic-bar-sub">按分类查看</span>
             </div>
-            <div class="hot-bar-list">
-              <span class="hot-tag" data-jump="/topics/tag/ai-brief">#AI 简报 <em>32</em></span>
-              <span class="hot-tag" data-jump="/topics/tag/police-coop">#警方协同项目 <em>28</em></span>
-              <span class="hot-tag" data-jump="/topics/tag/db-governance">#数据库治理 <em>18</em></span>
-              <span class="hot-tag" data-jump="/topics/tag/mobile-adapt">#移动端适配 <em>14</em></span>
-              <span class="hot-tag" data-jump="/topics/tag/key-item">#关键事项 <em>11</em></span>
-              <span class="hot-tag more-tag" data-jump="/topics/trending">查看完整热榜 →</span>
+            <div class="topic-bar-list">
+              <span class="topic-tag on" data-jump="/topics?cat=all">全部</span>
+              <span class="topic-tag" data-jump="/topics?cat=report">汇报</span>
+              <span class="topic-tag" data-jump="/topics?cat=meeting">月会</span>
+              <span class="topic-tag" data-jump="/topics?cat=strategy">战略</span>
+              <span class="topic-tag" data-jump="/topics?cat=compliance">合规</span>
+              <span class="topic-tag" data-jump="/topics?cat=ops">经营</span>
+              <span class="topic-tag" data-jump="/topics?cat=tech">技术</span>
+              <span class="topic-tag" data-jump="/topics?cat=all-action">全员行动</span>
+              <span class="topic-tag" data-jump="/topics?cat=project">项目</span>
+              <span class="topic-tag" data-jump="/topics?cat=other">其他</span>
             </div>
-            <div class="hot-bar-extra">
-              <details>
-                <summary>筛选 ▾</summary>
-                <div class="filters-inner">
-                  <span class="chip on">全部</span>
-                  <span class="chip">目标</span>
-                  <span class="chip">月会</span>
-                  <span class="chip">战略</span>
-                  <span class="chip">合规</span>
-                  <span class="chip">经营</span>
-                  <span class="chip">技术</span>
-                  <span class="chip">全员行动</span>
-                  <span class="chip">项目</span>
-                  <span class="chip">其他</span>
-                </div>
-              </details>
+            <div class="topic-bar-extra">
+              <div class="filter-by-dept">
+                <span class="fbd-label">发布人部门</span>
+                <select class="fbd-select" data-jump-on="change">
+                  <option value="all">全部部门</option>
+                  <option value="welfare-platform">公益平台部</option>
+                  <option value="time-lab">时光实验室</option>
+                  <option value="digital-edu">数字教育实验室</option>
+                  <option value="digital-culture">数字文化实验室</option>
+                  <option value="tech-arch">技术架构部</option>
+                  <option value="biz-mgmt">业务管理部</option>
+                  <option value="brand">品牌管理中心</option>
+                  <option value="fund">基金会支持组</option>
+                  <option value="arc">ARC</option>
+                </select>
+              </div>
               <div class="sort">
                 <span>最新发布</span>
                 <span class="on">最近活跃</span>
@@ -320,48 +303,86 @@
 
         <aside class="right-col">
           <div class="ai-head">
-            <span>✦ Nexus AI</span>
+            <span>NEXUS AI</span>
             <span class="badge">AI</span>
           </div>
 
-          <div class="ai-card card-brief">
-            <h3>SSV 简报 · 2026-06-14</h3>
-            <p>Nexus AI 已正式上线，迎你体验 &amp; 反馈。<br>
-              本周 7 个关键议题进入落地阶段，包括 AI 简报、移动端适配、关键事项治理等。</p>
+          <div class="ai-card">
+            <h3>SSV 简报 <span class="h3-meta">2026-06-14</span></h3>
+            <p>Nexus AI 已正式上线，迎你体验 &amp; 反馈。本周 7 个关键议题进入落地阶段，包括 AI 简报、移动端适配、关键事项治理等。</p>
             <span class="more" data-jump="/brief/2026-06-14">展开全文 →</span>
           </div>
 
-          <div class="ai-card card-hot">
-            <h3>① 热门内容（30 天榜）</h3>
-            <div class="hot-row" data-jump="/topics/tag/ai-brief"><span><span class="hot-rank">1</span><span class="hot-tag">#AI 简报</span></span><span class="hot-stat">32 篇 · 18 人参与 ↑</span></div>
-            <div class="hot-row" data-jump="/topics/tag/police-coop"><span><span class="hot-rank">2</span><span class="hot-tag">#警方协同项目</span></span><span class="hot-stat">28 篇 · 14 人参与 ↑</span></div>
-            <div class="hot-row" data-jump="/topics/tag/db-governance"><span><span class="hot-rank">3</span><span class="hot-tag">#数据库治理</span></span><span class="hot-stat">18 篇 · 11 人参与</span></div>
-            <div class="hot-row" data-jump="/topics/tag/mobile-adapt"><span><span class="hot-rank">4</span><span class="hot-tag">#移动端适配</span></span><span class="hot-stat">14 篇 · 9 人参与</span></div>
-            <div class="hot-row" data-jump="/topics/tag/key-item"><span><span class="hot-rank">5</span><span class="hot-tag">#关键事项治理</span></span><span class="hot-stat">11 篇 · 7 人参与</span></div>
-            <span class="more" data-jump="/topics/trending">查看完整热榜 →</span>
+          <div class="ai-card">
+            <h3>新话题 <span class="h3-meta">7 天上升</span></h3>
+            <div class="item-row top" data-jump="/topics/tag/ai-brief">
+              <span class="item-rank">1</span>
+              <div class="item-body">
+                <div class="item-title">#AI 简报</div>
+                <div class="item-meta">32 篇 · 18 人参与</div>
+              </div>
+            </div>
+            <div class="item-row top" data-jump="/topics/tag/police-coop">
+              <span class="item-rank">2</span>
+              <div class="item-body">
+                <div class="item-title">#警方协同项目</div>
+                <div class="item-meta">28 篇 · 14 人参与</div>
+              </div>
+            </div>
+            <div class="item-row" data-jump="/topics/tag/db-governance">
+              <span class="item-rank">3</span>
+              <div class="item-body">
+                <div class="item-title">#数据库治理</div>
+                <div class="item-meta">18 篇 · 11 人参与</div>
+              </div>
+            </div>
+            <div class="item-row" data-jump="/topics/tag/mobile-adapt">
+              <span class="item-rank">4</span>
+              <div class="item-body">
+                <div class="item-title">#移动端适配</div>
+                <div class="item-meta">14 篇 · 9 人参与</div>
+              </div>
+            </div>
+            <div class="item-row" data-jump="/topics/tag/key-item">
+              <span class="item-rank">5</span>
+              <div class="item-body">
+                <div class="item-title">#关键事项治理</div>
+                <div class="item-meta">11 篇 · 7 人参与</div>
+              </div>
+            </div>
+            <span class="more" data-jump="/topics/trending">查看完整 →</span>
           </div>
 
-          <div class="ai-card card-dept">
-            <h3>② 热门部门事项</h3>
-            <div class="dept-item">
-              <div class="ttl" data-jump="/topics/4001">公益平台二期立项</div>
-              <div class="meta"><span class="lk" data-jump="/dept/welfare-platform">公益平台部</span> · <span class="lk" data-jump="/goals/2#item-1">目标 2-关键事项 1</span></div>
+          <div class="ai-card">
+            <h3>部门新动态 <span class="h3-meta">关键事项相关</span></h3>
+            <div class="item-row" data-jump="/topics/4001">
+              <span class="new-dot"></span>
+              <div class="item-body">
+                <div class="item-title">公益平台二期立项</div>
+                <div class="item-meta"><span class="lk" data-jump="/dept/welfare-platform">公益平台部</span> · <span class="lk" data-jump="/goals/2#item-1">目标 2-关键事项 1</span></div>
+              </div>
             </div>
-            <div class="dept-item">
-              <div class="ttl" data-jump="/topics/4002">数据库治理 Q3 规划</div>
-              <div class="meta"><span class="lk" data-jump="/dept/tech-arch">技术架构部</span> · <span class="lk" data-jump="/goals/1#item-4">目标 1-关键事项 4</span></div>
+            <div class="item-row" data-jump="/topics/4002">
+              <span class="new-dot"></span>
+              <div class="item-body">
+                <div class="item-title">数据库治理 Q3 规划</div>
+                <div class="item-meta"><span class="lk" data-jump="/dept/tech-arch">技术架构部</span> · <span class="lk" data-jump="/goals/1#item-4">目标 1-关键事项 4</span></div>
+              </div>
             </div>
-            <div class="dept-item">
-              <div class="ttl" data-jump="/topics/4003">AI 简报灰度上线复盘</div>
-              <div class="meta"><span class="lk" data-jump="/dept/digital-culture">数字文化实验室</span> · <span class="lk" data-jump="/goals/1#item-3">目标 1-关键事项 3</span></div>
+            <div class="item-row" data-jump="/topics/4003">
+              <span class="new-dot" style="background:transparent;border:1px solid var(--line-strong)"></span>
+              <div class="item-body">
+                <div class="item-title">AI 简报灰度上线复盘</div>
+                <div class="item-meta"><span class="lk" data-jump="/dept/digital-culture">数字文化实验室</span> · <span class="lk" data-jump="/goals/1#item-3">目标 1-关键事项 3</span></div>
+              </div>
             </div>
             <span class="more" data-jump="/topics?dept=any&hot=1">查看更多 →</span>
           </div>
 
-          <div class="ai-card card-ppl">
-            <h3>③ Ta 在说什么</h3>
+          <div class="ai-card">
+            <h3>Ta 在说什么</h3>
             <div class="ppl-item">
-              <div class="av" style="background:#B5D4F4;color:#185FA5" data-jump="/u/juhong">菊</div>
+              <div class="av" data-jump="/u/juhong">菊</div>
               <div class="body">
                 <span class="name" data-jump="/u/juhong">菊红</span>
                 <div class="said" data-jump="/topics/5001#comment-77">在「Q3 战略宣讲」里说：</div>
@@ -369,7 +390,7 @@
               </div>
             </div>
             <div class="ppl-item">
-              <div class="av" style="background:#C0DD97;color:#3B6D11" data-jump="/u/geraltluo">罗</div>
+              <div class="av" data-jump="/u/geraltluo">罗</div>
               <div class="body">
                 <span class="name" data-jump="/u/geraltluo">罗象</span>
                 <div class="said" data-jump="/topics/3001">发布了「html 罗象测试」</div>
@@ -377,7 +398,7 @@
               </div>
             </div>
             <div class="ppl-item">
-              <div class="av" style="background:#F5C4B3;color:#993C1D" data-jump="/u/dorishhwang">王</div>
+              <div class="av" data-jump="/u/dorishhwang">王</div>
               <div class="body">
                 <span class="name" data-jump="/u/dorishhwang">王璇慧</span>
                 <div class="said" data-jump="/topics/2004#comment-12">评论了「修改 topic 标题…」：</div>
@@ -387,15 +408,19 @@
             <span class="more" data-jump="/people/recommended">查看更多 →</span>
           </div>
 
-          <div class="ai-card card-anno">
-            <h3>④ 平台公告</h3>
-            <div class="anno-item" data-jump="/topics/9001">
-              Nexus 6 月版本说明
-              <div class="meta">官方 · 全员可见 · 06-13</div>
+          <div class="ai-card">
+            <h3>平台公告</h3>
+            <div class="item-row" data-jump="/topics/9001">
+              <div class="item-body">
+                <div class="item-title">Nexus 6 月版本说明</div>
+                <div class="item-meta">官方 · 全员可见 · 06-13</div>
+              </div>
             </div>
-            <div class="anno-item" data-jump="/topics/9002">
-              关键事项填报指引
-              <div class="meta">PMO · 季度更新 · 06-01</div>
+            <div class="item-row" data-jump="/topics/9002">
+              <div class="item-body">
+                <div class="item-title">关键事项填报指引</div>
+                <div class="item-meta">PMO · 季度更新 · 06-01</div>
+              </div>
             </div>
           </div>
         </aside>
