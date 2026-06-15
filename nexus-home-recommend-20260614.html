@@ -79,21 +79,26 @@
   .top-card .meta{color:var(--text-3);font-size:11px}
   .top-card .cancel{color:var(--c-coral);font-size:11px;margin-top:6px;cursor:pointer}
 
-  /* Topic 区头部 + 文字 tab */
-  .topic-section{margin-bottom:0}
-  .topic-section-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-  .ts-icon{font-size:14px;color:var(--text-2)}
+  /* Topic 话题区头 + tab */
+  .topic-section{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px 4px;margin-bottom:10px}
+  .topic-section-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
   .ts-title{font-size:14px;font-weight:500;color:var(--text)}
+  .ts-sub{font-size:11px;color:var(--text-3)}
   .ts-search{margin-left:auto;width:240px;font:400 12px inherit;color:var(--text);padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:#fff;outline:none}
   .ts-search:focus{border-color:var(--line-strong)}
-  .topic-tabs{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line);padding:4px 0 0;margin-bottom:0}
-  .tt-item{position:relative;font-size:13px;color:var(--text-2);cursor:pointer;padding:8px 12px;transition:.15s}
-  .tt-item:hover{color:var(--text)}
-  .tt-item.on{color:var(--text);font-weight:500}
-  .tt-item.on::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:2px;background:#1d1f23;border-radius:1px}
-  .tt-right{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:12px;color:var(--text-3);padding-bottom:4px}
-  .fbd-select{font:400 12px inherit;padding:4px 22px 4px 8px;border:1px solid var(--line);border-radius:6px;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' fill='none' stroke='%238b9099' stroke-width='1.2'/></svg>") right 6px center/10px no-repeat;color:var(--text);cursor:pointer;appearance:none}
+  .topic-tabs{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+  .tt-item{font-size:13px;color:var(--text-2);cursor:pointer;padding:5px 12px;border-radius:14px;transition:.15s;display:inline-flex;align-items:center;gap:5px;line-height:1.3}
+  .tt-item:hover{background:#f1f2f5;color:var(--text)}
+  .tt-item.on{background:#1d1f23;color:#fff}
+  .tt-item.on em{color:#fff;opacity:.65}
+  .tt-item em{font-style:normal;font-size:11px;color:var(--text-3)}
+  .tt-item.tt-more{color:var(--text-3);font-size:12px}
+  .tt-item.tt-more:hover{background:transparent;color:var(--text)}
+  .topic-tabs-extra{display:flex;align-items:center;gap:10px;border-top:1px dashed var(--line);padding:8px 0 6px;font-size:12px;color:var(--text-3)}
+  .fbd-label{color:var(--text-3)}
+  .fbd-select{font:400 12px inherit;padding:4px 22px 4px 10px;border:1px solid var(--line);border-radius:6px;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' fill='none' stroke='%238b9099' stroke-width='1.2'/></svg>") right 6px center/10px no-repeat;color:var(--text);cursor:pointer;appearance:none;min-width:120px}
   .fbd-select:hover{border-color:var(--line-strong)}
+  .sort-right{margin-left:auto;display:flex;gap:14px}
   .sort-item{cursor:pointer}
   .sort-item.on{color:var(--text);font-weight:500}
 
@@ -246,33 +251,35 @@
 
           <div class="topic-section">
             <div class="topic-section-head">
-              <span class="ts-icon">≡</span>
-              <span class="ts-title">Topic</span>
+              <span class="ts-title">话题</span>
+              <span class="ts-sub">按业务关键词查看</span>
               <input class="ts-search" placeholder="🔍  输入关键词后按回车搜索"/>
             </div>
             <div class="topic-tabs">
-              <span class="tt-item on" data-jump="/topics?cat=all">全部</span>
-              <span class="tt-item" data-jump="/topics?cat=goal">关联目标</span>
-              <span class="tt-item" data-jump="/topics?cat=meeting">月会</span>
-              <span class="tt-item" data-jump="/topics?cat=compliance">合规</span>
-              <span class="tt-item" data-jump="/topics?cat=ops">经营</span>
-              <span class="tt-item" data-jump="/topics?cat=tech">技术</span>
-              <span class="tt-item" data-jump="/topics?cat=all-action">全员行动</span>
-              <span class="tt-item" data-jump="/topics?cat=project">项目</span>
-              <span class="tt-item" data-jump="/topics?cat=other">其他</span>
-              <div class="tt-right">
-                <select class="fbd-select" data-jump-on="change">
-                  <option value="all">全部部门</option>
-                  <option value="welfare-platform">公益平台部</option>
-                  <option value="time-lab">时光实验室</option>
-                  <option value="digital-edu">数字教育实验室</option>
-                  <option value="digital-culture">数字文化实验室</option>
-                  <option value="tech-arch">技术架构部</option>
-                  <option value="biz-mgmt">业务管理部</option>
-                  <option value="brand">品牌管理中心</option>
-                  <option value="fund">基金会支持组</option>
-                  <option value="arc">ARC</option>
-                </select>
+              <span class="tt-item on" data-jump="/topics?tag=all">全部</span>
+              <span class="tt-item" data-jump="/topics?tag=report-kb">#汇报类知识库 <em>24</em></span>
+              <span class="tt-item" data-jump="/topics?tag=chatbot">#Chatbot <em>18</em></span>
+              <span class="tt-item" data-jump="/topics?tag=edu">#教育类 <em>15</em></span>
+              <span class="tt-item" data-jump="/topics?tag=donation">#企业捐赠类 <em>12</em></span>
+              <span class="tt-item" data-jump="/topics?tag=ai-edu">#AI 教育 <em>10</em></span>
+              <span class="tt-item" data-jump="/topics?tag=knowledge-db">#知识数据库 <em>8</em></span>
+              <span class="tt-item tt-more" data-jump="/topics/trending">更多 ▾</span>
+            </div>
+            <div class="topic-tabs-extra">
+              <span class="fbd-label">发布人部门</span>
+              <select class="fbd-select" data-jump-on="change">
+                <option value="all">全部部门</option>
+                <option value="welfare-platform">公益平台部</option>
+                <option value="time-lab">时光实验室</option>
+                <option value="digital-edu">数字教育实验室</option>
+                <option value="digital-culture">数字文化实验室</option>
+                <option value="tech-arch">技术架构部</option>
+                <option value="biz-mgmt">业务管理部</option>
+                <option value="brand">品牌管理中心</option>
+                <option value="fund">基金会支持组</option>
+                <option value="arc">ARC</option>
+              </select>
+              <div class="sort-right">
                 <span class="sort-item">最新发布</span>
                 <span class="sort-item on">最近活跃</span>
               </div>
@@ -351,53 +358,41 @@
 
           <div class="ai-card">
             <h3>新话题 <span class="h3-meta">7 天上升</span></h3>
-            <div class="item-row top" data-jump="/topics/tag/rd-perspective">
+            <div class="item-row top" data-jump="/topics?tag=report-kb">
               <div class="item-body">
-                <div class="item-title">#研发过程透视</div>
+                <div class="item-title">#汇报类知识库</div>
               </div>
-              <span class="item-count">5 个话题</span>
+              <span class="item-count">24 个话题</span>
             </div>
-            <div class="item-row top" data-jump="/topics/tag/welfare-platform">
+            <div class="item-row top" data-jump="/topics?tag=chatbot">
               <div class="item-body">
-                <div class="item-title">#公益平台</div>
+                <div class="item-title">#Chatbot</div>
               </div>
-              <span class="item-count">5 个话题</span>
+              <span class="item-count">18 个话题</span>
             </div>
-            <div class="item-row" data-jump="/topics/tag/project-governance">
+            <div class="item-row" data-jump="/topics?tag=edu">
               <div class="item-body">
-                <div class="item-title">#项目治理</div>
+                <div class="item-title">#教育类</div>
               </div>
-              <span class="item-count">4 个话题</span>
+              <span class="item-count">15 个话题</span>
             </div>
-            <div class="item-row" data-jump="/topics/tag/knowledge-base">
+            <div class="item-row" data-jump="/topics?tag=donation">
               <div class="item-body">
-                <div class="item-title">#知识库</div>
+                <div class="item-title">#企业捐赠类</div>
               </div>
-              <span class="item-count">3 个话题</span>
+              <span class="item-count">12 个话题</span>
             </div>
-            <div class="item-row" data-jump="/topics/tag/ai-tools">
+            <div class="item-row" data-jump="/topics?tag=ai-edu">
               <div class="item-body">
-                <div class="item-title">#AI 工具</div>
+                <div class="item-title">#AI 教育</div>
               </div>
-              <span class="item-count">3 个话题</span>
+              <span class="item-count">10 个话题</span>
             </div>
-            <div class="item-row" data-jump="/topics/tag/biz-platform">
+            <div class="item-row" data-jump="/topics?tag=knowledge-db">
               <div class="item-body">
-                <div class="item-title">#机构服务平台</div>
+                <div class="item-title">#知识数据库</div>
               </div>
-              <span class="item-count">2 个话题</span>
-            </div>
-            <div class="item-row" data-jump="/topics/tag/sre">
-              <div class="item-body">
-                <div class="item-title">#运维 SRE</div>
-              </div>
-              <span class="item-count">2 个话题</span>
-            </div>
-            <div class="item-row" data-jump="/topics/tag/design-center">
-              <div class="item-body">
-                <div class="item-title">#设计中心</div>
-              </div>
-              <span class="item-count">2 个话题</span>
+              <span class="item-count">8 个话题</span>
             </div>
             <span class="more" data-jump="/topics/trending">查看完整 →</span>
           </div>
