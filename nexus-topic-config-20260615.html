@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Nexus 话题工作流配置</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#f5f6f8;
+    --line:rgba(0,0,0,0.08);
+    --line-strong:rgba(0,0,0,0.14);
+    --text:#1d1f23;
+    --text-2:#5b6068;
+    --text-3:#8b9099;
+    --c-blue:#185FA5; --c-blue-bg:#E6F1FB;
+    --c-teal:#0F6E56; --c-teal-bg:#E1F5EE;
+    --c-amber:#854F0B; --c-amber-bg:#FAEEDA;
+    --c-coral:#993C1D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--text);font:14px/1.55 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+  a{color:inherit;text-decoration:none}
+
+  .layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+
+  /* 左导航（与首页一致） */
+  .sidebar{background:#fff;border-right:1px solid var(--line);padding:16px 12px}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:500;font-size:15px;padding:6px 8px;margin-bottom:12px}
+  .brand .logo{width:24px;height:24px;border-radius:6px;background:#1d1f23;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px}
+  .brand small{font-weight:400;color:var(--text-3);font-size:11px}
+  .nav-section{margin-top:18px}
+  .nav-title{font-size:11px;color:var(--text-3);letter-spacing:1px;padding:0 8px;margin-bottom:6px}
+  .nav-item{display:block;padding:7px 10px;border-radius:6px;color:var(--text-2);font-size:13px;cursor:pointer}
+  .nav-item:hover{background:#f1f2f5}
+
+  .topbar{height:48px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;font-size:13px;color:var(--text-2);justify-content:space-between}
+
+  .main{padding:24px 32px;max-width:960px}
+  .crumb{font-size:12.5px;color:var(--text-3);margin-bottom:16px}
+  .crumb a{color:var(--text-2);cursor:pointer}
+  .crumb a:hover{color:var(--text)}
+  .crumb .now{color:var(--text);font-weight:500}
+
+  .head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:14px}
+  .head h1{font-size:22px;font-weight:500;display:flex;align-items:center;gap:10px}
+  .head .sub{font-size:12.5px;color:var(--text-3);margin-top:6px;display:flex;gap:10px;flex-wrap:wrap}
+  .head .sub .lk{color:var(--c-teal);cursor:pointer}
+  .head .actions{display:flex;gap:8px;flex-shrink:0}
+
+  .btn{font-size:12.5px;padding:7px 14px;border-radius:6px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--text-2);text-decoration:none;display:inline-flex;align-items:center;gap:4px}
+  .btn:hover{border-color:var(--line-strong);color:var(--text)}
+  .btn.primary{background:#1d1f23;color:#fff;border-color:#1d1f23}
+  .btn.primary:hover{background:#000}
+  .btn.danger{color:var(--c-coral);border-color:rgba(153,60,29,.3)}
+  .btn.danger:hover{background:#fff5f3;border-color:var(--c-coral)}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin-bottom:14px}
+  .card h2{font-size:14px;font-weight:500;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline}
+  .card h2 .meta{font-size:11.5px;color:var(--text-3);font-weight:400}
+
+  .row{display:flex;align-items:center;gap:12px;margin-bottom:10px;font-size:13px}
+  .row .label{flex:0 0 100px;color:var(--text-3);font-size:12px}
+  .row .ctrl{flex:1}
+  .input,.select,.textarea{width:100%;font:400 13px inherit;padding:8px 12px;border:1px solid var(--line);border-radius:6px;outline:none;color:var(--text);background:#fff}
+  .input:focus,.select:focus,.textarea:focus{border-color:var(--text)}
+  .textarea{resize:vertical;min-height:60px;font:400 12.5px Menlo,monospace}
+  .select{appearance:none;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' fill='none' stroke='%238b9099' stroke-width='1.2'/></svg>") right 8px center/10px no-repeat;padding-right:28px}
+  .radio-row{display:flex;gap:14px;font-size:13px}
+  .radio-row label{display:flex;align-items:center;gap:6px;cursor:pointer}
+  .hint{font-size:11.5px;color:var(--text-3);margin-top:6px}
+
+  /* 工作流编辑卡 */
+  .wf{border:1px solid var(--line);border-radius:8px;margin-bottom:10px;background:#fafbfc}
+  .wf-head{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;user-select:none}
+  .wf-head:hover{background:#f5f6f8}
+  .wf-head::before{content:"▸";color:var(--text-3);font-size:11px;transition:transform .15s;flex-shrink:0}
+  .wf.open .wf-head::before{transform:rotate(90deg)}
+  .wf-no{color:var(--text-3);font-family:Menlo,monospace;font-size:11.5px}
+  .wf-name{font-weight:500;flex:1}
+  .wf-stat{color:var(--text-3);font-size:11px}
+  .wf-del{color:var(--text-3);font-size:11.5px;padding:2px 6px;border-radius:4px;cursor:pointer}
+  .wf-del:hover{color:var(--c-coral);background:#fff5f3}
+  .wf-body{padding:0 14px 14px;border-top:1px solid var(--line);background:#fff;display:none}
+  .wf.open .wf-body{display:block}
+
+  .sec{padding:14px 0;border-bottom:1px dashed var(--line)}
+  .sec:last-child{border-bottom:none}
+  .sec-head{font-size:11.5px;letter-spacing:.5px;font-weight:500;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .sec-head.sec-q{color:var(--c-blue)}
+  .sec-head.sec-s{color:var(--c-amber)}
+  .sec-head.sec-a{color:var(--c-teal)}
+  .sec-head .badge{display:inline-block;background:#f1f2f5;color:var(--text-3);padding:1px 6px;border-radius:3px;font-size:10px;font-weight:400;letter-spacing:0}
+
+  /* sources 编辑器 */
+  .src-edit{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-bottom:6px;font-size:12.5px}
+  .src-edit .src-type{font-family:Menlo,monospace;font-size:10.5px;background:#1d1f23;color:#fff;padding:2px 7px;border-radius:3px;flex-shrink:0}
+  .src-edit .src-input{flex:1;border:none;outline:none;font:400 12.5px Menlo,monospace;color:var(--text-2);background:transparent}
+  .src-edit .src-rm{color:var(--text-3);cursor:pointer;font-size:11.5px;padding:2px 6px;border-radius:4px}
+  .src-edit .src-rm:hover{color:var(--c-coral);background:#fff5f3}
+  .add-line{padding:9px;border:1px dashed var(--line-strong);border-radius:6px;color:var(--text-3);text-align:center;cursor:pointer;font-size:12px;background:#fff}
+  .add-line:hover{border-color:#1d1f23;color:#1d1f23}
+
+  .new-wf-btn{padding:11px;border:1px dashed var(--line-strong);border-radius:8px;color:var(--text-3);text-align:center;cursor:pointer;font-size:12.5px;background:#fff}
+  .new-wf-btn:hover{border-color:#1d1f23;color:#1d1f23}
+
+  /* 数据源池 */
+  .pool-item{display:flex;align-items:center;gap:12px;background:#fafbfc;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:6px}
+  .pool-name{font-size:12.5px;font-weight:500}
+  .pool-meta{font-size:11.5px;color:var(--text-3);margin-top:2px}
+  .pool-item .src-rm{margin-left:auto;color:var(--text-3);cursor:pointer;font-size:11.5px;padding:2px 6px;border-radius:4px}
+  .pool-item .src-rm:hover{color:var(--c-coral);background:#fff5f3}
+
+  .save-bar{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);padding:14px 22px;display:flex;justify-content:space-between;align-items:center;margin:0 -22px -18px;border-radius:0 0 10px 10px}
+  .save-bar .status{font-size:12px;color:var(--text-3)}
+  .save-bar .actions{display:flex;gap:8px}
+
+  .role-block{margin-top:24px;padding:8px;background:#f8f9fb;border-radius:8px}
+  .role-line{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2)}
+  .role-dot{width:6px;height:6px;border-radius:50%;background:var(--c-teal)}
+  .role-text{flex:1}
+  .role-select{font:400 11px inherit;padding:2px 4px;border:1px solid var(--line);border-radius:4px;background:#fff}
+  .role-hint{font-size:10px;color:var(--text-3);margin-top:4px}
+
+  .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1d1f23;color:#fff;padding:10px 18px;border-radius:8px;font-size:12.5px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="logo">N</span>
+      <div>SSV Nexus<br><small>透明即上下文</small></div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-title">TOPICS</div>
+      <a class="nav-item" href="nexus-home-recommend-20260614.html">ALL</a>
+      <a class="nav-item">MY</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-title">话题</div>
+      <a class="nav-item" href="nexus-topic-page-20260615.html?type=a&tag=ai-boost">#AI 提效</a>
+      <a class="nav-item" href="nexus-topic-page-20260615.html?type=a&tag=stage-report">#阶段汇报</a>
+      <a class="nav-item" href="nexus-topic-page-20260615.html?type=a&tag=tech-infra">#技术基建</a>
+      <a class="nav-item" href="nexus-topic-page-20260615.html?type=a&tag=knowledge-base">#知识库</a>
+      <a class="nav-item" href="nexus-topic-page-20260615.html?type=b&tag=donation">#企业捐赠</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-title">目标管理</div>
+      <a class="nav-item" href="nexus-goals-20260615.html?dept=tech-arch">技术架构部</a>
+      <a class="nav-item" href="nexus-goals-20260615.html?dept=welfare-platform">公益平台部</a>
+    </div>
+    <div class="nav-section role-block">
+      <div class="role-line">
+        <span class="role-dot"></span>
+        <span class="role-text">demo · 角色</span>
+        <select class="role-select" id="role-select">
+          <option value="member">成员</option>
+          <option value="owner" selected>指派人</option>
+          <option value="admin">管理员</option>
+        </select>
+      </div>
+      <div class="role-hint">指派人/管理员可编辑</div>
+    </div>
+  </aside>
+
+  <div>
+    <div class="topbar">
+      <div>透明即上下文，上下文即生产力</div>
+      <div>欢迎，<b>马巍</b></div>
+    </div>
+
+    <main class="main">
+      <div class="crumb">
+        <a href="nexus-home-recommend-20260614.html">首页</a> /
+        <a href="javascript:history.back()" id="back-link">话题</a> /
+        <span class="now">配置工作流</span>
+      </div>
+
+      <div class="head">
+        <div>
+          <h1>配置话题工作流 · <span id="topic-name">#企业捐赠</span></h1>
+          <div class="sub">
+            <span>挂在 <span class="lk">目标 2-关键事项 1</span></span>
+            <span>·</span>
+            <span>配置人 <span class="lk">coffeezhong（钟嘉辉）</span> · 关键事项指派人</span>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="btn" id="back-btn">取消</a>
+          <button class="btn primary" onclick="save()">💾 保存配置</button>
+        </div>
+      </div>
+
+      <!-- 基础信息 -->
+      <div class="card">
+        <h2>基础信息</h2>
+        <div class="row">
+          <span class="label">话题名</span>
+          <div class="ctrl"><input class="input" id="f-tag" value="#企业捐赠"/></div>
+        </div>
+        <div class="row">
+          <span class="label">类型</span>
+          <div class="ctrl">
+            <div class="radio-row">
+              <label><input type="radio" name="t-type" value="auto"/> A · 自然生成（无配置，全自动 AI 总结）</label>
+              <label><input type="radio" name="t-type" value="curated" checked/> B · 问答工作流（人工配置）</label>
+            </div>
+            <div class="hint">A → B 后，原 AI 总结仍保留，新增问答能力</div>
+          </div>
+        </div>
+        <div class="row">
+          <span class="label">挂载关键事项</span>
+          <div class="ctrl">
+            <select class="select">
+              <option>目标 2-关键事项 1 · 企业捐赠合作流程标准化</option>
+              <option>目标 2-关键事项 2 · 公益项目透明化</option>
+              <option>不挂载（仅作为业务话题）</option>
+            </select>
+            <div class="hint">配置人将自动取该关键事项指派人，无需另设维护者</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 工作流编辑 -->
+      <div class="card">
+        <h2>问答工作流 <span class="meta">每条 = 一种问题模式 + 数据源 + 答案模板</span></h2>
+
+        <!-- 工作流 1（默认展开）-->
+        <div class="wf open">
+          <div class="wf-head" onclick="toggleWf(this)">
+            <span class="wf-no">#1</span>
+            <span class="wf-name">最近数据查询</span>
+            <span class="wf-stat">命中 124 次</span>
+            <span class="wf-del" onclick="event.stopPropagation();delWf(this)">删除</span>
+          </div>
+          <div class="wf-body">
+
+            <div class="sec">
+              <div class="sec-head sec-q">① 问题模式（intent）<span class="badge">用户会怎么问</span></div>
+              <div class="row">
+                <span class="label">名称</span>
+                <div class="ctrl"><input class="input" value="最近数据查询"/></div>
+              </div>
+              <div class="row">
+                <span class="label">触发关键词</span>
+                <div class="ctrl"><input class="input" value="数据, 最近, 一周, 本月, 总额, 募款"/></div>
+              </div>
+              <div class="row">
+                <span class="label">同义词扩展</span>
+                <div class="ctrl"><input class="input" value="捐赠总额, 募款金额, 收入, 入账"/></div>
+              </div>
+            </div>
+
+            <div class="sec">
+              <div class="sec-head sec-s">② 数据源路由（sources）<span class="badge">取哪、怎么取</span></div>
+
+              <div class="src-edit">
+                <span class="src-type">SQL</span>
+                <input class="src-input" value="ref=BI/7821, params={range: last_7d, group_by: company}"/>
+                <span class="src-rm" onclick="this.parentNode.remove()">×</span>
+              </div>
+              <div class="src-edit">
+                <span class="src-type">TAPD</span>
+                <input class="src-input" value="project=1208, filter={tag: 企业捐赠, status: not_done}"/>
+                <span class="src-rm" onclick="this.parentNode.remove()">×</span>
+              </div>
+              <div class="src-edit">
+                <span class="src-type">Topic</span>
+                <input class="src-input" value="tag=donation, last_n=5, with_comments=true"/>
+                <span class="src-rm" onclick="this.parentNode.remove()">×</span>
+              </div>
+
+              <div class="add-line" onclick="addSrc(this)">+ 添加数据源（从全局源池选）</div>
+            </div>
+
+            <div class="sec">
+              <div class="sec-head sec-a">③ 答案模板（render）<span class="badge">拼成什么样</span></div>
+              <div class="row">
+                <span class="label">布局</span>
+                <div class="ctrl">
+                  <select class="select">
+                    <option>kpi_grid + need_list + topic_excerpt + citations</option>
+                    <option>kpi_grid + citations</option>
+                    <option>need_list + citations</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <span class="label">显式标注</span>
+                <div class="ctrl"><input class="input" value="每个数字 hover 显示「取数时间 + SQL 链接」"/></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 工作流 2 -->
+        <div class="wf">
+          <div class="wf-head" onclick="toggleWf(this)">
+            <span class="wf-no">#2</span>
+            <span class="wf-name">研发进展查询</span>
+            <span class="wf-stat">命中 67 次</span>
+            <span class="wf-del" onclick="event.stopPropagation();delWf(this)">删除</span>
+          </div>
+          <div class="wf-body">
+            <div class="sec">
+              <div class="sec-head sec-q">① 问题模式</div>
+              <div class="row"><span class="label">触发关键词</span><div class="ctrl"><input class="input" value="进展, 进度, 哪一步, 完成, 上线, 时间表"/></div></div>
+            </div>
+            <div class="sec">
+              <div class="sec-head sec-s">② 数据源</div>
+              <div class="src-edit"><span class="src-type">TAPD</span><input class="src-input" value="project=1208, order=priority_desc"/><span class="src-rm" onclick="this.parentNode.remove()">×</span></div>
+              <div class="src-edit"><span class="src-type">Topic</span><input class="src-input" value="tag=donation, type=event, last_n=3"/><span class="src-rm" onclick="this.parentNode.remove()">×</span></div>
+              <div class="add-line" onclick="addSrc(this)">+ 添加数据源</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 工作流 3 -->
+        <div class="wf">
+          <div class="wf-head" onclick="toggleWf(this)">
+            <span class="wf-no">#3</span>
+            <span class="wf-name">流程 / SOP 查询</span>
+            <span class="wf-stat">命中 41 次</span>
+            <span class="wf-del" onclick="event.stopPropagation();delWf(this)">删除</span>
+          </div>
+          <div class="wf-body">
+            <div class="sec">
+              <div class="sec-head sec-q">① 问题模式</div>
+              <div class="row"><span class="label">触发关键词</span><div class="ctrl"><input class="input" value="怎么, 如何, 流程, SOP, 接入, 操作"/></div></div>
+            </div>
+            <div class="sec">
+              <div class="sec-head sec-s">② 数据源（串行+兜底）</div>
+              <div class="src-edit"><span class="src-type">iWiki</span><input class="src-input" value="space=KM-DONATION-SOP, top_k=3"/><span class="src-rm" onclick="this.parentNode.remove()">×</span></div>
+              <div class="src-edit"><span class="src-type">乐享</span><input class="src-input" value="kb=公益平台部, fallback_when=top1<0.6"/><span class="src-rm" onclick="this.parentNode.remove()">×</span></div>
+              <div class="add-line" onclick="addSrc(this)">+ 添加数据源</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="new-wf-btn" onclick="addWf()">+ 新增问答工作流</div>
+      </div>
+
+      <!-- 全局数据源池 -->
+      <div class="card">
+        <h2>话题数据源池 <span class="meta">所有工作流共享</span></h2>
+
+        <div class="pool-item">
+          <span class="src-edit src-type" style="background:#1d1f23;color:#fff;font-family:Menlo,monospace;font-size:10.5px;padding:2px 7px;border-radius:3px;">SQL</span>
+          <div>
+            <div class="pool-name">BI 看板 · 企业捐赠总额（SQL 7821）</div>
+            <div class="pool-meta">数据延迟 5 分钟 · 上次校验 06-12</div>
+          </div>
+          <span class="src-rm" onclick="this.parentNode.remove()">×</span>
+        </div>
+        <div class="pool-item">
+          <span class="src-edit src-type" style="background:#1d1f23;color:#fff;font-family:Menlo,monospace;font-size:10.5px;padding:2px 7px;border-radius:3px;">TAPD</span>
+          <div>
+            <div class="pool-name">TAPD 项目 1208 · 公益平台 · 企业捐赠模块</div>
+            <div class="pool-meta">实时同步 · 标签 = 企业捐赠</div>
+          </div>
+          <span class="src-rm" onclick="this.parentNode.remove()">×</span>
+        </div>
+        <div class="pool-item">
+          <span class="src-edit src-type" style="background:#1d1f23;color:#fff;font-family:Menlo,monospace;font-size:10.5px;padding:2px 7px;border-radius:3px;">iWiki</span>
+          <div>
+            <div class="pool-name">iWiki 空间 KM-DONATION-SOP</div>
+            <div class="pool-meta">已索引 28 篇 · 6 月新增 4 篇</div>
+          </div>
+          <span class="src-rm" onclick="this.parentNode.remove()">×</span>
+        </div>
+        <div class="pool-item">
+          <span class="src-edit src-type" style="background:#1d1f23;color:#fff;font-family:Menlo,monospace;font-size:10.5px;padding:2px 7px;border-radius:3px;">乐享</span>
+          <div>
+            <div class="pool-name">乐享知识库 · 公益平台部</div>
+            <div class="pool-meta">兜底来源 · 仅当 iWiki top1 &lt; 0.6 启用</div>
+          </div>
+          <span class="src-rm" onclick="this.parentNode.remove()">×</span>
+        </div>
+
+        <div class="add-line" onclick="addPool()">+ 接入新数据源</div>
+      </div>
+
+      <!-- 保存条 -->
+      <div class="save-bar">
+        <span class="status">已修改 · 未保存</span>
+        <div class="actions">
+          <a class="btn" id="back-btn-2">取消返回</a>
+          <button class="btn primary" onclick="save()">💾 保存配置</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const tag = params.get('tag') || 'donation';
+const tagNames = {
+  'donation':'#企业捐赠',
+  'ai-boost':'#AI 提效',
+  'stage-report':'#阶段汇报',
+  'tech-infra':'#技术基建',
+  'knowledge-base':'#知识库',
+  'co-design':'#Co-design',
+  'sre':'#SRE 体系'
+};
+document.getElementById('topic-name').textContent = tagNames[tag] || ('#'+tag);
+document.getElementById('f-tag').value = tagNames[tag] || ('#'+tag);
+
+// role
+const roleSelect = document.getElementById('role-select');
+function applyRole(){
+  document.body.setAttribute('data-role', roleSelect.value);
+  try{ localStorage.setItem('nexus-demo-role', roleSelect.value); }catch(e){}
+}
+const saved = (function(){ try{return localStorage.getItem('nexus-demo-role');}catch(e){return null;} })();
+if(saved){ roleSelect.value = saved; }
+roleSelect.addEventListener('change', applyRole);
+applyRole();
+
+// 折叠工作流
+function toggleWf(head){
+  head.parentNode.classList.toggle('open');
+}
+function delWf(el){
+  if(!confirm('确认删除该工作流？')) return;
+  el.closest('.wf').remove();
+  showToast('已删除');
+}
+
+// 添加 source 行
+function addSrc(addBtn){
+  const types = ['SQL','TAPD','iWiki','乐享','Topic'];
+  const t = prompt('请输入数据源类型：'+types.join(' / '), 'SQL');
+  if(!t) return;
+  const ref = prompt('参数（如：ref=BI/7821, params={range: last_7d}）', '');
+  if(ref === null) return;
+  const row = document.createElement('div');
+  row.className = 'src-edit';
+  row.innerHTML = `
+    <span class="src-type">${t}</span>
+    <input class="src-input" value="${ref.replace(/"/g,'&quot;')}"/>
+    <span class="src-rm" onclick="this.parentNode.remove()">×</span>`;
+  addBtn.parentNode.insertBefore(row, addBtn);
+}
+
+// 新增工作流
+let wfCounter = 4;
+function addWf(){
+  const name = prompt('新工作流名称', '新工作流');
+  if(!name) return;
+  const wf = document.createElement('div');
+  wf.className = 'wf open';
+  wf.innerHTML = `
+    <div class="wf-head" onclick="toggleWf(this)">
+      <span class="wf-no">#${wfCounter++}</span>
+      <span class="wf-name">${name}</span>
+      <span class="wf-stat">新建</span>
+      <span class="wf-del" onclick="event.stopPropagation();delWf(this)">删除</span>
+    </div>
+    <div class="wf-body">
+      <div class="sec">
+        <div class="sec-head sec-q">① 问题模式</div>
+        <div class="row"><span class="label">触发关键词</span><div class="ctrl"><input class="input" placeholder="逗号分隔"/></div></div>
+      </div>
+      <div class="sec">
+        <div class="sec-head sec-s">② 数据源</div>
+        <div class="add-line" onclick="addSrc(this)">+ 添加数据源</div>
+      </div>
+      <div class="sec">
+        <div class="sec-head sec-a">③ 答案模板</div>
+        <div class="row"><span class="label">布局</span><div class="ctrl"><input class="input" placeholder="如：kpi_grid + citations"/></div></div>
+      </div>
+    </div>`;
+  // 插入到 + 新增问答工作流 按钮之前
+  const newBtn = document.querySelector('.new-wf-btn');
+  newBtn.parentNode.insertBefore(wf, newBtn);
+  wf.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+// 添加全局数据源
+function addPool(){
+  const types = ['SQL','TAPD','iWiki','乐享','Topic'];
+  const t = prompt('数据源类型：'+types.join(' / '), 'TAPD');
+  if(!t) return;
+  const name = prompt('显示名称（如：TAPD 项目 1208 · 模块名）', '');
+  if(!name) return;
+  const item = document.createElement('div');
+  item.className = 'pool-item';
+  item.innerHTML = `
+    <span class="src-edit src-type" style="background:#1d1f23;color:#fff;font-family:Menlo,monospace;font-size:10.5px;padding:2px 7px;border-radius:3px;">${t}</span>
+    <div>
+      <div class="pool-name">${name}</div>
+      <div class="pool-meta">刚刚接入</div>
+    </div>
+    <span class="src-rm" onclick="this.parentNode.remove()">×</span>`;
+  const addBtn = document.querySelectorAll('.add-line');
+  const last = addBtn[addBtn.length-1];
+  last.parentNode.insertBefore(item, last);
+}
+
+// 保存（demo）
+function save(){
+  showToast('✓ 配置已保存（demo · 未真正落库）');
+}
+
+// toast
+const toast = document.getElementById('toast');
+let timer;
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(timer);
+  timer = setTimeout(()=>toast.classList.remove('show'), 1800);
+}
+
+// 返回
+const refUrl = document.referrer && document.referrer.indexOf(location.host)>=0
+  ? document.referrer
+  : 'nexus-topic-page-20260615.html?type=b&tag='+tag;
+document.getElementById('back-btn').href = refUrl;
+document.getElementById('back-btn-2').href = refUrl;
+document.getElementById('back-link').href = refUrl;
+</script>
+</body>
+</html>
