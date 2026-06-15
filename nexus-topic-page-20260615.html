@@ -51,7 +51,8 @@
   .topic-tag{display:inline-block;background:#1d1f23;color:#fff;padding:2px 10px;border-radius:12px;font-size:12px}
   .topic-name{font-size:22px;font-weight:500;margin:8px 0 6px}
   .topic-meta{color:var(--text-3);font-size:12.5px;display:flex;gap:18px;align-items:center}
-  .topic-actions{margin-top:12px;display:flex;gap:10px}
+  .role-tag{display:inline-block;font-size:10.5px;color:var(--c-teal);background:var(--c-teal-bg);padding:1px 7px;border-radius:3px;margin-left:4px;line-height:1.5}
+  .topic-actions{margin-top:12px;display:flex;gap:10px;align-items:center}
   .btn{font-size:12.5px;padding:6px 14px;border-radius:6px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--text-2)}
   .btn:hover{border-color:var(--line-strong);color:var(--text)}
   .btn.primary{background:#1d1f23;color:#fff;border-color:#1d1f23}
@@ -324,7 +325,7 @@
             <div class="topic-meta">
               <span>挂在 <a class="lk" data-jump="/goals/2#item-1" style="color:var(--c-teal)">目标 2-关键事项 1</a></span>
               <span>·</span>
-              <span>由 公益平台部 · zhangthree（张三）维护</span>
+              <span>配置人 <a class="lk" data-jump="/u/coffeezhong" style="color:var(--c-teal)">coffeezhong（钟嘉辉）</a> <span class="role-tag">关键事项指派人</span></span>
               <span>·</span>
               <span>3 条已配置工作流</span>
             </div>
@@ -332,7 +333,7 @@
               <button class="btn primary">提问此话题</button>
               <button class="btn">订阅周报</button>
               <button class="btn" data-jump="/topics/tag/donation/edit">⚙ 配置工作流</button>
-              <span class="edit-hint">问什么 → 取哪 → 怎么答，由维护者编排</span>
+              <span class="edit-hint">配置人来自关键事项指派人，不另设维护者</span>
             </div>
           </div>
 
@@ -522,22 +523,23 @@
       <!-- 右栏 -->
       <aside class="right-col">
         <div class="ai-card">
-          <h3>话题维护者</h3>
-          <div class="right-row">
-            <div class="av">张</div>
+          <h3>配置人 <span class="h3-meta" style="font-size:10.5px;color:var(--text-3)">同关键事项指派人</span></h3>
+          <div class="right-row" data-jump="/u/coffeezhong">
+            <div class="av">钟</div>
             <div class="body">
-              <div class="name">zhangthree（张三）</div>
-              <div class="said">公益平台部 · 4 个话题在维护</div>
+              <div class="name">coffeezhong（钟嘉辉）</div>
+              <div class="said">公益平台部 · 目标 2-关键事项 1 指派人</div>
             </div>
           </div>
-          <div class="right-row">
-            <div class="av">李</div>
+          <div class="right-row" data-jump="/goals/2#item-1">
+            <div class="av" style="background:var(--c-teal-bg);color:var(--c-teal)">★</div>
             <div class="body">
-              <div class="name">leesi（李四）</div>
-              <div class="said">公益平台部 · 协同维护</div>
+              <div class="name">目标 2-关键事项 1</div>
+              <div class="said">企业捐赠合作流程标准化</div>
             </div>
           </div>
         </div>
+        <style>.ai-card h3 .h3-meta{font-weight:400;margin-left:4px}</style>
 
         <div class="ai-card">
           <h3>近期发声的人</h3>
