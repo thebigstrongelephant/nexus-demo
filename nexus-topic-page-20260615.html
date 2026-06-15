@@ -192,6 +192,34 @@
   a.btn{text-decoration:none;display:inline-flex;align-items:center}
   a.wf-add,a.src-pool-add{text-decoration:none;display:block}
 
+  /* 目标公开 + 角色块（与首页一致） */
+  .nav-item .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5}
+  .public-goals{margin:0}
+  .public-goals summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 8px;font-size:11px;color:var(--text-3);letter-spacing:1px;user-select:none}
+  .public-goals summary::-webkit-details-marker{display:none}
+  .pg-caret{font-size:10px;display:inline-block;transition:transform .2s}
+  .public-goals[open] .pg-caret{transform:rotate(0deg)}
+  .public-goals:not([open]) .pg-caret{transform:rotate(-90deg)}
+  .pg-title{font-weight:500;color:var(--text-2);letter-spacing:1px}
+  .pg-meta{margin-left:auto;font-size:10px;color:var(--text-3);letter-spacing:0;background:#f1f2f5;padding:1px 6px;border-radius:8px}
+  .pg-self{padding:6px 0 4px}
+  .pg-self-name{font-size:12.5px;font-weight:500;color:var(--c-teal);padding:4px 10px;border-radius:6px;display:block;text-decoration:none}
+  .pg-self-name:hover{background:var(--c-teal-bg)}
+  .goal-item{display:flex;gap:8px;padding:5px 10px;font-size:12px;color:var(--text-2);border-radius:6px;line-height:1.4;text-decoration:none}
+  .goal-item:hover{background:#f1f2f5;color:var(--text)}
+  .goal-no{flex:0 0 auto;font-size:10.5px;color:var(--text-3);background:#f1f2f5;padding:0 5px;border-radius:3px;line-height:18px;font-family:Menlo,monospace}
+  .goal-item:hover .goal-no{background:var(--c-teal-bg);color:var(--c-teal)}
+  .goal-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pg-other{margin-top:6px;padding:6px 10px;font-size:11.5px;color:var(--text-3);border-top:1px dashed var(--line);display:block;text-decoration:none}
+  .pg-other:hover{color:var(--c-teal)}
+
+  .role-block{margin-top:24px;padding:8px;background:#f8f9fb;border-radius:8px}
+  .role-line{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2)}
+  .role-dot{width:6px;height:6px;border-radius:50%;background:var(--c-teal)}
+  .role-text{flex:1}
+  .role-select{font:400 11px inherit;padding:2px 4px;border:1px solid var(--line);border-radius:4px;background:#fff}
+  .role-hint{font-size:10px;color:var(--text-3);margin-top:4px}
+
   /* hidden helper */
   [hidden]{display:none !important}
   .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1d1f23;color:#fff;padding:10px 18px;border-radius:8px;font-size:12.5px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
@@ -209,16 +237,61 @@
     </div>
     <div class="nav-section">
       <div class="nav-title">TOPICS</div>
-      <div class="nav-item">ALL</div>
-      <div class="nav-item">MY</div>
+      <a class="nav-item" href="nexus-home-recommend-20260614.html"><span class="dot"></span>ALL</a>
+      <a class="nav-item"><span class="dot"></span>MY</a>
     </div>
+
     <div class="nav-section">
-      <div class="nav-title">话题（按业务关键词）</div>
-      <div class="nav-item active">#AI 提效</div>
-      <div class="nav-item">#阶段汇报</div>
-      <div class="nav-item">#技术基建</div>
-      <div class="nav-item">#知识库</div>
-      <div class="nav-item">#企业捐赠</div>
+      <details class="public-goals" open>
+        <summary>
+          <span class="pg-caret">▾</span>
+          <span class="pg-title">目标公开</span>
+          <span class="pg-meta">我的部门</span>
+        </summary>
+        <div class="pg-self">
+          <a class="pg-self-name" href="nexus-goals-20260615.html?dept=digital-culture">数字文化实验室</a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-1">
+            <span class="goal-no">G1-K1</span>
+            <span class="goal-text">AI 简报上线及反馈闭环</span>
+          </a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-2">
+            <span class="goal-no">G1-K2</span>
+            <span class="goal-text">移动端核心交互改造</span>
+          </a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-3">
+            <span class="goal-no">G2-K1</span>
+            <span class="goal-text">关键事项治理标准建立</span>
+          </a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-4">
+            <span class="goal-no">G2-K2</span>
+            <span class="goal-text">跨 Topic 内容沉淀机制</span>
+          </a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-5">
+            <span class="goal-no">G3-K1</span>
+            <span class="goal-text">B 端工具产品规划</span>
+          </a>
+        </div>
+        <a class="pg-other" href="nexus-goals-20260615.html?dept=all">查看其他部门目标 →</a>
+      </details>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-title">TOOLS</div>
+      <a class="nav-item">技能</a>
+      <a class="nav-item">插件</a>
+    </div>
+
+    <div class="nav-section role-block">
+      <div class="role-line">
+        <span class="role-dot"></span>
+        <span class="role-text">demo · 角色</span>
+        <select class="role-select" id="role-select">
+          <option value="member">成员</option>
+          <option value="owner" selected>指派人</option>
+          <option value="admin">管理员</option>
+        </select>
+      </div>
+      <div class="role-hint">指派人/管理员可见 ✎</div>
     </div>
   </aside>
 
@@ -636,8 +709,15 @@
   }
 
   // role
-  const role = (function(){ try{return localStorage.getItem('nexus-demo-role')||'owner';}catch(e){return 'owner';} })();
-  document.body.setAttribute('data-role', role);
+  const roleSelect = document.getElementById('role-select');
+  function applyRole(){
+    document.body.setAttribute('data-role', roleSelect.value);
+    try{ localStorage.setItem('nexus-demo-role', roleSelect.value); }catch(e){}
+  }
+  const saved = (function(){ try{return localStorage.getItem('nexus-demo-role');}catch(e){return null;} })();
+  if(saved){ roleSelect.value = saved; }
+  roleSelect.addEventListener('change', applyRole);
+  applyRole();
 
   // URL 参数：type + tag
   const params = new URLSearchParams(location.search);

@@ -23,15 +23,35 @@
 
   .layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
 
-  /* 左导航（与首页一致） */
+  /* 左导航（与首页完全一致） */
   .sidebar{background:#fff;border-right:1px solid var(--line);padding:16px 12px}
   .brand{display:flex;align-items:center;gap:8px;font-weight:500;font-size:15px;padding:6px 8px;margin-bottom:12px}
   .brand .logo{width:24px;height:24px;border-radius:6px;background:#1d1f23;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px}
   .brand small{font-weight:400;color:var(--text-3);font-size:11px}
   .nav-section{margin-top:18px}
   .nav-title{font-size:11px;color:var(--text-3);letter-spacing:1px;padding:0 8px;margin-bottom:6px}
-  .nav-item{display:block;padding:7px 10px;border-radius:6px;color:var(--text-2);font-size:13px;cursor:pointer}
+  .nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;color:var(--text-2);font-size:13px;cursor:pointer;text-decoration:none}
   .nav-item:hover{background:#f1f2f5}
+  .nav-item .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5}
+
+  .public-goals{margin:0}
+  .public-goals summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 8px;font-size:11px;color:var(--text-3);letter-spacing:1px;user-select:none}
+  .public-goals summary::-webkit-details-marker{display:none}
+  .pg-caret{font-size:10px;display:inline-block;transition:transform .2s}
+  .public-goals[open] .pg-caret{transform:rotate(0deg)}
+  .public-goals:not([open]) .pg-caret{transform:rotate(-90deg)}
+  .pg-title{font-weight:500;color:var(--text-2);letter-spacing:1px}
+  .pg-meta{margin-left:auto;font-size:10px;color:var(--text-3);letter-spacing:0;background:#f1f2f5;padding:1px 6px;border-radius:8px}
+  .pg-self{padding:6px 0 4px}
+  .pg-self-name{font-size:12.5px;font-weight:500;color:var(--c-teal);padding:4px 10px;border-radius:6px;display:block;text-decoration:none}
+  .pg-self-name:hover{background:var(--c-teal-bg)}
+  .goal-item{display:flex;gap:8px;padding:5px 10px;font-size:12px;color:var(--text-2);border-radius:6px;line-height:1.4;text-decoration:none}
+  .goal-item:hover{background:#f1f2f5;color:var(--text)}
+  .goal-no{flex:0 0 auto;font-size:10.5px;color:var(--text-3);background:#f1f2f5;padding:0 5px;border-radius:3px;line-height:18px;font-family:Menlo,monospace}
+  .goal-item:hover .goal-no{background:var(--c-teal-bg);color:var(--c-teal)}
+  .goal-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pg-other{margin-top:6px;padding:6px 10px;font-size:11.5px;color:var(--text-3);border-top:1px dashed var(--line);display:block;text-decoration:none}
+  .pg-other:hover{color:var(--c-teal)}
 
   .topbar{height:48px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;font-size:13px;color:var(--text-2);justify-content:space-between}
 
@@ -134,21 +154,48 @@
     </div>
     <div class="nav-section">
       <div class="nav-title">TOPICS</div>
-      <a class="nav-item" href="nexus-home-recommend-20260614.html">ALL</a>
-      <a class="nav-item">MY</a>
+      <a class="nav-item" href="nexus-home-recommend-20260614.html"><span class="dot"></span>ALL</a>
+      <a class="nav-item"><span class="dot"></span>MY</a>
     </div>
+
     <div class="nav-section">
-      <div class="nav-title">话题</div>
-      <a class="nav-item" href="nexus-topic-page-20260615.html?type=a&tag=ai-boost">#AI 提效</a>
-      <a class="nav-item" href="nexus-topic-page-20260615.html?type=a&tag=stage-report">#阶段汇报</a>
-      <a class="nav-item" href="nexus-topic-page-20260615.html?type=a&tag=tech-infra">#技术基建</a>
-      <a class="nav-item" href="nexus-topic-page-20260615.html?type=a&tag=knowledge-base">#知识库</a>
-      <a class="nav-item" href="nexus-topic-page-20260615.html?type=b&tag=donation">#企业捐赠</a>
+      <details class="public-goals" open>
+        <summary>
+          <span class="pg-caret">▾</span>
+          <span class="pg-title">目标公开</span>
+          <span class="pg-meta">我的部门</span>
+        </summary>
+        <div class="pg-self">
+          <a class="pg-self-name" href="nexus-goals-20260615.html?dept=digital-culture">数字文化实验室</a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-1">
+            <span class="goal-no">G1-K1</span>
+            <span class="goal-text">AI 简报上线及反馈闭环</span>
+          </a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-2">
+            <span class="goal-no">G1-K2</span>
+            <span class="goal-text">移动端核心交互改造</span>
+          </a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-3">
+            <span class="goal-no">G2-K1</span>
+            <span class="goal-text">关键事项治理标准建立</span>
+          </a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-4">
+            <span class="goal-no">G2-K2</span>
+            <span class="goal-text">跨 Topic 内容沉淀机制</span>
+          </a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-5">
+            <span class="goal-no">G3-K1</span>
+            <span class="goal-text">B 端工具产品规划</span>
+          </a>
+        </div>
+        <a class="pg-other" href="nexus-goals-20260615.html?dept=all">查看其他部门目标 →</a>
+      </details>
     </div>
+
     <div class="nav-section">
-      <div class="nav-title">目标管理</div>
-      <a class="nav-item" href="nexus-goals-20260615.html?dept=tech-arch">技术架构部</a>
-      <a class="nav-item" href="nexus-goals-20260615.html?dept=welfare-platform">公益平台部</a>
+      <div class="nav-title">TOOLS</div>
+      <a class="nav-item">技能</a>
+      <a class="nav-item">插件</a>
     </div>
     <div class="nav-section role-block">
       <div class="role-line">
