@@ -79,28 +79,31 @@
   .top-card .meta{color:var(--text-3);font-size:11px}
   .top-card .cancel{color:var(--c-coral);font-size:11px;margin-top:6px;cursor:pointer}
 
-  /* 话题分类条（中性样式） */
-  .topic-bar{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
-  .topic-bar-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
-  .topic-bar-title{font-size:13px;font-weight:500;color:var(--text)}
-  .topic-bar-sub{font-size:11px;color:var(--text-3)}
-  .topic-bar-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-  .topic-tag{display:inline-flex;align-items:center;font-size:12.5px;color:var(--text-2);cursor:pointer;padding:4px 12px;border-radius:14px;transition:.15s}
-  .topic-tag:hover{background:#f1f2f5;color:var(--text)}
-  .topic-tag.on{background:#1d1f23;color:#fff}
-  .topic-bar-extra{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;font-size:12px;color:var(--text-3);gap:14px}
-  .filter-by-dept{display:flex;align-items:center;gap:8px}
-  .fbd-label{color:var(--text-3);font-size:12px}
-  .fbd-select{font:400 12px inherit;padding:4px 24px 4px 10px;border:1px solid var(--line);border-radius:6px;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' fill='none' stroke='%238b9099' stroke-width='1.2'/></svg>") right 6px center/10px no-repeat;color:var(--text);cursor:pointer;appearance:none}
+  /* Topic 区头部 + 文字 tab */
+  .topic-section{margin-bottom:0}
+  .topic-section-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .ts-icon{font-size:14px;color:var(--text-2)}
+  .ts-title{font-size:14px;font-weight:500;color:var(--text)}
+  .ts-search{margin-left:auto;width:240px;font:400 12px inherit;color:var(--text);padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:#fff;outline:none}
+  .ts-search:focus{border-color:var(--line-strong)}
+  .topic-tabs{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line);padding:4px 0 0;margin-bottom:0}
+  .tt-item{position:relative;font-size:13px;color:var(--text-2);cursor:pointer;padding:8px 12px;transition:.15s}
+  .tt-item:hover{color:var(--text)}
+  .tt-item.on{color:var(--text);font-weight:500}
+  .tt-item.on::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:2px;background:#1d1f23;border-radius:1px}
+  .tt-right{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:12px;color:var(--text-3);padding-bottom:4px}
+  .fbd-select{font:400 12px inherit;padding:4px 22px 4px 8px;border:1px solid var(--line);border-radius:6px;background:#fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' fill='none' stroke='%238b9099' stroke-width='1.2'/></svg>") right 6px center/10px no-repeat;color:var(--text);cursor:pointer;appearance:none}
   .fbd-select:hover{border-color:var(--line-strong)}
-  .sort{display:flex;gap:14px}
-  .sort span{cursor:pointer}
-  .sort span.on{color:var(--text);font-weight:500}
+  .sort-item{cursor:pointer}
+  .sort-item.on{color:var(--text);font-weight:500}
 
-  .topic-row{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:.15s}
-  .topic-row:hover{border-color:var(--line-strong)}
-  .topic-row .ttl{font-size:14px;font-weight:500;margin-bottom:6px}
+  .topic-row{background:#fff;border-bottom:1px solid var(--line);padding:12px 16px;cursor:pointer;transition:.15s}
+  .topic-row:hover{background:#fafbfc}
+  .topic-row.pinned-soft{background:#f1f2f5}
+  .topic-row .ttl{font-size:14px;font-weight:500;margin-bottom:6px;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
   .topic-row .meta{color:var(--text-3);font-size:12px}
+  .t-tag{display:inline-block;font-size:10.5px;color:var(--c-blue);background:var(--c-blue-bg);padding:1px 7px;border-radius:3px;font-weight:400;line-height:1.5}
+  .t-tag.t-tag-update{color:var(--text-3);background:#f1f2f5}
 
   /* === 右栏 Nexus AI 模块（统一中性风格） === */
   .right-col{display:flex;flex-direction:column;gap:12px;position:sticky;top:14px}
@@ -241,26 +244,23 @@
             <div class="top-card" data-jump="/topics/2005"><span class="tag">　　</span><span style="color:var(--text-3);font-size:10px">2026-…</span><div class="ttl">关联事项 steven12123</div><div class="meta">stevenliu（刘毅）</div><div class="cancel">取消上墙</div></div>
           </div>
 
-          <div class="topic-bar">
-            <div class="topic-bar-head">
-              <span class="topic-bar-title">话题</span>
-              <span class="topic-bar-sub">按分类查看</span>
+          <div class="topic-section">
+            <div class="topic-section-head">
+              <span class="ts-icon">≡</span>
+              <span class="ts-title">Topic</span>
+              <input class="ts-search" placeholder="🔍  输入关键词后按回车搜索"/>
             </div>
-            <div class="topic-bar-list">
-              <span class="topic-tag on" data-jump="/topics?cat=all">全部</span>
-              <span class="topic-tag" data-jump="/topics?cat=report">汇报</span>
-              <span class="topic-tag" data-jump="/topics?cat=meeting">月会</span>
-              <span class="topic-tag" data-jump="/topics?cat=strategy">战略</span>
-              <span class="topic-tag" data-jump="/topics?cat=compliance">合规</span>
-              <span class="topic-tag" data-jump="/topics?cat=ops">经营</span>
-              <span class="topic-tag" data-jump="/topics?cat=tech">技术</span>
-              <span class="topic-tag" data-jump="/topics?cat=all-action">全员行动</span>
-              <span class="topic-tag" data-jump="/topics?cat=project">项目</span>
-              <span class="topic-tag" data-jump="/topics?cat=other">其他</span>
-            </div>
-            <div class="topic-bar-extra">
-              <div class="filter-by-dept">
-                <span class="fbd-label">发布人部门</span>
+            <div class="topic-tabs">
+              <span class="tt-item on" data-jump="/topics?cat=all">全部</span>
+              <span class="tt-item" data-jump="/topics?cat=goal">关联目标</span>
+              <span class="tt-item" data-jump="/topics?cat=meeting">月会</span>
+              <span class="tt-item" data-jump="/topics?cat=compliance">合规</span>
+              <span class="tt-item" data-jump="/topics?cat=ops">经营</span>
+              <span class="tt-item" data-jump="/topics?cat=tech">技术</span>
+              <span class="tt-item" data-jump="/topics?cat=all-action">全员行动</span>
+              <span class="tt-item" data-jump="/topics?cat=project">项目</span>
+              <span class="tt-item" data-jump="/topics?cat=other">其他</span>
+              <div class="tt-right">
                 <select class="fbd-select" data-jump-on="change">
                   <option value="all">全部部门</option>
                   <option value="welfare-platform">公益平台部</option>
@@ -273,33 +273,67 @@
                   <option value="fund">基金会支持组</option>
                   <option value="arc">ARC</option>
                 </select>
-              </div>
-              <div class="sort">
-                <span>最新发布</span>
-                <span class="on">最近活跃</span>
+                <span class="sort-item">最新发布</span>
+                <span class="sort-item on">最近活跃</span>
               </div>
             </div>
           </div>
 
-          <div class="topic-row" data-jump="/topics/3001">
-            <div class="ttl">html 罗象测试</div>
-            <div class="meta">geraltluo（罗象） · 2026-06-05 · 公共 Topic · 动态 · 2 关注</div>
+          <div class="topic-row" data-jump="/topics/4101">
+            <div class="ttl">数字教育研发项目 - 研发过程透视记录 <span class="t-tag">关联目标</span> <span class="t-tag t-tag-update">有更新</span></div>
+            <div class="meta">windlin（林燕描） · 2026-06-10 · windlin（林燕描）新增了 event：「W22 开发小组 研发过程透视」10 小时前</div>
           </div>
-          <div class="topic-row" data-jump="/topics/3002">
-            <div class="ttl">mcp 附件上传测试 2</div>
-            <div class="meta">danilhuang（黄浩） · 2026-06-12 · 项目 Topic · 讨论议题 · 2 关注</div>
+          <div class="topic-row" data-jump="/topics/4102">
+            <div class="ttl">科技联合研发项目 - 研发过程透视记录 <span class="t-tag">关联目标</span> <span class="t-tag t-tag-update">有更新</span></div>
+            <div class="meta">windlin（林燕描） · 2026-06-13 · windlin（林燕描）修改了标题：「科技联合研发项目 - 研发过程透视记…」11 小时前</div>
           </div>
-          <div class="topic-row" data-jump="/topics/3003">
-            <div class="ttl">正文+预览  <span style="font-size:11px;background:#FAC775;color:#854F0B;padding:1px 6px;border-radius:3px;margin-left:4px">战略</span> <span style="font-size:11px;background:#F7C1C1;color:#993C1D;padding:1px 6px;border-radius:3px">合规</span></div>
-            <div class="meta">cissili（李思斯） · 2026-06-10 · 部门 Topic · 经验分享 · 2 关注</div>
+          <div class="topic-row" data-jump="/topics/4103">
+            <div class="ttl">SSV 实验室项目-运维/SRE 基建讨论与规划</div>
+            <div class="meta">dalunli · 2026-05-18 · windlin（林燕描）评论了「监控大盘 跟我们做 oncall 关系是怎么样子…」1 天前</div>
           </div>
-          <div class="topic-row" data-jump="/topics/3004">
-            <div class="ttl">test</div>
-            <div class="meta">danielldi（李丹阳） · 2026-06-12 · 公共 Topic · 动态</div>
+          <div class="topic-row" data-jump="/topics/4104">
+            <div class="ttl">设计中心业务支持双周进展透视 <span class="t-tag">月会</span> <span class="t-tag">项目</span> <span class="t-tag">关联目标</span></div>
+            <div class="meta">tevenxu（徐子闻） · 2026-06-11 · tevenxu（徐子闻）修改了标题：「设计中心业务支持双周进展透视」1 天前</div>
           </div>
-          <div class="topic-row" data-jump="/topics/3005">
-            <div class="ttl">Nexus 6 月版本灰度复盘</div>
-            <div class="meta">cissili（李思斯） · 2026-06-13 · 项目 Topic · 会议纪要 · 12 关注</div>
+          <div class="topic-row" data-jump="/topics/4105">
+            <div class="ttl">数字文化研发项目 - 研发过程透视记录 <span class="t-tag">关联目标</span></div>
+            <div class="meta">windlin（林燕描） · 2026-06-09 · windlin（林燕描）新增了 event：「研发过程透视 06-09」1 天前</div>
+          </div>
+          <div class="topic-row" data-jump="/topics/4106">
+            <div class="ttl">公益项目上线审核体验方案</div>
+            <div class="meta">coffeezhong（钟嘉辉） · 2026-06-12 · coffeezhong（钟嘉辉）编辑了 event：「AI 审核流程重构&amp;备案号…」2 天前</div>
+          </div>
+          <div class="topic-row" data-jump="/topics/4107">
+            <div class="ttl">项目状态简化方案讨论</div>
+            <div class="meta">kiitywu（吴孟娟） · 2026-06-12 · kiitywu（吴孟娟）新增了 event：「产品方案」2 天前</div>
+          </div>
+          <div class="topic-row" data-jump="/topics/4108">
+            <div class="ttl">项目 space 优化方案讨论</div>
+            <div class="meta">kiitywu（吴孟娟） · 2026-06-12 · kiitywu（吴孟娟）编辑了 event：「项目空间整合方案 0611」2 天前</div>
+          </div>
+          <div class="topic-row" data-jump="/topics/4109">
+            <div class="ttl">机构服务平台首页优化讨论</div>
+            <div class="meta">kiitywu（吴孟娟） · 2026-06-12 · kiitywu（吴孟娟）新增了 event：「首页方案」2 天前</div>
+          </div>
+          <div class="topic-row" data-jump="/topics/4110">
+            <div class="ttl">公益测试工作提效讨论 <span class="t-tag">技术</span> <span class="t-tag">项目</span></div>
+            <div class="meta">spraydong（董江德） · 2026-05-08 · liminpeng（彭丽敏）编辑了 event：「测试工作流本周进展-2026…」2 天前</div>
+          </div>
+          <div class="topic-row" data-jump="/topics/4111">
+            <div class="ttl">公益平台部 CICDCO 基建讨论 <span class="t-tag">技术</span></div>
+            <div class="meta">dingyuan（袁丁） · 2026-05-15 · yibinzeng（曾奕斌）编辑了 event：「CICDCO 优化进展 0611…」2 天前</div>
+          </div>
+          <div class="topic-row pinned-soft" data-jump="/topics/4112">
+            <div class="ttl">Nexus 每日需求进展（更新至：2026-06-11） <span class="t-tag">关联目标</span></div>
+            <div class="meta">weima（马巍） · 2026-06-09 · weima（马巍）编辑了 event：「Nexus HTML 附件样式与 AI…」3 天前</div>
+          </div>
+          <div class="topic-row" data-jump="/topics/4113">
+            <div class="ttl">公益知识库优化专项讨论 <span class="t-tag">技术</span></div>
+            <div class="meta">esonlin（林喜东） · 2026-05-29 · esonlin（林喜东）编辑了 event：「6.11 知识库检索 Skill…」3 天前</div>
+          </div>
+          <div class="topic-row" data-jump="/topics/4114">
+            <div class="ttl">腾讯公益小程序性能与体验提升专项讨论 <span class="t-tag">技术</span> <span class="t-tag">项目</span></div>
+            <div class="meta">hunterguo（郭晓波） · 2026-05-06 · hunterguo（郭晓波）新增了 event：「6.12 专项进度同步」3 天前</div>
           </div>
         </section>
 
@@ -317,66 +351,78 @@
 
           <div class="ai-card">
             <h3>新话题 <span class="h3-meta">7 天上升</span></h3>
-            <div class="item-row top" data-jump="/topics/tag/report-kb">
+            <div class="item-row top" data-jump="/topics/tag/rd-perspective">
               <div class="item-body">
-                <div class="item-title">#汇报类知识库</div>
+                <div class="item-title">#研发过程透视</div>
               </div>
-              <span class="item-count">24 个话题</span>
+              <span class="item-count">5 个话题</span>
             </div>
-            <div class="item-row top" data-jump="/topics/tag/chatbot">
+            <div class="item-row top" data-jump="/topics/tag/welfare-platform">
               <div class="item-body">
-                <div class="item-title">#Chatbot</div>
+                <div class="item-title">#公益平台</div>
               </div>
-              <span class="item-count">18 个话题</span>
+              <span class="item-count">5 个话题</span>
             </div>
-            <div class="item-row" data-jump="/topics/tag/edu">
+            <div class="item-row" data-jump="/topics/tag/project-governance">
               <div class="item-body">
-                <div class="item-title">#教育类</div>
+                <div class="item-title">#项目治理</div>
               </div>
-              <span class="item-count">15 个话题</span>
+              <span class="item-count">4 个话题</span>
             </div>
-            <div class="item-row" data-jump="/topics/tag/donation">
+            <div class="item-row" data-jump="/topics/tag/knowledge-base">
               <div class="item-body">
-                <div class="item-title">#企业捐赠类</div>
+                <div class="item-title">#知识库</div>
               </div>
-              <span class="item-count">12 个话题</span>
+              <span class="item-count">3 个话题</span>
             </div>
-            <div class="item-row" data-jump="/topics/tag/ai-edu">
+            <div class="item-row" data-jump="/topics/tag/ai-tools">
               <div class="item-body">
-                <div class="item-title">#AI 教育</div>
+                <div class="item-title">#AI 工具</div>
               </div>
-              <span class="item-count">10 个话题</span>
+              <span class="item-count">3 个话题</span>
             </div>
-            <div class="item-row" data-jump="/topics/tag/knowledge-db">
+            <div class="item-row" data-jump="/topics/tag/biz-platform">
               <div class="item-body">
-                <div class="item-title">#知识数据库</div>
+                <div class="item-title">#机构服务平台</div>
               </div>
-              <span class="item-count">8 个话题</span>
+              <span class="item-count">2 个话题</span>
+            </div>
+            <div class="item-row" data-jump="/topics/tag/sre">
+              <div class="item-body">
+                <div class="item-title">#运维 SRE</div>
+              </div>
+              <span class="item-count">2 个话题</span>
+            </div>
+            <div class="item-row" data-jump="/topics/tag/design-center">
+              <div class="item-body">
+                <div class="item-title">#设计中心</div>
+              </div>
+              <span class="item-count">2 个话题</span>
             </div>
             <span class="more" data-jump="/topics/trending">查看完整 →</span>
           </div>
 
           <div class="ai-card">
             <h3>部门新动态 <span class="h3-meta">关键事项相关</span></h3>
-            <div class="item-row" data-jump="/topics/4001">
+            <div class="item-row" data-jump="/topics/4101">
               <span class="new-dot"></span>
               <div class="item-body">
-                <div class="item-title">公益平台二期立项</div>
-                <div class="item-meta"><span class="lk" data-jump="/dept/welfare-platform">公益平台部</span> · <span class="lk" data-jump="/goals/2#item-1">目标 2-关键事项 1</span></div>
+                <div class="item-title">数字教育研发项目 - 研发过程透视</div>
+                <div class="item-meta"><span class="lk" data-jump="/dept/digital-edu">数字教育实验室</span> · <span class="lk" data-jump="/goals/2#item-3">目标 2-关键事项 3</span></div>
               </div>
             </div>
-            <div class="item-row" data-jump="/topics/4002">
+            <div class="item-row" data-jump="/topics/4106">
               <span class="new-dot"></span>
               <div class="item-body">
-                <div class="item-title">数据库治理 Q3 规划</div>
-                <div class="item-meta"><span class="lk" data-jump="/dept/tech-arch">技术架构部</span> · <span class="lk" data-jump="/goals/1#item-4">目标 1-关键事项 4</span></div>
+                <div class="item-title">公益项目上线审核体验方案</div>
+                <div class="item-meta"><span class="lk" data-jump="/dept/welfare-platform">公益平台部</span> · <span class="lk" data-jump="/goals/1#item-2">目标 1-关键事项 2</span></div>
               </div>
             </div>
-            <div class="item-row" data-jump="/topics/4003">
+            <div class="item-row" data-jump="/topics/4112">
               <span class="new-dot" style="background:transparent;border:1px solid var(--line-strong)"></span>
               <div class="item-body">
-                <div class="item-title">AI 简报灰度上线复盘</div>
-                <div class="item-meta"><span class="lk" data-jump="/dept/digital-culture">数字文化实验室</span> · <span class="lk" data-jump="/goals/1#item-3">目标 1-关键事项 3</span></div>
+                <div class="item-title">Nexus 每日需求进展</div>
+                <div class="item-meta"><span class="lk" data-jump="/dept/digital-culture">数字文化实验室</span> · <span class="lk" data-jump="/goals/3#item-1">目标 3-关键事项 1</span></div>
               </div>
             </div>
             <span class="more" data-jump="/topics?dept=any&hot=1">查看更多 →</span>
@@ -385,27 +431,27 @@
           <div class="ai-card">
             <h3>Ta 在说什么</h3>
             <div class="ppl-item">
-              <div class="av" data-jump="/u/juhong">菊</div>
+              <div class="av" data-jump="/u/jasonxdong">东</div>
               <div class="body">
-                <span class="name" data-jump="/u/juhong">菊红</span>
-                <div class="said" data-jump="/topics/5001#comment-77">在「Q3 战略宣讲」里说：</div>
-                <div class="quote" data-jump="/topics/5001#comment-77">下半年我们要把重点放在 B 端工具的产品化上…</div>
+                <span class="name" data-jump="/u/jasonxdong">jasonxdong（东旭）</span>
+                <div class="said" data-jump="/topics/w-2202">发布了「AI 时代 SSV 的"二次创业"」</div>
+                <div class="ref">全员行动 · 战略</div>
               </div>
             </div>
             <div class="ppl-item">
-              <div class="av" data-jump="/u/geraltluo">罗</div>
+              <div class="av" data-jump="/u/windlin">林</div>
               <div class="body">
-                <span class="name" data-jump="/u/geraltluo">罗象</span>
-                <div class="said" data-jump="/topics/3001">发布了「html 罗象测试」</div>
-                <div class="ref">公共 Topic · 动态</div>
+                <span class="name" data-jump="/u/windlin">windlin（林燕描）</span>
+                <div class="said" data-jump="/topics/4103#comment-12">评论了「监控大盘 oncall…」：</div>
+                <div class="quote" data-jump="/topics/4103#comment-12">监控大盘和 oncall 关系建议先拆开看…</div>
               </div>
             </div>
             <div class="ppl-item">
-              <div class="av" data-jump="/u/dorishhwang">王</div>
+              <div class="av" data-jump="/u/kiitywu">吴</div>
               <div class="body">
-                <span class="name" data-jump="/u/dorishhwang">王璇慧</span>
-                <div class="said" data-jump="/topics/2004#comment-12">评论了「修改 topic 标题…」：</div>
-                <div class="quote" data-jump="/topics/2004#comment-12">建议加一个目标动态汇总的入口</div>
+                <span class="name" data-jump="/u/kiitywu">kiitywu（吴孟娟）</span>
+                <div class="said" data-jump="/topics/4108">连续发布 3 个项目优化方案</div>
+                <div class="ref">项目状态简化 · space 优化 · 机构服务平台首页</div>
               </div>
             </div>
             <span class="more" data-jump="/people/recommended">查看更多 →</span>
