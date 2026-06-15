@@ -151,6 +151,173 @@
   .ppl-item .ref{display:inline;font-size:11px;color:var(--text-3)}
   .quote{display:block;border-left:2px solid var(--line-strong);padding-left:8px;margin-top:4px;color:var(--text-3);font-size:11.5px;line-height:1.5}
 
+  /* === 话题导航条目 + 配置图标 === */
+  .topic-nav-item{display:flex;align-items:center;justify-content:space-between;gap:6px}
+  .cfg-mini{font-size:11px;color:var(--text-3);opacity:0;transition:.15s;padding:0 2px;border-radius:3px}
+  .topic-nav-item:hover .cfg-mini{opacity:1}
+  .cfg-mini:hover{color:#1d1f23;background:#f1f2f5}
+  body[data-role="member"] .role-only{display:none !important}
+  body[data-role="owner"] .role-only:not(.owner):not(.admin){display:none !important}
+  body[data-role="member"] .cfg-mini{display:none}
+
+  .role-block{margin-top:32px;padding:8px;background:#f8f9fb;border-radius:8px}
+  .role-line{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2)}
+  .role-dot{width:6px;height:6px;border-radius:50%;background:var(--c-teal)}
+  .role-text{flex:1}
+  .role-select{font:400 11px inherit;padding:2px 4px;border:1px solid var(--line);border-radius:4px;background:#fff}
+  .role-hint{font-size:10px;color:var(--text-3);margin-top:4px}
+
+  /* === 通用 view 切换 === */
+  #view-topic, #view-goals{padding:24px 32px;max-width:1100px}
+  .crumb{font-size:12.5px;color:var(--text-3);margin-bottom:18px}
+  .crumb a{color:var(--text-2);cursor:pointer}
+  .crumb a:hover{color:var(--text)}
+  .crumb .now{color:var(--text);font-weight:500}
+
+  /* 话题页 */
+  .topic-head{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin-bottom:14px}
+  .topic-tag{display:inline-block;background:#1d1f23;color:#fff;padding:2px 10px;border-radius:12px;font-size:12px}
+  .topic-tag.tag-b{background:var(--c-teal)}
+  .topic-name{font-size:22px;font-weight:500;margin:8px 0 6px}
+  .topic-meta{color:var(--text-3);font-size:12.5px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .topic-meta .lk-teal{color:var(--c-teal);cursor:pointer}
+  .topic-meta .lk-teal:hover{text-decoration:underline}
+  .role-tag{display:inline-block;font-size:10.5px;color:var(--c-teal);background:var(--c-teal-bg);padding:1px 7px;border-radius:3px;margin-left:4px}
+  .topic-actions{margin-top:12px;display:flex;gap:10px;align-items:center}
+  .btn{font-size:12.5px;padding:6px 14px;border-radius:6px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--text-2)}
+  .btn:hover{border-color:var(--line-strong);color:var(--text)}
+  .btn.primary{background:#1d1f23;color:#fff;border-color:#1d1f23}
+  .btn.primary:hover{background:#000}
+  .cfg-link{color:var(--c-teal);cursor:pointer}
+  .cfg-link:hover{text-decoration:underline}
+
+  .topic-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin-bottom:12px}
+  .topic-card h2{font-size:14px;font-weight:500;margin-bottom:10px;display:flex;justify-content:space-between;align-items:baseline}
+  .topic-card h2 .meta{font-size:11.5px;color:var(--text-3);font-weight:400}
+
+  .ai-summary{background:#f1f2f5;border-radius:8px;padding:14px 16px}
+  .ai-head{display:flex;gap:6px;align-items:center;font-size:11px;color:var(--text-3);letter-spacing:.5px;margin-bottom:6px}
+  .ai-badge{background:#1d1f23;color:#fff;padding:1px 5px;border-radius:3px;font-size:10px}
+  .ai-summary p{font-size:13px;line-height:1.7}
+
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .kpi{background:#f1f2f5;border-radius:8px;padding:12px 14px}
+  .kpi .lbl{font-size:11.5px;color:var(--text-3);margin-bottom:2px}
+  .kpi .val{font-size:20px;font-weight:500}
+  .kpi .dlt{font-size:11px;color:var(--c-coral);margin-top:2px}
+  .kpi .dlt.down{color:var(--c-teal)}
+
+  .point-list{list-style:none;margin:0;padding:0}
+  .point-list li{font-size:12.5px;color:var(--text-2);padding:5px 0;cursor:pointer}
+  .point-list li:hover{color:#000}
+
+  .t-list .t-row{padding:10px 0;border-bottom:1px solid var(--line);cursor:pointer}
+  .t-list .t-row:last-child{border-bottom:none}
+  .t-list .t-row:hover .ttl{text-decoration:underline}
+  .t-list .ttl{font-size:13px;font-weight:500}
+  .t-list .meta{font-size:11.5px;color:var(--text-3);margin-top:2px}
+
+  /* 提问区 */
+  .ask-box{display:flex;gap:8px;margin-bottom:8px}
+  .ask-input{flex:1;font:400 13px inherit;padding:8px 12px;border:1px solid var(--line);border-radius:8px;outline:none}
+  .ask-input:focus{border-color:#1d1f23}
+  .ask-tags{font-size:11.5px;color:var(--text-3);display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+  .ask-pill{background:#f1f2f5;color:var(--text-2);padding:3px 9px;border-radius:11px;cursor:pointer;font-size:11.5px}
+  .ask-pill:hover{background:#e4e6ea;color:var(--text)}
+
+  .answer{margin-top:12px;background:#fafbfc;border:1px solid var(--line);border-radius:8px;padding:14px}
+  .answer-trace{font-size:11px;color:var(--text-3);padding-bottom:8px;margin-bottom:8px;border-bottom:1px dashed var(--line)}
+  .answer-trace .trace-tag{display:inline-block;background:#fff;border:1px solid var(--line);color:var(--text-2);padding:1px 6px;border-radius:3px;margin-right:5px;font-size:10.5px}
+  .answer-body{font-size:12.5px;line-height:1.7}
+  .answer-body .ans-kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}
+  .answer-body .ans-kpi-cell{background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px}
+  .answer-body .ans-kpi-cell .lbl{font-size:10.5px;color:var(--text-3)}
+  .answer-body .ans-kpi-cell .val{font-size:16px;font-weight:500}
+  .answer-body .ans-list{margin:4px 0}
+  .answer-body .ans-list-row{font-size:12px;padding:5px 0;border-bottom:1px dashed var(--line)}
+  .answer-body .ans-list-row:last-child{border-bottom:none}
+  .answer-body .citation{font-size:11px;color:var(--text-3);margin-top:6px}
+  .answer-body .citation a{color:var(--c-blue);cursor:pointer}
+
+  /* workflow 折叠 */
+  .wf{background:#fafbfc;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:8px}
+  .wf summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:10px 14px;font-size:12px}
+  .wf summary::-webkit-details-marker{display:none}
+  .wf summary::before{content:"▸";color:var(--text-3);font-size:10px;transition:transform .15s}
+  .wf[open] summary::before{transform:rotate(90deg)}
+  .wf-no{color:var(--text-3);font-family:Menlo,monospace;font-size:11px}
+  .wf-name{font-weight:500;min-width:120px}
+  .wf-intent{color:var(--text-2);flex:1;font-size:11.5px}
+  .wf-stat{color:var(--text-3);font-size:11px}
+  .wf-body{padding:0 14px 12px;border-top:1px solid var(--line);background:#fff}
+  .wf-section{padding:10px 0;border-bottom:1px dashed var(--line)}
+  .wf-section:last-child{border-bottom:none}
+  .wf-sec-head{font-size:11px;letter-spacing:.5px;font-weight:500;margin-bottom:6px}
+  .wf-sec-head.sec-q{color:#185FA5}
+  .wf-sec-head.sec-s{color:#854F0B}
+  .wf-sec-head.sec-a{color:#0F6E56}
+  .wf-row{display:flex;gap:10px;font-size:11.5px;padding:2px 0}
+  .wf-key{flex:0 0 80px;color:var(--text-3)}
+  .wf-val{flex:1;color:var(--text-2)}
+  .src-row{display:flex;align-items:center;gap:8px;font-size:11.5px;padding:6px 8px;background:#fff;border:1px solid var(--line);border-radius:6px;margin-bottom:5px}
+  .src-type{font-family:Menlo,monospace;font-size:10px;background:#1d1f23;color:#fff;padding:2px 6px;border-radius:3px}
+  .src-ref{font-weight:500}
+  .src-param{flex:1;color:var(--text-3);font-family:Menlo,monospace;font-size:10.5px}
+  .wf-add{padding:10px;border:1px dashed var(--line-strong);border-radius:8px;color:var(--text-3);font-size:12px;cursor:pointer;text-align:center;margin-top:6px}
+  .wf-add:hover{border-color:#1d1f23;color:#1d1f23}
+
+  .src-pool{display:flex;flex-direction:column;gap:6px}
+  .src-pool-item{display:flex;align-items:center;gap:10px;background:#fafbfc;border:1px solid var(--line);border-radius:8px;padding:9px 12px}
+  .src-pool-name{font-size:12px;font-weight:500}
+  .src-pool-meta{font-size:11px;color:var(--text-3);margin-top:1px}
+  .src-pool-add{padding:9px;border:1px dashed var(--line-strong);border-radius:8px;color:var(--text-3);text-align:center;cursor:pointer;font-size:12px}
+  .src-pool-add:hover{border-color:#1d1f23;color:#1d1f23}
+
+  /* 目标管理页 */
+  .goals-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+  .goals-head h1{font-size:22px;font-weight:500}
+  .goals-actions{display:flex;gap:10px}
+  .goal-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin-bottom:12px}
+  .goal-card-head{padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:12px}
+  .g-tag{display:inline-block;background:var(--c-teal-bg);color:var(--c-teal);padding:2px 10px;border-radius:3px;font-size:11.5px;font-weight:500}
+  .goal-card-head h2{font-size:16px;font-weight:500;margin:8px 0 4px}
+  .goal-card-head .g-meta{font-size:12px;color:var(--text-3)}
+  .ki-row{display:flex;align-items:center;gap:14px;padding:14px;background:#fafbfc;border:1px solid var(--line);border-radius:8px;margin-bottom:8px}
+  .ki-row:last-child{margin-bottom:0}
+  .ki-no{flex:0 0 auto;background:#E6F1FB;color:#185FA5;padding:2px 10px;border-radius:3px;font-size:11.5px;font-weight:500}
+  .ki-text{flex:1;min-width:0}
+  .ki-title{font-size:13px;font-weight:500;margin-bottom:3px}
+  .ki-meta{font-size:11.5px;color:var(--text-3)}
+  .ki-right{flex:0 0 auto;display:flex;align-items:center;gap:10px}
+  .ki-link{font-size:11.5px;color:var(--text-3)}
+  .ki-cfg{font-size:11.5px;background:#fff;border:1px solid var(--line);color:var(--text-2);padding:4px 10px;border-radius:6px;cursor:pointer}
+  .ki-cfg:hover{border-color:var(--c-teal);color:var(--c-teal)}
+  .ki-fold{color:var(--text-3);cursor:pointer;padding:0 4px}
+  .goals-tip{font-size:11.5px;color:var(--text-3);background:#FAEEDA;border:1px dashed rgba(133,79,11,.3);border-radius:8px;padding:10px 14px;margin-top:14px}
+  .goals-tip b{color:#854F0B}
+
+  /* === 配置抽屉 === */
+  .drawer-mask{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:90}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:480px;background:#fff;z-index:91;display:flex;flex-direction:column;box-shadow:-2px 0 20px rgba(0,0,0,.1)}
+  .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line)}
+  .drawer-title{font-size:15px;font-weight:500}
+  .drawer-close{cursor:pointer;color:var(--text-3);font-size:14px;padding:4px 8px;border-radius:4px}
+  .drawer-close:hover{background:#f1f2f5;color:var(--text)}
+  .drawer-body{flex:1;overflow-y:auto;padding:18px 22px}
+  .drawer-section{margin-bottom:18px}
+  .drawer-label{font-size:12px;color:var(--text-2);font-weight:500;margin-bottom:6px}
+  .drawer-input{width:100%;font:400 13px inherit;padding:8px 12px;border:1px solid var(--line);border-radius:6px;outline:none}
+  .drawer-input:focus{border-color:var(--text)}
+  .drawer-radio{display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+  .drawer-radio label{display:flex;gap:8px;cursor:pointer}
+  .drawer-hint{font-size:11px;color:var(--text-3);margin-top:6px}
+  .drawer-wf-row{display:flex;justify-content:space-between;font-size:12.5px;padding:8px 12px;background:#fafbfc;border:1px solid var(--line);border-radius:6px;margin-bottom:5px}
+  .drawer-wf-row span{color:var(--text-3);cursor:pointer;font-size:11.5px}
+  .drawer-wf-row span:hover{color:var(--text)}
+  .drawer-wf-add{padding:9px;border:1px dashed var(--line-strong);border-radius:6px;text-align:center;color:var(--text-3);font-size:12px;cursor:pointer}
+  .drawer-wf-add:hover{border-color:#1d1f23;color:#1d1f23}
+  .drawer-foot{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid var(--line)}
+
   /* 跳转 toast */
   .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1d1f23;color:#fff;padding:10px 18px;border-radius:8px;font-size:12.5px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
   .toast.show{opacity:1}
@@ -168,8 +335,17 @@
 
     <div class="nav-section">
       <div class="nav-title">TOPICS</div>
-      <div class="nav-item active"><span class="dot"></span>ALL</div>
-      <div class="nav-item"><span class="dot"></span>MY</div>
+      <div class="nav-item active" data-view="home"><span class="dot"></span>ALL</div>
+      <div class="nav-item" data-view="my"><span class="dot"></span>MY</div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-title">话题（按业务关键词）</div>
+      <div class="nav-item topic-nav-item" data-view="topic" data-tag="ai-boost"><span>#AI 提效</span><span class="cfg-mini" title="配置">⚙</span></div>
+      <div class="nav-item topic-nav-item" data-view="topic" data-tag="stage-report">#阶段汇报</div>
+      <div class="nav-item topic-nav-item" data-view="topic" data-tag="tech-infra">#技术基建</div>
+      <div class="nav-item topic-nav-item" data-view="topic" data-tag="knowledge-base">#知识库</div>
+      <div class="nav-item topic-nav-item" data-view="topic" data-tag="donation"><span>#企业捐赠</span><span class="cfg-mini" title="配置">⚙</span></div>
     </div>
 
     <div class="nav-section">
@@ -180,7 +356,7 @@
           <span class="pg-meta">我的部门</span>
         </summary>
         <div class="pg-self">
-          <div class="pg-self-name" data-jump="/dept/digital-culture/goals">数字文化实验室</div>
+          <div class="pg-self-name" data-view="goals" data-dept="digital-culture">数字文化实验室</div>
           <div class="goal-item" data-jump="/goals/3#item-1">
             <span class="goal-no">G1-K1</span>
             <span class="goal-text">AI 简报上线及反馈闭环</span>
@@ -202,7 +378,7 @@
             <span class="goal-text">B 端工具产品规划</span>
           </div>
         </div>
-        <div class="pg-other" data-jump="/goals/all">
+        <div class="pg-other" data-view="goals" data-dept="all">
           查看其他部门目标 →
         </div>
       </details>
@@ -212,6 +388,19 @@
       <div class="nav-title">TOOLS</div>
       <div class="nav-item">技能</div>
       <div class="nav-item">插件</div>
+    </div>
+
+    <div class="nav-section role-block">
+      <div class="role-line">
+        <span class="role-dot"></span>
+        <span class="role-text">demo · 当前角色</span>
+        <select class="role-select" id="role-select">
+          <option value="member">成员</option>
+          <option value="owner" selected>关键事项指派人</option>
+          <option value="admin">管理员</option>
+        </select>
+      </div>
+      <div class="role-hint">指派人 / 管理员可见 ⚙ 配置入口</div>
     </div>
   </aside>
 
@@ -227,7 +416,7 @@
       </div>
     </div>
 
-    <main class="main">
+    <main class="main" id="view-home">
       <div class="grid">
 
         <section>
@@ -458,30 +647,437 @@
 
       </div>
     </main>
+
+    <!-- ===================== view-topic · 话题详情页 ===================== -->
+    <main class="main" id="view-topic" hidden>
+      <div class="crumb">
+        <a data-view="home">首页</a> /
+        <a>话题</a> /
+        <span class="now" id="topic-crumb-now">#AI 提效</span>
+      </div>
+
+      <!-- A 类话题（无配置）-->
+      <div class="topic-page" id="topic-page-a" hidden>
+        <div class="topic-head">
+          <span class="topic-tag">话题 · 自然生成</span>
+          <h1 class="topic-name" id="topic-name-a">#AI 提效</h1>
+          <div class="topic-meta">
+            <span id="topic-stat-a">11 个话题 · 14 人参与</span>
+            <span>·</span>
+            <span>最近 7 天 · 持续上升</span>
+            <span class="role-only owner admin" data-config-tag="ai-boost">·  <a class="cfg-link">⚙ 配置工作流（升级为问答型）</a></span>
+          </div>
+        </div>
+
+        <div class="topic-card">
+          <h2>话题概览 <span class="meta">每天 6 点自动刷新</span></h2>
+          <div class="ai-summary">
+            <div class="ai-head"><span class="ai-badge">AI</span> NEXUS AI 自动总结</div>
+            <p>最近 7 天围绕「AI 提效」共 <b>11 篇 Topic</b>，参与同学集中在 <b>数字文化实验室、公益平台部、技术架构部</b>。
+              焦点议题：<b>① AI 审核流程接入合规</b>；<b>② Skill 检索召回率与延迟权衡</b>；<b>③ PixelBuddy 在 D2C 落地</b>。</p>
+          </div>
+        </div>
+
+        <div class="topic-card">
+          <h2>话题数据</h2>
+          <div class="kpi-grid">
+            <div class="kpi"><div class="lbl">Topic 数</div><div class="val">11</div><div class="dlt">↑ 7 天 +4</div></div>
+            <div class="kpi"><div class="lbl">参与人</div><div class="val">14</div><div class="dlt">↑ 7 天 +3</div></div>
+            <div class="kpi"><div class="lbl">评论数</div><div class="val">87</div><div class="dlt">↑ 7 天 +29</div></div>
+            <div class="kpi"><div class="lbl">活跃部门</div><div class="val">5</div><div class="dlt down">→ 持平</div></div>
+          </div>
+        </div>
+
+        <div class="topic-card">
+          <h2>关键讨论点 <span class="meta">AI 抽取，可点击进对应原文</span></h2>
+          <ul class="point-list">
+            <li data-jump="/topics/4106">AI 审核如何与现有合规流程兼容（来源：公益项目上线审核体验方案）</li>
+            <li data-jump="/topics/4113">Skill 检索的召回率与延迟权衡（来源：公益知识库优化）</li>
+            <li data-jump="/topics/w-2201">PixelBuddy 在 D2C 设计场景的落地（来源：Weekly 研效分享）</li>
+          </ul>
+        </div>
+
+        <div class="topic-card">
+          <h2>相关 Topic</h2>
+          <div class="t-list">
+            <div class="t-row" data-jump="/topics/4106"><div class="ttl">公益项目上线审核体验方案</div><div class="meta">coffeezhong · 2026-06-12 · 8 评论</div></div>
+            <div class="t-row" data-jump="/topics/4113"><div class="ttl">公益知识库优化专项讨论</div><div class="meta">esonlin · 2026-05-29 · 14 评论</div></div>
+            <div class="t-row" data-jump="/topics/w-2201"><div class="ttl">Weekly 研效分享</div><div class="meta">kenzjwang · 2026-05-22 · 21 评论</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B 类话题（已配置工作流）-->
+      <div class="topic-page" id="topic-page-b" hidden>
+        <div class="topic-head">
+          <span class="topic-tag tag-b">话题 · 问答工作流</span>
+          <h1 class="topic-name">#企业捐赠</h1>
+          <div class="topic-meta">
+            <span>挂在 <a class="lk-teal" data-jump="/goals/2#item-1">目标 2-关键事项 1</a></span>
+            <span>·</span>
+            <span>配置人 <a class="lk-teal" data-jump="/u/coffeezhong">coffeezhong（钟嘉辉）</a> <span class="role-tag">关键事项指派人</span></span>
+            <span>·</span>
+            <span>3 条已配置工作流</span>
+          </div>
+          <div class="topic-actions">
+            <button class="btn primary">提问此话题</button>
+            <button class="btn">订阅周报</button>
+            <button class="btn role-only owner admin" data-config-tag="donation">⚙ 配置工作流</button>
+          </div>
+        </div>
+
+        <div class="topic-card">
+          <h2>对话此话题 <span class="meta">命中已配置 intent 自动取数 + 拼装回答</span></h2>
+          <div class="ask-box">
+            <input class="ask-input" id="ask-input" placeholder="试试问：企业捐赠最近怎么样？"/>
+            <button class="btn primary" onclick="runAsk()">提问</button>
+          </div>
+          <div class="ask-tags">
+            常用提问：
+            <span class="ask-pill" onclick="fillAsk('企业捐赠最近一周数据是多少？')">最近一周数据是多少</span>
+            <span class="ask-pill" onclick="fillAsk('捐赠流程优化进展到哪一步了？')">流程优化进展</span>
+            <span class="ask-pill" onclick="fillAsk('新企业怎么接入捐赠流程？')">新企业接入 SOP</span>
+          </div>
+          <div class="answer" id="answer-box" hidden>
+            <div class="answer-trace" id="answer-trace"></div>
+            <div class="answer-body" id="answer-body"></div>
+          </div>
+        </div>
+
+        <div class="topic-card">
+          <h2>已配置的工作流 <span class="meta">点击展开看 intent / sources / render</span></h2>
+
+          <details class="wf">
+            <summary><span class="wf-no">#1</span><span class="wf-name">最近数据查询</span><span class="wf-intent">intent: 「数据」+「最近 / 一周 / 本月」</span><span class="wf-stat">命中 124 次</span></summary>
+            <div class="wf-body">
+              <div class="wf-section"><div class="wf-sec-head sec-q">① 问题模式</div>
+                <div class="wf-row"><span class="wf-key">关键词</span><span class="wf-val">数据 · 最近 · 一周 · 本月 · 总额 · 募款</span></div>
+              </div>
+              <div class="wf-section"><div class="wf-sec-head sec-s">② 数据源（并行）</div>
+                <div class="src-row"><span class="src-type">SQL</span><span class="src-ref">BI 看板 / SQL ID 7821</span><span class="src-param">range = last_7d</span></div>
+                <div class="src-row"><span class="src-type">TAPD</span><span class="src-ref">项目 1208 · 标签=企业捐赠</span><span class="src-param">status ≠ done</span></div>
+                <div class="src-row"><span class="src-type">Topic</span><span class="src-ref">话题 #企业捐赠 · 最近 N 条</span><span class="src-param">last_n = 5</span></div>
+              </div>
+              <div class="wf-section"><div class="wf-sec-head sec-a">③ 答案模板</div>
+                <div class="wf-row"><span class="wf-key">布局</span><span class="wf-val">kpi_grid + need_list + topic_excerpt + citations</span></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="wf">
+            <summary><span class="wf-no">#2</span><span class="wf-name">研发进展查询</span><span class="wf-intent">intent: 「进展 / 进度 / 哪一步」</span><span class="wf-stat">命中 67 次</span></summary>
+            <div class="wf-body">
+              <div class="wf-section"><div class="wf-sec-head sec-s">② 数据源</div>
+                <div class="src-row"><span class="src-type">TAPD</span><span class="src-ref">项目 1208 · 全部需求</span><span class="src-param">order: priority desc</span></div>
+                <div class="src-row"><span class="src-type">Topic</span><span class="src-ref">话题 #企业捐赠 · 类型=event</span><span class="src-param">last_n = 3</span></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="wf">
+            <summary><span class="wf-no">#3</span><span class="wf-name">流程 / SOP 查询</span><span class="wf-intent">intent: 「怎么 / 如何 / 流程 / SOP」</span><span class="wf-stat">命中 41 次</span></summary>
+            <div class="wf-body">
+              <div class="wf-section"><div class="wf-sec-head sec-s">② 数据源（串行+兜底）</div>
+                <div class="src-row"><span class="src-type">iWiki</span><span class="src-ref">空间 KM-DONATION-SOP</span><span class="src-param">top_k = 3</span></div>
+                <div class="src-row"><span class="src-type">乐享</span><span class="src-ref">公益平台部</span><span class="src-param">fallback when score &lt; 0.6</span></div>
+              </div>
+            </div>
+          </details>
+
+          <div class="wf-add role-only owner admin" data-config-tag="donation">+ 新增问答工作流</div>
+        </div>
+
+        <div class="topic-card">
+          <h2>话题数据源（全局可用）</h2>
+          <div class="src-pool">
+            <div class="src-pool-item"><span class="src-type">SQL</span><div><div class="src-pool-name">BI 看板 · 企业捐赠总额（SQL 7821）</div><div class="src-pool-meta">数据延迟 5 分钟 · 上次校验 06-12</div></div></div>
+            <div class="src-pool-item"><span class="src-type">TAPD</span><div><div class="src-pool-name">TAPD 项目 1208 · 公益平台 · 企业捐赠模块</div><div class="src-pool-meta">实时同步</div></div></div>
+            <div class="src-pool-item"><span class="src-type">iWiki</span><div><div class="src-pool-name">iWiki 空间 KM-DONATION-SOP</div><div class="src-pool-meta">已索引 28 篇</div></div></div>
+            <div class="src-pool-add role-only owner admin" data-config-tag="donation">+ 接入新数据源</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ===================== view-goals · 部门目标管理页 ===================== -->
+    <main class="main" id="view-goals" hidden>
+      <div class="crumb">
+        <a data-view="home">首页</a> / <a>目标管理</a> /
+        <span class="now">技术架构部</span>
+      </div>
+
+      <div class="goals-head">
+        <h1>技术架构部</h1>
+        <div class="goals-actions">
+          <button class="btn">🕘 查看动态</button>
+          <button class="btn primary">+ 发布 Topic</button>
+        </div>
+      </div>
+
+      <div class="goal-card">
+        <div class="goal-card-head">
+          <span class="g-tag">🎯 目标 1</span>
+          <h2>推进 SSV 的在 AI-Native 下的组织能力升级</h2>
+          <div class="g-meta">周期 2026 Q3 · 可见范围：全员可见</div>
+        </div>
+
+        <div class="ki-row">
+          <div class="ki-no">关键事项 1</div>
+          <div class="ki-text">
+            <div class="ki-title">和业务深入 Co-design，推进小团队的机制建设，提升团队能力</div>
+            <div class="ki-meta">@brantli, @ciccizhang, @tevenxu, @windlin</div>
+          </div>
+          <div class="ki-right">
+            <span class="ki-link">关联 Topics 4 条</span>
+            <button class="ki-cfg role-only owner admin" data-config-ki="g1k1" title="配置该关键事项关联的话题工作流">⚙ 配置话题</button>
+            <span class="ki-fold">▾</span>
+          </div>
+        </div>
+
+        <div class="ki-row">
+          <div class="ki-no">关键事项 2</div>
+          <div class="ki-text">
+            <div class="ki-title">构建组织上下文和资产复用的知识库，给 SSVer 和 AI 工具提供生产和消费的能力</div>
+            <div class="ki-meta">@suriwang</div>
+          </div>
+          <div class="ki-right">
+            <span class="ki-link">关联 Topics 4 条</span>
+            <button class="ki-cfg role-only owner admin" data-config-ki="g1k2" title="配置该关键事项关联的话题工作流">⚙ 配置话题</button>
+            <span class="ki-fold">▾</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="goals-tip">
+        提示：「⚙ 配置话题」按钮仅 <b>关键事项指派人 / 管理员</b> 可见。点击后进入对应话题的工作流配置界面，与左导航和话题页里的 ⚙ 入口贯通。
+      </div>
+    </main>
   </div>
 </div>
+
+<!-- 配置抽屉 · 共用 -->
+<div class="drawer-mask" id="drawer-mask" hidden></div>
+<aside class="drawer" id="drawer" hidden>
+  <div class="drawer-head">
+    <span class="drawer-title" id="drawer-title">配置话题工作流</span>
+    <span class="drawer-close" id="drawer-close">✕</span>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-section">
+      <div class="drawer-label">话题</div>
+      <input class="drawer-input" id="drawer-tag" value="#企业捐赠"/>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-label">类型</div>
+      <div class="drawer-radio">
+        <label><input type="radio" name="t-type" value="auto"/> A · 自然生成</label>
+        <label><input type="radio" name="t-type" value="curated" checked/> B · 配置问答工作流</label>
+      </div>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-label">挂载关键事项</div>
+      <input class="drawer-input" value="目标 2-关键事项 1 · 企业捐赠合作流程标准化"/>
+      <div class="drawer-hint">配置人将自动取该关键事项指派人，无需另设维护者</div>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-label">已配置工作流</div>
+      <div class="drawer-wf-row">#1 最近数据查询<span>编辑</span></div>
+      <div class="drawer-wf-row">#2 研发进展查询<span>编辑</span></div>
+      <div class="drawer-wf-row">#3 流程 SOP 查询<span>编辑</span></div>
+      <div class="drawer-wf-add">+ 新增工作流</div>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-label">已接入数据源</div>
+      <div class="drawer-wf-row">SQL · BI 7821</div>
+      <div class="drawer-wf-row">TAPD · 项目 1208</div>
+      <div class="drawer-wf-row">iWiki · KM-DONATION-SOP</div>
+      <div class="drawer-wf-add">+ 接入新数据源</div>
+    </div>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn">取消</button>
+    <button class="btn primary">保存配置</button>
+  </div>
+</aside>
 
 <div class="toast" id="toast">已跳转 <code id="toast-url"></code></div>
 
 <script>
-(function(){
-  const toast = document.getElementById('toast');
-  const toastUrl = document.getElementById('toast-url');
-  let timer;
-  function showToast(url){
-    toastUrl.textContent = url;
-    toast.classList.add('show');
-    clearTimeout(timer);
-    timer = setTimeout(()=>toast.classList.remove('show'), 1800);
+// ==== 角色切换 ====
+const roleSelect = document.getElementById('role-select');
+function applyRole(){
+  document.body.setAttribute('data-role', roleSelect.value);
+}
+roleSelect.addEventListener('change', applyRole);
+applyRole();
+
+// ==== view 切换 ====
+const views = {
+  home: document.getElementById('view-home'),
+  topic: document.getElementById('view-topic'),
+  goals: document.getElementById('view-goals')
+};
+const pageA = document.getElementById('topic-page-a');
+const pageB = document.getElementById('topic-page-b');
+const topicCrumb = document.getElementById('topic-crumb-now');
+
+function setActiveNav(view, tag){
+  document.querySelectorAll('.sidebar .nav-item, .sidebar .topic-nav-item').forEach(n=>n.classList.remove('active'));
+  if(view === 'home'){
+    document.querySelector('.sidebar .nav-item[data-view="home"]').classList.add('active');
+  } else if(view === 'topic' && tag){
+    const el = document.querySelector('.topic-nav-item[data-tag="'+tag+'"]');
+    if(el) el.classList.add('active');
   }
-  document.addEventListener('click', e => {
-    const el = e.target.closest('[data-jump]');
-    if(!el) return;
+}
+
+function showView(name){
+  Object.entries(views).forEach(([k,el])=>el.hidden = (k !== name));
+  if(name === 'home') setActiveNav('home');
+}
+
+function showTopic(tag){
+  showView('topic');
+  setActiveNav('topic', tag);
+  // tag → A 还是 B
+  const tagInfo = {
+    'ai-boost':       {name:'#AI 提效',     stat:'11 个话题 · 14 人参与', type:'a'},
+    'stage-report':   {name:'#阶段汇报',    stat:'16 个话题 · 22 人参与', type:'a'},
+    'tech-infra':     {name:'#技术基建',    stat:'14 个话题 · 19 人参与', type:'a'},
+    'knowledge-base': {name:'#知识库',      stat:'9 个话题 · 11 人参与',  type:'a'},
+    'donation':       {name:'#企业捐赠',    stat:'7 个话题 · 已配置 3 条工作流', type:'b'}
+  }[tag] || {name:'#'+tag, stat:'', type:'a'};
+
+  topicCrumb.textContent = tagInfo.name;
+  if(tagInfo.type === 'b'){
+    pageA.hidden = true; pageB.hidden = false;
+  } else {
+    pageA.hidden = false; pageB.hidden = true;
+    document.getElementById('topic-name-a').textContent = tagInfo.name;
+    document.getElementById('topic-stat-a').textContent = tagInfo.stat;
+    // A 类配置入口的 tag
+    document.querySelector('#topic-page-a [data-config-tag]').setAttribute('data-config-tag', tag);
+  }
+}
+
+document.addEventListener('click', e=>{
+  const navView = e.target.closest('[data-view]');
+  if(navView){
+    const v = navView.getAttribute('data-view');
+    if(v === 'home'){ e.preventDefault(); showView('home'); return; }
+    if(v === 'topic'){
+      const tag = navView.getAttribute('data-tag');
+      // 如果点的是话题项里的 ⚙ 图标
+      if(e.target.classList.contains('cfg-mini')){
+        e.stopPropagation();
+        openDrawer('配置话题工作流 · #'+tag);
+        return;
+      }
+      showTopic(tag); return;
+    }
+    if(v === 'goals'){
+      showView('goals'); return;
+    }
+    if(v === 'my'){ alert('Demo 暂未实现 MY 视图'); return; }
+  }
+});
+
+// ==== 配置抽屉 ====
+const drawerMask = document.getElementById('drawer-mask');
+const drawer = document.getElementById('drawer');
+const drawerTitle = document.getElementById('drawer-title');
+const drawerClose = document.getElementById('drawer-close');
+function openDrawer(title){
+  drawerTitle.textContent = title || '配置话题工作流';
+  drawer.hidden = false; drawerMask.hidden = false;
+}
+function closeDrawer(){ drawer.hidden = true; drawerMask.hidden = true; }
+drawerMask.addEventListener('click', closeDrawer);
+drawerClose.addEventListener('click', closeDrawer);
+
+document.addEventListener('click', e=>{
+  const cfgTag = e.target.closest('[data-config-tag]');
+  if(cfgTag){
+    e.preventDefault();
     e.stopPropagation();
-    const url = el.getAttribute('data-jump');
-    showToast(url);
+    openDrawer('配置话题工作流 · #'+cfgTag.getAttribute('data-config-tag'));
+    return;
+  }
+  const cfgKi = e.target.closest('[data-config-ki]');
+  if(cfgKi){
+    e.preventDefault();
+    e.stopPropagation();
+    openDrawer('配置关键事项 · '+cfgKi.getAttribute('data-config-ki').toUpperCase()+' 的话题工作流');
+    return;
+  }
+});
+
+// 让左导航有「目标管理」入口（点击 dept 名）
+document.querySelectorAll('[data-dept]').forEach(el=>{
+  el.addEventListener('click', e=>{
+    e.preventDefault();
+    showView('goals');
   });
-})();
+});
+
+// ==== 提问 demo ====
+function fillAsk(q){ document.getElementById('ask-input').value = q; runAsk(); }
+function runAsk(){
+  const q = document.getElementById('ask-input').value.trim();
+  if(!q) return;
+  let intent;
+  if(/进展|进度|哪一步|完成|上线/.test(q)) intent = 'progress';
+  else if(/怎么|如何|流程|SOP|接入|操作/.test(q)) intent = 'sop';
+  else intent = 'data';
+
+  const traces = {
+    data: ['intent #1 · 最近数据查询','SQL · BI 7821','TAPD · 1208','Topic feed · 5'],
+    progress: ['intent #2 · 研发进展查询','TAPD · 1208 · 全部','Topic event · 3'],
+    sop: ['intent #3 · 流程 SOP 查询','iWiki · KM-DONATION-SOP top 3','Topic 经验分享 · 5']
+  };
+  const bodies = {
+    data: `<div>本周（06-08 ~ 06-14）<b>企业捐赠 ¥ 1,860 万</b>，环比 ↑ 8%。</div>
+      <div class="ans-kpi">
+        <div class="ans-kpi-cell"><div class="lbl">本周总额</div><div class="val">¥ 1,860 万</div></div>
+        <div class="ans-kpi-cell"><div class="lbl">捐赠企业</div><div class="val">14 家</div></div>
+        <div class="ans-kpi-cell"><div class="lbl">单笔均值</div><div class="val">¥ 132 万</div></div>
+      </div>
+      <div class="citation">来源：<a data-jump="https://bi.woa.com/sql/7821">BI SQL 7821</a> · <a data-jump="https://tapd.woa.com/project/1208">TAPD 1208</a></div>`,
+    progress: `<div>当前「企业捐赠模块」TAPD 状态：</div>
+      <div class="ans-list">
+        <div class="ans-list-row">✅ TAPD-12345 · 捐赠流程优化 · 已完成 · 06-08</div>
+        <div class="ans-list-row">🛠 TAPD-12356 · 报表导出 · 60% · ETA 06-25</div>
+        <div class="ans-list-row">⏳ TAPD-12372 · 异常监控 · 待开始 · ETA 07-10</div>
+      </div>
+      <div class="citation">来源：<a data-jump="https://tapd.woa.com/project/1208">TAPD 项目 1208</a></div>`,
+    sop: `<div>新企业接入捐赠流程的 SOP（iWiki top 1，相似度 0.83）：</div>
+      <div class="ans-list">
+        <div class="ans-list-row">1. 走 OA 提交《企业捐赠合作申请》</div>
+        <div class="ans-list-row">2. 法务核合规 5 个工作日内出意见</div>
+        <div class="ans-list-row">3. 财务对公账户验证 + 数据流接入</div>
+        <div class="ans-list-row">4. TAPD-12345 已替代旧流程</div>
+      </div>
+      <div class="citation">来源：<a data-jump="https://wiki.woa.com/donation-sop">iWiki · 接入 SOP</a></div>`
+  };
+  document.getElementById('answer-trace').innerHTML = '命中：'+traces[intent].map(t=>`<span class="trace-tag">${t}</span>`).join('');
+  document.getElementById('answer-body').innerHTML = bodies[intent];
+  document.getElementById('answer-box').hidden = false;
+}
+
+// ==== 跳转 toast ====
+const toast = document.getElementById('toast');
+const toastUrl = document.getElementById('toast-url');
+let timer;
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-jump]');
+  if(!el) return;
+  e.stopPropagation();
+  const url = el.getAttribute('data-jump');
+  toastUrl.textContent = url;
+  toast.classList.add('show');
+  clearTimeout(timer);
+  timer = setTimeout(()=>toast.classList.remove('show'), 1800);
+});
 </script>
 </body>
 </html>
