@@ -254,8 +254,7 @@
             <div class="topic-actions">
               <button class="btn primary">+ 关注此话题</button>
               <button class="btn">分享</button>
-              <a class="btn role-only" href="nexus-topic-config-20260615.html?tag=ai-boost">⚙ 升级为问答型</a>
-              <span class="edit-hint">系统自动聚合，无人工配置</span>
+              <span class="edit-hint">系统自动聚合 · 升级问答型入口在右栏「话题负责人」</span>
             </div>
           </div>
 
@@ -338,8 +337,7 @@
             <div class="topic-actions">
               <button class="btn primary">提问此话题</button>
               <button class="btn">订阅周报</button>
-              <a class="btn role-only" href="nexus-topic-config-20260615.html?tag=donation">⚙ 配置工作流</a>
-              <span class="edit-hint">配置人 = 关键事项指派人</span>
+              <span class="edit-hint">配置入口在右栏「话题负责人」卡（仅指派人可见）</span>
             </div>
           </div>
 
@@ -529,12 +527,15 @@
       <!-- 右栏 -->
       <aside class="right-col">
         <div class="ai-card">
-          <h3>配置人 <span class="h3-meta" style="font-size:10.5px;color:var(--text-3)">同关键事项指派人</span></h3>
+          <h3>
+            话题负责人
+            <a class="topic-side-edit role-only" href="nexus-topic-config-20260615.html?tag=donation" title="编辑话题工作流">✎ 编辑</a>
+          </h3>
           <div class="right-row" data-jump="/u/coffeezhong">
             <div class="av">钟</div>
             <div class="body">
               <div class="name">coffeezhong（钟嘉辉）</div>
-              <div class="said">公益平台部 · 目标 2-关键事项 1 指派人</div>
+              <div class="said">公益平台部 · 关键事项指派人</div>
             </div>
           </div>
           <div class="right-row" data-jump="/goals/2#item-1">
@@ -544,8 +545,19 @@
               <div class="said">企业捐赠合作流程标准化</div>
             </div>
           </div>
+          <div class="role-note">
+            <span class="role-only">你是该话题指派人，可编辑工作流</span>
+            <span class="role-only-member">仅指派人 / 管理员可编辑</span>
+          </div>
         </div>
-        <style>.ai-card h3 .h3-meta{font-weight:400;margin-left:4px}</style>
+        <style>
+          .ai-card h3{display:flex;align-items:center;justify-content:space-between}
+          .topic-side-edit{font-size:11.5px;color:var(--c-teal);font-weight:400;text-decoration:none;padding:3px 8px;border:1px solid var(--c-teal);border-radius:4px}
+          .topic-side-edit:hover{background:var(--c-teal-bg)}
+          .role-note{font-size:10.5px;color:var(--text-3);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+          body[data-role="member"] .role-only-member{display:inline}
+          body:not([data-role="member"]) .role-only-member{display:none}
+        </style>
 
         <div class="ai-card">
           <h3>近期发声的人</h3>

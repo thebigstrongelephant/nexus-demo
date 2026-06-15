@@ -151,13 +151,17 @@
   .ppl-item .ref{display:inline;font-size:11px;color:var(--text-3)}
   .quote{display:block;border-left:2px solid var(--line-strong);padding-left:8px;margin-top:4px;color:var(--text-3);font-size:11.5px;line-height:1.5}
 
-  /* 话题导航 + 配置图标 */
-  a.nav-item{text-decoration:none}
-  .topic-link{display:flex;align-items:center;justify-content:space-between;gap:6px}
-  .cfg-mini{font-size:12px;color:var(--text-3);opacity:0;transition:.15s;padding:2px 6px;border-radius:4px;text-decoration:none}
-  .topic-link:hover .cfg-mini{opacity:1}
-  .cfg-mini:hover{color:#1d1f23;background:#f1f2f5}
+  /* 角色权限 */
   body[data-role="member"] .role-only{display:none !important}
+  /* owner-only：只有指派人能看（admin 也能看；member 看不到 → 已被 role-only 兜住） */
+  body[data-role="admin"] .owner-only{display:inline-flex !important}
+  /* 当前演示：仅当 role=owner 时 owner-only 强匹配（admin 也能编辑） */
+
+  /* 首页右栏「新话题」编辑按钮 */
+  a.item-row{text-decoration:none;color:inherit}
+  .topic-edit{flex:0 0 auto;font-size:13px;color:var(--text-3);padding:2px 6px;border-radius:4px;margin-left:6px;opacity:0;transition:.15s;text-decoration:none}
+  a.item-row:hover .topic-edit{opacity:1}
+  .topic-edit:hover{color:var(--c-teal);background:var(--c-teal-bg)}
 
   .role-block{margin-top:24px;padding:8px;background:#f8f9fb;border-radius:8px}
   .role-line{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2)}
@@ -187,27 +191,6 @@
       <div class="nav-title">TOPICS</div>
       <div class="nav-item active"><span class="dot"></span>ALL</div>
       <div class="nav-item"><span class="dot"></span>MY</div>
-    </div>
-
-    <div class="nav-section">
-      <div class="nav-title">话题（按业务关键词）</div>
-      <a class="nav-item topic-link" href="nexus-topic-page-20260615.html?type=a&tag=ai-boost">
-        <span>#AI 提效</span>
-        <a class="cfg-mini role-only" href="nexus-topic-config-20260615.html?tag=ai-boost" title="配置工作流" onclick="event.stopPropagation()">⚙</a>
-      </a>
-      <a class="nav-item topic-link" href="nexus-topic-page-20260615.html?type=a&tag=stage-report">
-        <span>#阶段汇报</span>
-      </a>
-      <a class="nav-item topic-link" href="nexus-topic-page-20260615.html?type=a&tag=tech-infra">
-        <span>#技术基建</span>
-      </a>
-      <a class="nav-item topic-link" href="nexus-topic-page-20260615.html?type=a&tag=knowledge-base">
-        <span>#知识库</span>
-      </a>
-      <a class="nav-item topic-link" href="nexus-topic-page-20260615.html?type=b&tag=donation">
-        <span>#企业捐赠</span>
-        <a class="cfg-mini role-only" href="nexus-topic-config-20260615.html?tag=donation" title="配置工作流" onclick="event.stopPropagation()">⚙</a>
-      </a>
     </div>
 
     <div class="nav-section">
@@ -402,37 +385,32 @@
 
           <div class="ai-card">
             <h3>新话题 <span class="h3-meta">7 天上升</span></h3>
-            <div class="item-row top" data-jump="/topics?tag=stage-report">
-              <div class="item-body">
-                <div class="item-title">#阶段汇报</div>
-              </div>
+            <a class="item-row top" href="nexus-topic-page-20260615.html?type=a&tag=stage-report">
+              <div class="item-body"><div class="item-title">#阶段汇报</div></div>
               <span class="item-count">16 个话题</span>
-            </div>
-            <div class="item-row top" data-jump="/topics?tag=tech-infra">
-              <div class="item-body">
-                <div class="item-title">#技术基建</div>
-              </div>
+              <a class="topic-edit role-only owner-only" href="nexus-topic-config-20260615.html?tag=stage-report" title="编辑话题" onclick="event.stopPropagation()">✎</a>
+            </a>
+            <a class="item-row top" href="nexus-topic-page-20260615.html?type=a&tag=tech-infra">
+              <div class="item-body"><div class="item-title">#技术基建</div></div>
               <span class="item-count">14 个话题</span>
-            </div>
-            <div class="item-row" data-jump="/topics?tag=ai-boost">
-              <div class="item-body">
-                <div class="item-title">#AI 提效</div>
-              </div>
+              <a class="topic-edit role-only" href="nexus-topic-config-20260615.html?tag=tech-infra" title="编辑话题（管理员可见）" onclick="event.stopPropagation()">✎</a>
+            </a>
+            <a class="item-row" href="nexus-topic-page-20260615.html?type=a&tag=ai-boost">
+              <div class="item-body"><div class="item-title">#AI 提效</div></div>
               <span class="item-count">11 个话题</span>
-            </div>
-            <div class="item-row" data-jump="/topics?tag=knowledge-base">
-              <div class="item-body">
-                <div class="item-title">#知识库</div>
-              </div>
+              <a class="topic-edit role-only owner-only" href="nexus-topic-config-20260615.html?tag=ai-boost" title="你是该话题指派人" onclick="event.stopPropagation()">✎</a>
+            </a>
+            <a class="item-row" href="nexus-topic-page-20260615.html?type=a&tag=knowledge-base">
+              <div class="item-body"><div class="item-title">#知识库</div></div>
               <span class="item-count">9 个话题</span>
-            </div>
-            <div class="item-row" data-jump="/topics?tag=donation">
-              <div class="item-body">
-                <div class="item-title">#企业捐赠</div>
-              </div>
+              <a class="topic-edit role-only" href="nexus-topic-config-20260615.html?tag=knowledge-base" title="编辑话题（管理员可见）" onclick="event.stopPropagation()">✎</a>
+            </a>
+            <a class="item-row" href="nexus-topic-page-20260615.html?type=b&tag=donation">
+              <div class="item-body"><div class="item-title">#企业捐赠</div></div>
               <span class="item-count">7 个话题</span>
-            </div>
-            <span class="more" data-jump="/topics/trending">查看完整 →</span>
+              <a class="topic-edit role-only owner-only" href="nexus-topic-config-20260615.html?tag=donation" title="你是该话题指派人" onclick="event.stopPropagation()">✎</a>
+            </a>
+            <span class="more">查看完整 →</span>
           </div>
 
           <div class="ai-card">
