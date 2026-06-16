@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Nexus 话题工作台 · 详情</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#f5f6f8;
+    --line:rgba(0,0,0,0.08);
+    --line-strong:rgba(0,0,0,0.14);
+    --text:#1d1f23;
+    --text-2:#5b6068;
+    --text-3:#8b9099;
+    --c-blue:#185FA5; --c-blue-bg:#E6F1FB;
+    --c-teal:#0F6E56; --c-teal-bg:#E1F5EE;
+    --c-amber:#854F0B; --c-amber-bg:#FAEEDA;
+    --c-purple:#534AB7; --c-purple-bg:#EEEDFE;
+    --c-coral:#993C1D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--text);font:14px/1.55 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+  a{color:inherit;text-decoration:none}
+
+  .layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+
+  /* 左导航（与首页一致） */
+  .sidebar{background:#fff;border-right:1px solid var(--line);padding:16px 12px}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:500;font-size:15px;padding:6px 8px;margin-bottom:12px}
+  .brand .logo{width:24px;height:24px;border-radius:6px;background:#1d1f23;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px}
+  .brand small{font-weight:400;color:var(--text-3);font-size:11px}
+  .nav-section{margin-top:18px}
+  .nav-title{font-size:11px;color:var(--text-3);letter-spacing:1px;padding:0 8px;margin-bottom:6px}
+  .nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;color:var(--text-2);font-size:13px;cursor:pointer;text-decoration:none}
+  .nav-item:hover{background:#f1f2f5}
+  .nav-item.active{background:#1d1f23;color:#fff}
+  .nav-item .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5}
+
+  .public-goals{margin:0}
+  .public-goals summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 8px;font-size:11px;color:var(--text-3);letter-spacing:1px;user-select:none}
+  .public-goals summary::-webkit-details-marker{display:none}
+  .pg-caret{font-size:10px;display:inline-block;transition:transform .2s}
+  .public-goals[open] .pg-caret{transform:rotate(0deg)}
+  .public-goals:not([open]) .pg-caret{transform:rotate(-90deg)}
+  .pg-title{font-weight:500;color:var(--text-2);letter-spacing:1px}
+  .pg-meta{margin-left:auto;font-size:10px;color:var(--text-3);letter-spacing:0;background:#f1f2f5;padding:1px 6px;border-radius:8px}
+  .pg-self{padding:6px 0 4px}
+  .pg-self-name{font-size:12.5px;font-weight:500;color:var(--c-teal);padding:4px 10px;border-radius:6px;display:block}
+  .pg-self-name:hover{background:var(--c-teal-bg)}
+  .goal-item{display:flex;gap:8px;padding:5px 10px;font-size:12px;color:var(--text-2);border-radius:6px;line-height:1.4}
+  .goal-item:hover{background:#f1f2f5;color:var(--text)}
+  .goal-no{flex:0 0 auto;font-size:10.5px;color:var(--text-3);background:#f1f2f5;padding:0 5px;border-radius:3px;line-height:18px;font-family:Menlo,monospace}
+  .goal-item:hover .goal-no{background:var(--c-teal-bg);color:var(--c-teal)}
+  .goal-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pg-other{margin-top:6px;padding:6px 10px;font-size:11.5px;color:var(--text-3);border-top:1px dashed var(--line);display:block}
+  .pg-other:hover{color:var(--c-teal)}
+
+  .role-block{margin-top:24px;padding:8px;background:#f8f9fb;border-radius:8px}
+  .role-line{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2)}
+  .role-dot{width:6px;height:6px;border-radius:50%;background:var(--c-teal)}
+  .role-text{flex:1}
+  .role-select{font:400 11px inherit;padding:2px 4px;border:1px solid var(--line);border-radius:4px;background:#fff}
+  .role-hint{font-size:10px;color:var(--text-3);margin-top:4px}
+
+  .topbar{height:48px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;font-size:13px;color:var(--text-2);justify-content:space-between}
+
+  .main{padding:24px 32px;max-width:1100px}
+  .crumb{font-size:12.5px;color:var(--text-3);margin-bottom:14px}
+  .crumb a{color:var(--text-2);cursor:pointer}
+  .crumb a:hover{color:var(--text)}
+  .crumb .now{color:var(--text);font-weight:500}
+
+  .btn{font-size:12.5px;padding:6px 14px;border-radius:6px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--text-2);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  .btn:hover{border-color:var(--line-strong);color:var(--text)}
+  .btn.primary{background:#1d1f23;color:#fff;border-color:#1d1f23}
+  .btn.primary:hover{background:#000}
+  .btn.subbed{background:var(--c-teal-bg);color:var(--c-teal);border-color:var(--c-teal)}
+
+  /* 工作台头部 */
+  .ws-head{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin-bottom:14px}
+  .ws-tag{display:inline-block;background:var(--c-teal);color:#fff;padding:2px 10px;border-radius:12px;font-size:12px}
+  .ws-name{font-size:24px;font-weight:500;margin:8px 0 6px}
+  .ws-sub{color:var(--text-3);font-size:13px;margin-bottom:10px;line-height:1.6}
+  .ws-meta{display:flex;flex-wrap:wrap;gap:18px;font-size:12px;color:var(--text-3);margin-bottom:14px}
+  .ws-meta b{font-weight:500;color:var(--text-2)}
+  .ws-actions{display:flex;gap:10px;align-items:center}
+  .ws-actions .right{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .perm-hint{font-size:11.5px;color:var(--text-3)}
+
+  /* 编辑模式开关 */
+  .edit-toggle{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2);padding:5px 12px;border:1px solid var(--line);border-radius:6px;cursor:pointer;background:#fff}
+  .edit-toggle:hover{border-color:var(--line-strong)}
+  .edit-toggle.on{background:#1d1f23;color:#fff;border-color:#1d1f23}
+  .edit-toggle .dot{width:8px;height:8px;border-radius:50%;background:#bbb;transition:.15s}
+  .edit-toggle.on .dot{background:#5DCAA5}
+
+  body[data-role="member"] .role-only{display:none !important}
+
+  /* 5 个 box */
+  .ws-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column}
+  .box.full{grid-column:1 / -1}
+  .box-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .box-head h2{font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px}
+  .box-head h2 .num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#1d1f23;color:#fff;font-size:11px;font-weight:500}
+  .box-head h2 .desc{color:var(--text-3);font-size:11.5px;font-weight:400;margin-left:4px}
+  .box-head .actions{display:flex;gap:6px}
+  .box-head .icon-btn{font-size:11.5px;color:var(--text-3);padding:4px 10px;border-radius:5px;cursor:pointer;border:1px solid var(--line);background:#fff;line-height:1.4}
+  .box-head .icon-btn:hover{color:var(--text);border-color:var(--line-strong)}
+  .box-head .icon-btn.primary{background:var(--c-teal-bg);color:var(--c-teal);border-color:var(--c-teal)}
+  .box-head .icon-btn.primary:hover{background:var(--c-teal);color:#fff}
+
+  .conclusion{display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13px;line-height:1.6}
+  .conclusion:last-child{border-bottom:none}
+  body.editing .conclusion{cursor:text}
+  body.editing .conclusion .text{outline:1px dashed transparent;outline-offset:4px;border-radius:4px;padding:0 4px}
+  body.editing .conclusion .text:focus{outline-color:var(--c-teal);background:var(--c-teal-bg)}
+  body:not(.editing) .conclusion .text{user-select:text}
+  .conclusion .check{flex:0 0 auto;color:var(--c-teal);font-size:12px;margin-top:3px}
+  .conclusion .text{flex:1;min-width:0;color:var(--text)}
+  .conclusion .src{display:inline-block;margin-left:6px;font-size:11px;color:var(--c-blue);background:var(--c-blue-bg);padding:1px 7px;border-radius:3px;cursor:pointer}
+  .conclusion .src:hover{background:#cfe1f5}
+  .conclusion .row-x{flex:0 0 auto;color:var(--text-3);cursor:pointer;padding:2px 6px;border-radius:4px;font-size:11px;display:none}
+  body.editing .conclusion:hover .row-x{display:inline-flex}
+  .conclusion .row-x:hover{color:var(--c-coral);background:#fff5f3}
+
+  .row-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+  .row-item:last-child{border-bottom:none}
+  .row-item .ri-icon{flex:0 0 36px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:500;font-family:Menlo,monospace;letter-spacing:.3px}
+  .ri-tapd .ri-icon{background:var(--c-blue-bg);color:var(--c-blue)}
+  .ri-topic .ri-icon{background:#f1f2f5;color:var(--text-2)}
+  .ri-data .ri-icon{background:var(--c-amber-bg);color:var(--c-amber)}
+  .ri-design .ri-icon{background:var(--c-purple-bg);color:var(--c-purple)}
+  .ri-research .ri-icon{background:var(--c-teal-bg);color:var(--c-teal)}
+  .row-item .ri-body{flex:1;min-width:0}
+  .row-item .ri-title{font-weight:500;color:var(--text);cursor:pointer;line-height:1.5}
+  .row-item .ri-title:hover{text-decoration:underline}
+  .row-item .ri-meta{font-size:11px;color:var(--text-3);margin-top:1px}
+  .row-item .ri-status{flex:0 0 auto;font-size:11px;padding:2px 8px;border-radius:10px}
+  .ri-status.done{background:var(--c-teal-bg);color:var(--c-teal)}
+  .ri-status.doing{background:var(--c-amber-bg);color:var(--c-amber)}
+  .ri-status.todo{background:#f1f2f5;color:var(--text-3)}
+  .row-item .ri-progress{flex:0 0 auto;font-size:11px;color:var(--text-3);min-width:54px;text-align:right}
+  .row-item .row-x{display:none;color:var(--text-3);cursor:pointer;padding:2px 6px;border-radius:4px;font-size:11px}
+  body.editing .row-item:hover .row-x{display:inline-flex}
+  .row-item .row-x:hover{color:var(--c-coral);background:#fff5f3}
+
+  /* 关联占位（非编辑态隐藏） */
+  .add-relate{display:none;padding:9px 12px;border:1px dashed var(--line-strong);border-radius:6px;color:var(--text-3);font-size:12px;cursor:pointer;text-align:center;margin-top:8px;background:#fff}
+  body.editing .add-relate{display:block}
+  .add-relate:hover{border-color:#1d1f23;color:#1d1f23}
+  body[data-role="member"] .add-relate{display:none !important}
+
+  .edit-trail{font-size:11.5px;color:var(--text-3);padding:8px 0;border-top:1px dashed var(--line);margin-top:auto}
+  .trail-line{display:flex;gap:6px;padding:3px 0}
+  .trail-av{width:18px;height:18px;border-radius:50%;background:#f1f2f5;color:var(--text-2);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:500}
+
+  /* 关联抽屉 */
+  .drawer-mask{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:90;opacity:0;pointer-events:none;transition:opacity .2s}
+  .drawer-mask.show{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:-540px;bottom:0;width:520px;background:#fff;z-index:91;display:flex;flex-direction:column;box-shadow:-2px 0 20px rgba(0,0,0,.1);transition:right .25s}
+  .drawer.show{right:0}
+  .drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line)}
+  .drawer-title{font-size:15px;font-weight:500}
+  .drawer-close{cursor:pointer;color:var(--text-3);font-size:14px;padding:4px 8px;border-radius:4px}
+  .drawer-close:hover{background:#f1f2f5;color:var(--text)}
+
+  .entity-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);padding:0 22px;background:#fafbfc}
+  .et-tab{font-size:12.5px;color:var(--text-2);padding:10px 14px;cursor:pointer;position:relative}
+  .et-tab.on{color:var(--text);font-weight:500}
+  .et-tab.on::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:2px;background:#1d1f23}
+
+  .drawer-body{flex:1;overflow-y:auto;padding:14px 22px}
+  .drawer-search{width:100%;font:400 13px inherit;padding:8px 12px;border:1px solid var(--line);border-radius:6px;outline:none;margin-bottom:10px}
+  .drawer-search:focus{border-color:#1d1f23}
+  .et-list{display:flex;flex-direction:column;gap:6px}
+  .et-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--line);border-radius:6px;background:#fafbfc;cursor:pointer}
+  .et-row:hover{border-color:var(--line-strong);background:#fff}
+  .et-row .et-icon{width:32px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:500;font-family:Menlo,monospace;flex-shrink:0}
+  .et-row.tapd .et-icon{background:var(--c-blue-bg);color:var(--c-blue)}
+  .et-row.topic .et-icon{background:#f1f2f5;color:var(--text-2)}
+  .et-row.data .et-icon{background:var(--c-amber-bg);color:var(--c-amber)}
+  .et-row.design .et-icon{background:var(--c-purple-bg);color:var(--c-purple)}
+  .et-row.research .et-icon{background:var(--c-teal-bg);color:var(--c-teal)}
+  .et-row .body{flex:1;min-width:0}
+  .et-row .ttl{font-size:12.5px;font-weight:500}
+  .et-row .meta{font-size:11px;color:var(--text-3);margin-top:1px}
+  .et-row .add{flex:0 0 auto;font-size:11.5px;color:var(--c-teal);background:var(--c-teal-bg);padding:3px 10px;border-radius:11px}
+
+  .drawer-foot{padding:14px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+
+  .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1d1f23;color:#fff;padding:10px 18px;border-radius:8px;font-size:12.5px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
+  .toast.show{opacity:1}
+
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="logo">N</span>
+      <div>SSV Nexus<br><small>透明即上下文</small></div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-title">TOPICS</div>
+      <a class="nav-item" href="nexus-home-recommend-20260614.html"><span class="dot"></span>ALL</a>
+      <a class="nav-item"><span class="dot"></span>MY</a>
+    </div>
+
+    <div class="nav-section">
+      <details class="public-goals" open>
+        <summary>
+          <span class="pg-caret">▾</span>
+          <span class="pg-title">目标公开</span>
+          <span class="pg-meta">我的部门</span>
+        </summary>
+        <div class="pg-self">
+          <a class="pg-self-name" href="nexus-goals-20260615.html?dept=digital-culture">数字文化实验室</a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-1"><span class="goal-no">G1-K1</span><span class="goal-text">AI 简报上线及反馈闭环</span></a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-2"><span class="goal-no">G1-K2</span><span class="goal-text">移动端核心交互改造</span></a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-3"><span class="goal-no">G2-K1</span><span class="goal-text">关键事项治理标准建立</span></a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-4"><span class="goal-no">G2-K2</span><span class="goal-text">跨 Topic 内容沉淀机制</span></a>
+          <a class="goal-item" href="nexus-goals-20260615.html?dept=digital-culture#item-5"><span class="goal-no">G3-K1</span><span class="goal-text">B 端工具产品规划</span></a>
+        </div>
+        <a class="pg-other" href="nexus-goals-20260615.html?dept=all">查看其他部门目标 →</a>
+      </details>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-title">TOOLS</div>
+      <a class="nav-item">技能</a>
+      <a class="nav-item">插件</a>
+    </div>
+
+    <div class="nav-section role-block">
+      <div class="role-line">
+        <span class="role-dot"></span>
+        <span class="role-text">demo · 角色</span>
+        <select class="role-select" id="role-select">
+          <option value="member">非部门成员</option>
+          <option value="dept-member" selected>部门成员</option>
+          <option value="admin">管理员</option>
+        </select>
+      </div>
+      <div class="role-hint">部门成员 / 管理员可关联 + 编辑</div>
+    </div>
+  </aside>
+
+  <div>
+    <div class="topbar">
+      <div>透明即上下文，上下文即生产力</div>
+      <div>欢迎，<b>马巍</b></div>
+    </div>
+
+    <main class="main">
+      <div class="crumb">
+        <a href="nexus-home-recommend-20260614.html">首页</a> /
+        <a href="nexus-topic-workspace-20260616.html">话题</a> /
+        <span class="now" id="ws-crumb">PixelBuddy 落地</span>
+      </div>
+
+      <div class="ws-head">
+        <span class="ws-tag">项目话题 · 工作台</span>
+        <h1 class="ws-name" id="ws-name">PixelBuddy 落地</h1>
+        <div class="ws-sub" id="ws-desc">
+          从 Figma 自动生成 Vue/React 组件骨架，覆盖设计中心 + 前端工程小组 + 数字文化实验室协作，预计 Q3 全量灰度。
+        </div>
+        <div class="ws-meta">
+          <span><b id="ws-dept">3 部门</b> 协作</span>
+          <span><b>9 人</b> 关注</span>
+          <span>关联 <b id="ws-topics">11</b> 个 Topic</span>
+          <span>关联 <b id="ws-tapds">5</b> 个 TAPD</span>
+          <span>最近编辑 windlin · 1 小时前</span>
+        </div>
+        <div class="ws-actions">
+          <button class="btn primary subbed">✓ 已订阅</button>
+          <button class="btn">分享</button>
+          <button class="btn">📌 收藏</button>
+          <div class="right">
+            <span class="perm-hint role-only">部门成员可关联 / 编辑</span>
+            <span class="perm-hint" style="display:none" id="readonly-hint">非部门成员，仅可阅读</span>
+            <span class="edit-toggle role-only" id="edit-btn" onclick="toggleEdit()">
+              <span class="dot"></span><span class="lbl">开始编辑</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ws-grid">
+
+        <!-- ① 方向讨论 -->
+        <div class="box full">
+          <div class="box-head">
+            <h2><span class="num">1</span>方向讨论 <span class="desc">结论性信息 · 每条挂原始 Topic</span></h2>
+            <div class="actions role-only">
+              <span class="icon-btn">⌘ AI 自动归纳</span>
+              <span class="icon-btn primary" onclick="openRelate('conclusion')">+ 关联 Topic</span>
+            </div>
+          </div>
+
+          <div class="conclusion">
+            <span class="check">✓</span>
+            <div class="text" contenteditable="false">D2C 转换方案确定走 <b>结构化中间层</b>方案（不直接生成 JSX），保留 design token 与组件名映射 <span class="src" onclick="goTopic('4106')">Topic 4106</span></div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已删除该结论')">×</span>
+          </div>
+          <div class="conclusion">
+            <span class="check">✓</span>
+            <div class="text" contenteditable="false">Figma 插件先支持 Auto Layout / Variants 两个能力，复杂 Variants 通过 prop matrix 表达 <span class="src" onclick="goTopic('w-2201')">Weekly 研效</span></div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已删除该结论')">×</span>
+          </div>
+          <div class="conclusion">
+            <span class="check">✓</span>
+            <div class="text" contenteditable="false">灰度顺序：① 数字文化内部 → ② 设计中心 → ③ 全员；每阶段附 retro <span class="src" onclick="goTopic('4112')">Nexus 进展</span></div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已删除该结论')">×</span>
+          </div>
+          <div class="conclusion">
+            <span class="check">✓</span>
+            <div class="text" contenteditable="false">代码生成质量评估指标：覆盖率 + 上手时间，目前 KBD 抽样 0.78 <span class="src" onclick="goTopic('4113')">公益知识库</span></div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已删除该结论')">×</span>
+          </div>
+
+          <div class="add-relate" onclick="openRelate('conclusion')">+ 关联 Topic 形成新结论</div>
+
+          <div class="edit-trail">
+            <div class="trail-line"><span class="trail-av">林</span><span>windlin · 1 小时前编辑了「灰度顺序」</span></div>
+            <div class="trail-line"><span class="trail-av">钟</span><span>coffeezhong · 昨天 16:42 添加了「代码生成质量评估指标」</span></div>
+          </div>
+        </div>
+
+        <!-- ② 需求与研发进展 -->
+        <div class="box">
+          <div class="box-head">
+            <h2><span class="num">2</span>需求与研发进展 <span class="desc">关联 Topic + TAPD</span></h2>
+            <div class="actions role-only">
+              <span class="icon-btn primary" onclick="openRelate('progress')">+ 关联</span>
+            </div>
+          </div>
+
+          <div class="row-item ri-tapd" onclick="window.open('https://tapd.woa.com/story/12345','_blank')">
+            <span class="ri-icon">TAPD</span>
+            <div class="ri-body">
+              <div class="ri-title">TAPD-12345 · Figma 插件 v1 · Auto Layout 支持</div>
+              <div class="ri-meta">@windlin · 06-08 上线 · 关联 Topic 4106</div>
+            </div>
+            <span class="ri-progress">100%</span>
+            <span class="ri-status done">已完成</span>
+            <span class="row-x" onclick="event.stopPropagation();this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+          <div class="row-item ri-tapd">
+            <span class="ri-icon">TAPD</span>
+            <div class="ri-body">
+              <div class="ri-title">TAPD-12356 · Variants 支持 + prop matrix 生成</div>
+              <div class="ri-meta">@kiitywu · ETA 06-25 · 关联 Topic 4109</div>
+            </div>
+            <span class="ri-progress">60%</span>
+            <span class="ri-status doing">进行中</span>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+          <div class="row-item ri-tapd">
+            <span class="ri-icon">TAPD</span>
+            <div class="ri-body">
+              <div class="ri-title">TAPD-12372 · 设计 Token 同步机制</div>
+              <div class="ri-meta">@spraydong · ETA 07-10</div>
+            </div>
+            <span class="ri-progress">0%</span>
+            <span class="ri-status todo">待开始</span>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+
+          <div class="add-relate" onclick="openRelate('progress')">+ 关联 TAPD / Topic</div>
+        </div>
+
+        <!-- ③ 数据与代码 -->
+        <div class="box">
+          <div class="box-head">
+            <h2><span class="num">3</span>数据与代码 <span class="desc">绑定 BI / 工蜂 / KBD</span></h2>
+            <div class="actions role-only">
+              <span class="icon-btn primary" onclick="openRelate('data')">+ 关联数据源</span>
+            </div>
+          </div>
+
+          <div class="row-item ri-data">
+            <span class="ri-icon">工蜂</span>
+            <div class="ri-body">
+              <div class="ri-title">git.woa.com/ssv-fe/pixelbuddy</div>
+              <div class="ri-meta">CodeDog 主分支 · 87% 测试覆盖 · 24 contributors</div>
+            </div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+          <div class="row-item ri-data">
+            <span class="ri-icon">KBD</span>
+            <div class="ri-body">
+              <div class="ri-title">设计稿 → 代码 转换准确率</div>
+              <div class="ri-meta">本周 0.78 · 目标 0.85 · 5 分钟刷新</div>
+            </div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+          <div class="row-item ri-data">
+            <span class="ri-icon">BI</span>
+            <div class="ri-body">
+              <div class="ri-title">SQL 8123 · 插件激活率（按部门）</div>
+              <div class="ri-meta">数字文化 92% / 设计中心 64% / 其它 12%</div>
+            </div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+
+          <div class="add-relate" onclick="openRelate('data')">+ 关联 工蜂 / CodeDog / KBD / BI</div>
+        </div>
+
+        <!-- ④ 设计资源 -->
+        <div class="box">
+          <div class="box-head">
+            <h2><span class="num">4</span>设计资源 <span class="desc">从相关 Topic 抽取</span></h2>
+            <div class="actions role-only">
+              <span class="icon-btn primary" onclick="openRelate('design')">+ 关联</span>
+            </div>
+          </div>
+
+          <div class="row-item ri-design">
+            <span class="ri-icon">Figma</span>
+            <div class="ri-body">
+              <div class="ri-title">PixelBuddy 主页 · v3 终稿</div>
+              <div class="ri-meta">@tevenxu · 来源 Topic 4104 · 6 月更新</div>
+            </div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+          <div class="row-item ri-design">
+            <span class="ri-icon">Figma</span>
+            <div class="ri-body">
+              <div class="ri-title">设计 Token 全景图</div>
+              <div class="ri-meta">@tevenxu · 来源 Topic 4104 · 5 月初稿</div>
+            </div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+          <div class="row-item ri-design">
+            <span class="ri-icon">PB</span>
+            <div class="ri-body">
+              <div class="ri-title">PixelBuddy 输出代码 demo · 3 个组件</div>
+              <div class="ri-meta">自动生成于 06-12 · 与设计稿一致度 0.81</div>
+            </div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+
+          <div class="add-relate" onclick="openRelate('design')">+ 关联 Figma / 截图 / 代码 demo</div>
+        </div>
+
+        <!-- ⑤ 相关调研 -->
+        <div class="box full">
+          <div class="box-head">
+            <h2><span class="num">5</span>相关调研 <span class="desc">竞品 / 用研 / 市场</span></h2>
+            <div class="actions role-only">
+              <span class="icon-btn primary" onclick="openRelate('research')">+ 关联调研</span>
+            </div>
+          </div>
+
+          <div class="row-item ri-research">
+            <span class="ri-icon">竞品</span>
+            <div class="ri-body">
+              <div class="ri-title">字节飞书 · Codeflow 能力对比</div>
+              <div class="ri-meta">@dorishhwang · 06-09 · iWiki 报告</div>
+            </div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+          <div class="row-item ri-research">
+            <span class="ri-icon">用研</span>
+            <div class="ri-body">
+              <div class="ri-title">设计中心 6 人深访 · D2C 期待与抗拒</div>
+              <div class="ri-meta">@kiitywu · 5 月底 · 含访谈纪要 + 痛点聚类</div>
+            </div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+          <div class="row-item ri-research">
+            <span class="ri-icon">市场</span>
+            <div class="ri-body">
+              <div class="ri-title">D2C 工具市场扫描 · v0 / Cursor / Locofy</div>
+              <div class="ri-meta">@coffeezhong · 03 月旧报告，建议本月更新</div>
+            </div>
+            <span class="row-x" onclick="this.parentNode.remove();showToast('已解除关联')">×</span>
+          </div>
+
+          <div class="add-relate" onclick="openRelate('research')">+ 关联调研（Topic / iWiki / 外链）</div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- 关联抽屉 -->
+<div class="drawer-mask" id="drawer-mask" onclick="closeRelate()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <span class="drawer-title">关联到「<span id="drawer-target">方向讨论</span>」</span>
+    <span class="drawer-close" onclick="closeRelate()">✕</span>
+  </div>
+
+  <div class="entity-tabs" id="et-tabs"></div>
+
+  <div class="drawer-body">
+    <input class="drawer-search" placeholder="🔍 输入关键词搜索可关联对象..." />
+    <div class="et-list" id="et-list"></div>
+  </div>
+
+  <div class="drawer-foot">
+    <button class="btn" onclick="closeRelate()">取消</button>
+    <button class="btn primary" onclick="confirmRelate()">关联到工作台</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// 数据：每个工作台名映射
+const wsData = {
+  'pixelbuddy':    {name:'PixelBuddy 落地',     desc:'从 Figma 自动生成 Vue/React 组件骨架，覆盖设计中心 + 前端工程小组 + 数字文化实验室协作。', dept:'3 部门', topics:11, tapds:5},
+  'welfare-2':     {name:'公益平台二期',        desc:'企业捐赠 + 机构服务平台升级，跨四部门协作。预计 Q3 上线。',                        dept:'4 部门', topics:24, tapds:3},
+  'nexus':         {name:'Nexus 自身演进',      desc:'AI 简报 / 移动端适配 / 关键事项治理 / 跨 Topic 沉淀机制。',                         dept:'1 部门', topics:16, tapds:2},
+  'biz-platform':  {name:'机构服务平台升级',    desc:'首页改版 + 项目空间整合 + 项目状态简化，三个并行优化方案的统一承载。',                dept:'2 部门', topics:9,  tapds:4},
+  'ai-boost':      {name:'AI 提效专项',         desc:'横向 AI 工具落地：审核 / 检索 / Skill / Chatbot。',                                 dept:'5 部门', topics:11, tapds:1},
+  'donation':      {name:'企业捐赠合作',        desc:'已配置问答工作流的样板话题。涵盖数据看板 / TAPD 同步 / SOP 文档。',                  dept:'2 部门', topics:7,  tapds:3},
+  'co-design':     {name:'业务 Co-design 机制周会沉淀', desc:'挂在「业务架构部 G1-K1」下，小团队机制建设的累计讨论。',                       dept:'1 部门', topics:6,  tapds:0},
+  'kb-build':      {name:'公益知识库优化专项',  desc:'挂在「业务架构部 G1-K2」下，知识库检索能力 + 结构化沉淀。',                          dept:'1 部门', topics:8,  tapds:2},
+  'cicdco':        {name:'CICDCO 持续优化',     desc:'公益平台部基建标准化 + 流水线对齐。',                                                dept:'技术架构部', topics:12, tapds:0},
+  'fe-team':       {name:'前端工程小组',        desc:'跨部门虚拟小组，前端基建 / 组件库 / 研发提效。',                                     dept:'横跨 4 部门', topics:14, tapds:0},
+  'data-team':     {name:'数据治理小组',        desc:'BI 看板 / 指标体系 / 数据质量。',                                                    dept:'横跨 3 部门', topics:9,  tapds:0},
+  'design-center': {name:'设计中心',            desc:'各业务双周进展透视 + Figma 资产管理 + 设计规范。',                                    dept:'独立部门', topics:11, tapds:0}
+};
+
+const wsId = new URLSearchParams(location.search).get('ws') || 'pixelbuddy';
+const ws = wsData[wsId] || wsData['pixelbuddy'];
+document.getElementById('ws-name').textContent = ws.name;
+document.getElementById('ws-crumb').textContent = ws.name;
+document.getElementById('ws-desc').textContent = ws.desc;
+document.getElementById('ws-dept').textContent = ws.dept;
+document.getElementById('ws-topics').textContent = ws.topics;
+document.getElementById('ws-tapds').textContent = ws.tapds;
+
+// 角色
+const roleSelect = document.getElementById('role-select');
+function applyRole(){
+  const v = roleSelect.value;
+  document.body.setAttribute('data-role', v);
+  try{ localStorage.setItem('nexus-demo-role', v); }catch(e){}
+  // 非部门成员（member）→ 强制退出编辑态 + 显示只读提示
+  const isReadOnly = (v === 'member');
+  document.getElementById('readonly-hint').style.display = isReadOnly ? 'inline' : 'none';
+  if(isReadOnly){ document.body.classList.remove('editing'); updateEditBtn(); }
+}
+const saved = (function(){ try{return localStorage.getItem('nexus-demo-role');}catch(e){return null;} })();
+if(saved && roleSelect.querySelector(`[value="${saved}"]`)){ roleSelect.value = saved; }
+roleSelect.addEventListener('change', applyRole);
+applyRole();
+
+// toast
+const toast = document.getElementById('toast');
+let timer;
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(timer);
+  timer = setTimeout(()=>toast.classList.remove('show'), 1800);
+}
+
+// 编辑模式 toggle
+function toggleEdit(){
+  if(roleSelect.value === 'member'){ showToast('非部门成员仅可阅读'); return; }
+  const editing = document.body.classList.toggle('editing');
+  document.querySelectorAll('.conclusion .text').forEach(el=>el.contentEditable = editing);
+  updateEditBtn();
+  showToast(editing ? '已进入编辑模式' : '已保存（demo · 未真正落库）');
+}
+function updateEditBtn(){
+  const editing = document.body.classList.contains('editing');
+  const btn = document.getElementById('edit-btn');
+  btn.classList.toggle('on', editing);
+  btn.querySelector('.lbl').textContent = editing ? '保存退出' : '开始编辑';
+}
+
+function goTopic(id){
+  showToast('跳转到 Topic ' + id);
+}
+
+// === 关联抽屉 ===
+const entityTypes = {
+  conclusion: {
+    label: '方向讨论',
+    tabs: [
+      {key:'topic', name:'Topic（含评论结论）'},
+      {key:'event', name:'Event（会议纪要）'}
+    ]
+  },
+  progress: {
+    label: '需求与研发进展',
+    tabs: [
+      {key:'tapd', name:'TAPD 需求'},
+      {key:'topic', name:'Topic'}
+    ]
+  },
+  data: {
+    label: '数据与代码',
+    tabs: [
+      {key:'gongfeng', name:'工蜂仓库'},
+      {key:'codedog', name:'CodeDog'},
+      {key:'kbd', name:'KBD'},
+      {key:'bi', name:'BI 看板'}
+    ]
+  },
+  design: {
+    label: '设计资源',
+    tabs: [
+      {key:'figma', name:'Figma'},
+      {key:'topic', name:'Topic（含设计稿）'},
+      {key:'asset', name:'设计资产库'}
+    ]
+  },
+  research: {
+    label: '相关调研',
+    tabs: [
+      {key:'iwiki', name:'iWiki 报告'},
+      {key:'lexiang', name:'乐享文档'},
+      {key:'topic', name:'Topic（调研类）'},
+      {key:'url', name:'外部链接'}
+    ]
+  }
+};
+
+const sampleEntities = {
+  topic: [
+    {id:'4106', t:'公益项目上线审核体验方案', m:'coffeezhong · 06-12 · 8 评论'},
+    {id:'4112', t:'Nexus 每日需求进展', m:'weima · 06-09 · 12 评论'},
+    {id:'4113', t:'公益知识库优化专项讨论', m:'esonlin · 05-29 · 14 评论'}
+  ],
+  event: [
+    {id:'EV-501', t:'PixelBuddy 周会纪要 · 06-12', m:'设计中心 + 数字文化'},
+    {id:'EV-489', t:'Co-design 机制评审 · 06-08', m:'业务架构部'}
+  ],
+  tapd: [
+    {id:'12389', t:'TAPD-12389 · 接入新企业 SOP 自动化', m:'@spraydong · 30%'},
+    {id:'12401', t:'TAPD-12401 · Figma plug-in v2 · Variants', m:'@windlin · 待评审'}
+  ],
+  gongfeng:[
+    {id:'GF-1', t:'git.woa.com/ssv-fe/pixelbuddy-cli', m:'CLI 工具 · 主分支'},
+    {id:'GF-2', t:'git.woa.com/ssv-design/tokens', m:'设计 token 仓库'}
+  ],
+  codedog:[
+    {id:'CD-1', t:'pixelbuddy 主仓库覆盖率', m:'实时刷新'}
+  ],
+  kbd:[
+    {id:'KBD-1', t:'KBD · 数据流转看板', m:'5 分钟刷新'},
+    {id:'KBD-2', t:'KBD · 转换准确率分布', m:'按部门'}
+  ],
+  bi:[
+    {id:'8123', t:'SQL 8123 · 插件激活率', m:'按部门'},
+    {id:'8156', t:'SQL 8156 · 周新增组件数', m:'7 天滚动'}
+  ],
+  figma:[
+    {id:'FG-1', t:'PixelBuddy 主页 · v3 终稿', m:'@tevenxu · 已发版'},
+    {id:'FG-2', t:'图标系统 v2', m:'@dorishhwang · WIP'}
+  ],
+  asset:[
+    {id:'AS-1', t:'Brand Kit 2026', m:'品牌管理中心'}
+  ],
+  iwiki:[
+    {id:'WK-1', t:'D2C 工具市场扫描', m:'2026-03 · 待更新'},
+    {id:'WK-2', t:'设计中心年度报告', m:'2026-Q1'}
+  ],
+  lexiang:[
+    {id:'LX-1', t:'乐享 · 公益平台部周报合集', m:'每周更新'}
+  ],
+  url:[
+    {id:'URL', t:'手动粘贴 URL...', m:'保存为外部链接'}
+  ]
+};
+
+let currentTarget = null;
+let selectedItems = new Set();
+
+function openRelate(type){
+  if(roleSelect.value === 'member'){ showToast('非部门成员不能关联'); return; }
+  currentTarget = type;
+  selectedItems.clear();
+  const cfg = entityTypes[type];
+  document.getElementById('drawer-target').textContent = cfg.label;
+
+  const tabsEl = document.getElementById('et-tabs');
+  tabsEl.innerHTML = cfg.tabs.map((t,i)=>`<span class="et-tab ${i===0?'on':''}" data-key="${t.key}" onclick="switchEt(this)">${t.name}</span>`).join('');
+  renderEtList(cfg.tabs[0].key);
+
+  document.getElementById('drawer').classList.add('show');
+  document.getElementById('drawer-mask').classList.add('show');
+}
+function closeRelate(){
+  document.getElementById('drawer').classList.remove('show');
+  document.getElementById('drawer-mask').classList.remove('show');
+}
+function switchEt(tab){
+  document.querySelectorAll('.et-tab').forEach(x=>x.classList.remove('on'));
+  tab.classList.add('on');
+  renderEtList(tab.getAttribute('data-key'));
+}
+function renderEtList(key){
+  const list = sampleEntities[key] || [];
+  const cls = ({tapd:'tapd', topic:'topic', event:'topic', gongfeng:'data', codedog:'data', kbd:'data', bi:'data', figma:'design', asset:'design', iwiki:'research', lexiang:'research', url:'research'})[key] || 'topic';
+  const iconText = ({tapd:'TAPD', topic:'Topic', event:'Event', gongfeng:'工蜂', codedog:'CodeDog', kbd:'KBD', bi:'BI', figma:'Figma', asset:'资产', iwiki:'iWiki', lexiang:'乐享', url:'URL'})[key] || key;
+
+  const el = document.getElementById('et-list');
+  el.innerHTML = list.map(it => `
+    <div class="et-row ${cls}" data-id="${it.id}" onclick="toggleEt(this)">
+      <span class="et-icon">${iconText}</span>
+      <div class="body">
+        <div class="ttl">${it.t}</div>
+        <div class="meta">${it.m}</div>
+      </div>
+      <span class="add">+ 选中</span>
+    </div>
+  `).join('');
+}
+function toggleEt(row){
+  const id = row.getAttribute('data-id');
+  if(selectedItems.has(id)){
+    selectedItems.delete(id);
+    row.querySelector('.add').textContent = '+ 选中';
+    row.style.borderColor = '';
+  } else {
+    selectedItems.add(id);
+    row.querySelector('.add').textContent = '✓ 已选';
+    row.style.borderColor = 'var(--c-teal)';
+  }
+}
+function confirmRelate(){
+  const n = selectedItems.size;
+  if(!n){ showToast('请先选中至少 1 项'); return; }
+  closeRelate();
+  showToast(`已关联 ${n} 项到「${entityTypes[currentTarget].label}」`);
+}
+</script>
+</body>
+</html>
